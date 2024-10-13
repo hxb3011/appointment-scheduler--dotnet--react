@@ -1,0 +1,183 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "[:]=AppointmentScheduler"
+        },
+        {
+            "path": "./backend/domain",
+            "name": "[:domain]"
+        },
+        {
+            "path": "./backend/infrastructure",
+            "name": "[:infrastructure]"
+        },
+        {
+            "path": "./backend/service",
+            "name": "[:service]"
+        },
+        {
+            "path": "./frontend/internal",
+            "name": "[:presentation]"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "ms-dotnettools.csdevkit",
+            "ms-dotnettools.csharp",
+            "ms-dotnettools.vscodeintellicode-csharp"
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": ".NET Core Launch (API)",
+                "type": "coreclr",
+                "request": "launch",
+                "preLaunchTask": ".NET Core Build (API)",
+                "program": "backend/service/Service/bin/Debug/net8.0/AppointmentScheduler.Service.dll",
+                "args": [],
+                "stopAtEntry": false,
+                "serverReadyAction": {
+                    "action": "openExternally",
+                    "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                },
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development"
+                }
+            },
+            {
+                "name": ".NET Core Launch (Presentation)",
+                "type": "coreclr",
+                "request": "launch",
+                "preLaunchTask": ".NET Core Build (Presentation)",
+                "program": "frontend/internal/Presentation/bin/Debug/net8.0/AppointmentScheduler.Presentation.dll",
+                "args": [],
+                "stopAtEntry": false,
+                "serverReadyAction": {
+                    "action": "openExternally",
+                    "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+                },
+                "env": {
+                    "ASPNETCORE_ENVIRONMENT": "Development"
+                },
+                "sourceFileMap": {
+                    "/Views": "frontend/internal/Presentation/Views"
+                }
+            },
+            {
+                "name": ".NET Core Attach",
+                "type": "coreclr",
+                "request": "attach"
+            }
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": ".NET Core Build (API)",
+                "command": "dotnet",
+                "group": "build",
+                "type": "process",
+                "args": [
+                    "build",
+                    "backend/service/Service/AppointmentScheduler.Service.csproj",
+                    "/property:GenerateFullPaths=true",
+                    "/consoleloggerparameters:NoSummary;ForceNoAlign"
+                ],
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": ".NET Core Publish (API)",
+                "command": "dotnet",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "publish",
+                    "backend/service/Service/AppointmentScheduler.Service.csproj",
+                    "/property:GenerateFullPaths=true",
+                    "/consoleloggerparameters:NoSummary;ForceNoAlign"
+                ],
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": ".NET Core Watch (API)",
+                "command": "dotnet",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "watch",
+                    "run",
+                    "--project",
+                    "backend/service/Service/AppointmentScheduler.Service.csproj"
+                ],
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": ".NET Core Build (Presentation)",
+                "command": "dotnet",
+                "group": "build",
+                "type": "process",
+                "args": [
+                    "build",
+                    "frontend/internal/Presentation/AppointmentScheduler.Presentation.csproj",
+                    "/property:GenerateFullPaths=true",
+                    "/consoleloggerparameters:NoSummary;ForceNoAlign"
+                ],
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": ".NET Core Publish (Presentation)",
+                "command": "dotnet",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "publish",
+                    "frontend/internal/Presentation/AppointmentScheduler.Presentation.csproj",
+                    "/property:GenerateFullPaths=true",
+                    "/consoleloggerparameters:NoSummary;ForceNoAlign"
+                ],
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": ".NET Core Watch (Presentation)",
+                "command": "dotnet",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "watch",
+                    "run",
+                    "--project",
+                    "frontend/internal/Presentation/AppointmentScheduler.Presentation.csproj"
+                ],
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": ".NET Core Clean (Debug)",
+                "command": "dotnet",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "clean",
+                    "-c",
+                    "Debug"
+                ],
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": ".NET Core Clean (Release)",
+                "command": "dotnet",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "clean",
+                    "-c",
+                    "Release"
+                ],
+                "problemMatcher": "$msCompile"
+            }
+        ]
+    }
+}

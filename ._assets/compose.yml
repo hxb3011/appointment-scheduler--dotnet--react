@@ -1,0 +1,88 @@
+version: '3'
+name: apomtsched
+networks:
+  apomtsched:
+    driver: bridge
+    name: apomtsched
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM mysql:8.3.0-oraclelinux8
+        COPY ../database/preload/ /docker-entrypoint-initdb.d/
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: HeLlo|12
+      MYSQL_DATABASE: apomtschedsys
+      MYSQL_USER: user0
+      MYSQL_PASSWORD: HeLlo|12
+    networks:
+      - apomtsched
+    volumes:
+      - dbd0:/var/lib/mysql
+
+  api:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM mcr.microsoft.com/dotnet/aspnet:8.0
+        WORKDIR /app
+        COPY ../backend/service/Service/bin/Release/net8.0 .
+        ENTRYPOINT ["dotnet", "AppointmentScheduler.Service.dll"]
+    container_name: api
+    depends_on:
+      - db
+    environment:
+      DB_SERVER: db
+      DB_PORT: 3306
+      DB_USERNAME: user0
+      DB_PASSWORD: HeLlo|12
+      DB_DATABASE: apomtschedsys
+    networks:
+      - apomtsched
+    ports:
+      - 8081:8080
+    volumes:
+      - apid0:/app/files
+
+  iui:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM mcr.microsoft.com/dotnet/aspnet:8.0
+        WORKDIR /app
+        COPY ../frontend/internal/Presentation/bin/Release/net8.0 .
+        ENTRYPOINT ["dotnet", "AppointmentScheduler.Presentation.dll"]
+    container_name: iui
+    environment:
+      API_SERVER: api
+      API_PORT: 8080
+    depends_on:
+      - api
+    networks:
+      - apomtsched
+    ports:
+      - 8082:8080
+
+  xui:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM nginx:1.27.2-bookworm
+        COPY ../frontend/public/react-appointment-scheduler/build /usr/share/nginx/html
+        CMD ["nginx", "-g", "daemon off;"]
+    container_name: xui
+    depends_on:
+      - api
+    networks:
+      - apomtsched
+    ports:
+      - 8080:80
+
+volumes:
+  dbd0:
+    name: dbd0
+  apid0:
+    name: apid0

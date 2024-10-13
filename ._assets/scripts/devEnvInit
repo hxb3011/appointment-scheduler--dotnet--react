@@ -1,0 +1,47 @@
+#! /bin/bash
+
+if ! command -v docker >/dev/null 2>/dev/null ; then
+    echo Docker is not installed!
+    exit 1
+fi
+
+if ! docker version >/dev/null 2>/dev/null ; then
+    echo Docker Daemon is not started!
+    exit 1
+fi
+
+docker ps -aqf name=dotnet | read -n 0
+_dotnet=$?
+docker ps -aqf name=mysql | read -n 0
+_mysql=$?
+docker ps -aqf name=node | read -n 0
+_node=$?
+
+if [ $_dotnet -eq 0 ] || [ $_mysql -eq 0 ] || [ $_node -eq 0 ] ; then
+    if [ "$*" == "force" ] ; then
+        if [ $_dotnet -eq 0 ] ; then
+            docker ps -qf name=dotnet | read -n 0 && docker stop dotnet >/dev/null && echo \"dotnet\" Stopped.
+            docker rm dotnet >/dev/null && echo \"dotnet\" Removed.
+        fi
+        if [ $_mysql -eq 0 ] ; then
+            docker ps -qf name=mysql | read -n 0 && docker stop mysql >/dev/null && echo \"mysql\" Stopped.
+            docker rm mysql >/dev/null && docker volume rm mysqld >/dev/null && echo \"mysql\" Removed.
+        fi
+        if [ $_node -eq 0 ] ; then
+            docker ps -qf name=node | read -n 0 && docker stop node >/dev/null && echo \"node\" Stopped.
+            docker rm node >/dev/null && echo \"node\" Removed.
+        fi
+    else
+        if [ "$*" ] ; then
+            echo Development environment already exists. You may have to use \"$0 force\" to force a re-initialization of the development environment.
+        else
+            echo Please use \"$0\" to initialize the development environment. Or \"$0 force\" to force a re-initialization of the development environment.
+        fi
+        echo Note: With the \"force\" option, the data of containers named \"dotnet\", \"mysql\" and \"node\" will be deleted except for VSCode extensions installed on them.
+        exit 1
+    fi
+fi
+docker run -v ./:/tmp/workspace -v vscrm:/root/.vscode-server -e 'DB_SERVER=localhost' -e 'DB_PORT=64001' -e 'DB_USER=user0' -e 'DB_PASSWORD=HeLlo|12' -e 'DB_DATABASE=apomtschedsys' -e 'API_SERVER=localhost' -e 'API_PORT=8088' -w /tmp/workspace --name dotnet --pull always -td mcr.microsoft.com/dotnet/sdk:8.0 && echo \"dotnet\" Created.
+docker run -v ./:/tmp/workspace -v mysqld:/var/lib/mysql -e 'MYSQL_ROOT_PASSWORD=HeLlo|12' -e 'MYSQL_DATABASE=apomtschedsys' -e 'MYSQL_USER=user0' -e 'MYSQL_PASSWORD=HeLlo|12' -p 64001:3306 -w /tmp/workspace/database --name mysql --pull always -td mysql:8.3.0-oraclelinux8 && echo \"mysql\" Created.
+docker run -v ./:/tmp/workspace -v vscrm:/root/.vscode-server -w /tmp/workspace/frontend/public/react-appointment-scheduler --name node --pull always -td node:22.9.0-bullseye && echo \"node\" Created.
+exit 0

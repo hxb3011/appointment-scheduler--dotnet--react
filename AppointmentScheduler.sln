@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{718D83F4-4DA4-4448-9D31-3DC599205AE4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "domain", "domain", "{57FFB162-3733-41BA-85E7-ED28D095464C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentScheduler.Domain", "backend\domain\Domain\AppointmentScheduler.Domain.csproj", "{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastructure", "{918AD25A-6366-4530-9376-3BEFC904E2A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentScheduler.Infrastructure", "backend\infrastructure\Infrastructure\AppointmentScheduler.Infrastructure.csproj", "{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "service", "service", "{AE68DA84-A5AE-4B7A-8FF2-E13FC1F399DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentScheduler.Service", "backend\service\Service\AppointmentScheduler.Service.csproj", "{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "frontend", "frontend", "{DEDD0A89-6426-4EB1-B7F0-AC7077F60DC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "internal", "internal", "{D5758761-5E37-476C-92A0-3736CBE1EBC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppointmentScheduler.Presentation", "frontend\internal\Presentation\AppointmentScheduler.Presentation.csproj", "{65BB4514-F54A-42AD-8A07-B1AF8126123C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65BB4514-F54A-42AD-8A07-B1AF8126123C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BB4514-F54A-42AD-8A07-B1AF8126123C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BB4514-F54A-42AD-8A07-B1AF8126123C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BB4514-F54A-42AD-8A07-B1AF8126123C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{57FFB162-3733-41BA-85E7-ED28D095464C} = {718D83F4-4DA4-4448-9D31-3DC599205AE4}
+		{609DD5B4-4B25-4DAB-95A1-71738C4CB94D} = {57FFB162-3733-41BA-85E7-ED28D095464C}
+		{918AD25A-6366-4530-9376-3BEFC904E2A5} = {718D83F4-4DA4-4448-9D31-3DC599205AE4}
+		{0606F258-9CCF-40E3-A837-3A1F7BD9E20C} = {918AD25A-6366-4530-9376-3BEFC904E2A5}
+		{AE68DA84-A5AE-4B7A-8FF2-E13FC1F399DE} = {718D83F4-4DA4-4448-9D31-3DC599205AE4}
+		{4D6870E1-0CE1-4AAD-9C92-A77F679F514A} = {AE68DA84-A5AE-4B7A-8FF2-E13FC1F399DE}
+		{D5758761-5E37-476C-92A0-3736CBE1EBC0} = {DEDD0A89-6426-4EB1-B7F0-AC7077F60DC1}
+		{65BB4514-F54A-42AD-8A07-B1AF8126123C} = {D5758761-5E37-476C-92A0-3736CBE1EBC0}
+	EndGlobalSection
+EndGlobal

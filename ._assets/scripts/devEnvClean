@@ -1,0 +1,25 @@
+#! /bin/bash
+
+if ! command -v docker >/dev/null 2>/dev/null ; then
+    echo Docker is not installed!
+    exit 1
+fi
+
+if ! docker version >/dev/null 2>/dev/null ; then
+    echo Docker Daemon is not started!
+    exit 1
+fi
+
+if docker ps -qf name=dotnet | read -n 0 ; then
+    docker exec dotnet dotnet clean -c Debug
+    docker exec dotnet dotnet clean -c Release
+else
+    echo \"dotnet\" container is not Started.
+fi
+
+if docker ps -qf name=node | read -n 0 ; then
+    docker exec -w /tmp/workspace/frontend/public/react-appointment-scheduler node rm -r build
+else
+    echo \"node\" container is not Started.
+fi
+exit 0

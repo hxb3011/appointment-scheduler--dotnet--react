@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "jsx": "react",
+        "module": "ES2022",
+        "moduleResolution": "Node",
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "target": "ES2022"
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "awesomeTypescriptLoaderOptions": {
+        "useBabel": true,
+        "useCache": true
+    },
+    "include": [
+        "./src/**/*",
+        "./global.d.ts"
+    ]
+}

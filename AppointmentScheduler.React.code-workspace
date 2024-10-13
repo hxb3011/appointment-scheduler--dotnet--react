@@ -1,0 +1,106 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "[:]=AppointmentScheduler"
+        },
+        {
+            "path": "./frontend/public",
+            "name": "[:presentation]"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.vscode-typescript-next"
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "command": "npm --prefix frontend/public/react-appointment-scheduler --include dev run start",
+                "name": "Node.JS React Launch (Presentation)",
+                "request": "launch",
+                "type": "node-terminal"
+            }
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Node.JS React Initilize (Presentation)",
+                "command": "npm",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "--prefix",
+                    "frontend/public/react-appointment-scheduler",
+                    "i",
+                    "--force"
+                ],
+                "problemMatcher": "$tsc"
+            },
+            {
+                "label": "Node.JS React Start (Presentation)",
+                "command": "npm",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "--prefix",
+                    "frontend/public/react-appointment-scheduler",
+                    "--include",
+                    "dev",
+                    "run",
+                    "start"
+                ],
+                "problemMatcher": "$tsc"
+            },
+            {
+                "label": "Node.JS React Build (Presentation)",
+                "command": "npm",
+                "group": "build",
+                "type": "process",
+                "args": [
+                    "--prefix",
+                    "frontend/public/react-appointment-scheduler",
+                    "--include",
+                    "dev",
+                    "run",
+                    "build"
+                ],
+                "problemMatcher": "$tsc"
+            },
+            {
+                "label": "Node.JS React Test (Presentation)",
+                "command": "npm",
+                "group": "test",
+                "type": "process",
+                "args": [
+                    "--prefix",
+                    "frontend/public/react-appointment-scheduler",
+                    "--include",
+                    "dev",
+                    "run",
+                    "test"
+                ],
+                "problemMatcher": "$tsc"
+            },
+            {
+                "label": "Node.JS React Eject (Presentation)",
+                "command": "npm",
+                "group": "none",
+                "type": "process",
+                "args": [
+                    "--prefix",
+                    "frontend/public/react-appointment-scheduler",
+                    "--include",
+                    "dev",
+                    "run",
+                    "eject"
+                ],
+                "problemMatcher": "$tsc"
+            }
+        ]
+    }
+}

@@ -1,0 +1,187 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "[:]=AppointmentScheduler"
+        },
+        {
+            "path": "./backend/domain",
+            "name": "[:domain]"
+        },
+        {
+            "path": "./backend/infrastructure",
+            "name": "[:infrastructure]"
+        },
+        {
+            "path": "./backend/service",
+            "name": "[:service]"
+        },
+        {
+            "path": "./frontend/internal",
+            "name": "[:presentation]($aspnet)"
+        },
+        {
+            "path": "./frontend/public",
+            "name": "[:presentation]($react)"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "ms-vscode-remote.remote-containers",
+            "ms-azuretools.vscode-docker"
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "DevEnv Launch API",
+                "request": "launch",
+                "type": "msedge",
+                "url": "http://localhost:8081/swagger",
+                "preLaunchTask": "Docker Compose Up (Build)",
+                "postDebugTask": "Docker Compose Down"
+            },
+            {
+                "name": "DevEnv Launch Admin",
+                "request": "launch",
+                "type": "msedge",
+                "url": "http://localhost:8082",
+                "preLaunchTask": "Docker Compose Up (Build)",
+                "postDebugTask": "Docker Compose Down"
+            },
+            {
+                "name": "DevEnv Launch User",
+                "request": "launch",
+                "type": "msedge",
+                "url": "http://localhost:8080",
+                "preLaunchTask": "Docker Compose Up (Build)",
+                "postDebugTask": "Docker Compose Down"
+            }
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "command": "./._assets/scripts/devEnvInit",
+                "group": "none",
+                "label": "DevEnv Initilize",
+                "type": "shell",
+                "windows": {
+                    "command": ".\\._assets\\scripts\\devEnvInit"
+                }
+            },
+            {
+                "command": "./._assets/scripts/devEnvInit force",
+                "group": "none",
+                "label": "DevEnv Initilize (Force)",
+                "type": "shell",
+                "windows": {
+                    "command": ".\\._assets\\scripts\\devEnvInit force"
+                }
+            },
+            {
+                "command": "./._assets/scripts/devEnvStart",
+                "group": "none",
+                "label": "DevEnv Start",
+                "type": "shell",
+                "windows": {
+                    "command": ".\\._assets\\scripts\\devEnvStart"
+                }
+            },
+            {
+                "command": "./._assets/scripts/devEnvClean",
+                "group": "none",
+                "label": "DevEnv Clean",
+                "type": "shell",
+                "windows": {
+                    "command": ".\\._assets\\scripts\\devEnvClean"
+                }
+            },
+            {
+                "command": "./._assets/scripts/devEnvBuild",
+                "dependsOn": "DevEnv Clean",
+                "group": "build",
+                "label": "DevEnv Build",
+                "type": "shell",
+                "windows": {
+                    "command": ".\\._assets\\scripts\\devEnvBuild"
+                }
+            },
+            {
+                "args": [
+                    "compose",
+                    "-f",
+                    "._assets/compose.yml",
+                    "up",
+                    "-d",
+                    "--pull",
+                    "always"
+                ],
+                "command": "docker",
+                "group": "none",
+                "label": "Docker Compose Up",
+                "type": "process"
+            },
+            {
+                "args": [
+                    "compose",
+                    "-f",
+                    "._assets/compose.yml",
+                    "up",
+                    "--build",
+                    "-d",
+                    "--pull",
+                    "always"
+                ],
+                "command": "docker",
+                "dependsOn": "DevEnv Build",
+                "group": "build",
+                "label": "Docker Compose Up (DevEnv Build)",
+                "type": "process"
+            },
+            {
+                "args": [
+                    "compose",
+                    "-f",
+                    "._assets/compose.yml",
+                    "down",
+                    "--rmi",
+                    "local",
+                    "-v"
+                ],
+                "command": "docker",
+                "group": "none",
+                "label": "Docker Compose Down",
+                "type": "process"
+            },
+            {
+                "dependsOn": "DevEnv Build",
+                "dockerCompose": {
+                    "up": {
+                        "detached": true,
+                        "build": true,
+                        "customOptions": "--pull always"
+                    },
+                    "files": [
+                        "._assets/compose.yml"
+                    ]
+                },
+                "group": "build",
+                "label": "Docker Compose Up (Build)",
+                "presentation": {
+                    "clear": true,
+                    "close": false,
+                    "echo": true,
+                    "focus": false,
+                    "reveal": "always",
+                    "revealProblems": "onProblem",
+                    "showReuseMessage": true
+                },
+                "type": "docker-compose",
+                "problemMatcher": []
+            }
+        ]
+    }
+}
