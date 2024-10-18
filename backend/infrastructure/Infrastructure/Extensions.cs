@@ -1,8 +1,7 @@
-﻿using AppointmentScheduler.Domain.Entities;
+﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Infrastructure.Authorization;
 using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppointmentScheduler.Infrastructure;

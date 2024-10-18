@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AppointmentScheduler.Infrastructure.Business
 {
-    public class UserImpl
+    public class UserImpl : IUser
     {
         public string UserName { get => "test@company.com"; set => throw new NotImplementedException(); }
         public string Password { get => "HeLlo|12"; set => throw new NotImplementedException(); }

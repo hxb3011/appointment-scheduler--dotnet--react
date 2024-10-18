@@ -83,21 +83,20 @@ public class DefaultRepository : DbContext, IRepository
                 return true;
             }
         }
-        else if (typeof(Appointment).IsAssignableFrom(typeof(TEntity)))
-        {
-            if (key is int sk)
-            {
-                entity = (TEntity)(IAppointment)new AppointmentImpl();
-                return true;
-            }
-        }
+        //else if (typeof(Appointment).IsAssignableFrom(typeof(TEntity)))
+        //{
+        //    if (key is int sk)
+        //    {
+        //        entity = (TEntity)(IAppointment)new AppointmentImpl();
+        //        return true;
+        //    }
+        //}
         entity = default;
         return false;
     }
 
     bool IRepository.TryGetKeyOf<TEntity, TKey>(TEntity entity, out TKey key)
     {
-#if DEMO
         if (entity is UserImpl demoUser)
         {
             string sk = "testkey";
@@ -109,9 +108,6 @@ public class DefaultRepository : DbContext, IRepository
         }
         key = default;
         return false;
-#else
-        throw new NotImplementedException();
-#endif
     }
 }
 

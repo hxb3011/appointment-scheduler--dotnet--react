@@ -1,7 +1,9 @@
 #define DEMO
 
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Infrastructure.Authorization;
+using AppointmentScheduler.Infrastructure.Business;
 using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -58,7 +60,7 @@ public class DemoControllerJWTController(IRepository repository, ILogger<DemoCon
 
         return Ok(new AuthResponse
         {
-            Token = _options.GetJSONWebToken(new DemoUserImpl(), _repository)!,
+            Token = _options.GetJSONWebToken(new UserImpl(), _repository)!,
         });
     }
 
@@ -114,7 +116,7 @@ public class DemoActionJWTController(IRepository repository, ILogger<DemoActionJ
 
         return Ok(new AuthResponse
         {
-            Token = _options.GetJSONWebToken(new DemoUserImpl(), _repository)!,
+            Token = _options.GetJSONWebToken(new UserImpl(), _repository)!,
         });
     }
 
