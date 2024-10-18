@@ -4,10 +4,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Nodes;
-using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Business;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AppointmentScheduler.Infrastructure.Authorization;

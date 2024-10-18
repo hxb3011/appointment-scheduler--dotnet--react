@@ -1,5 +1,5 @@
 
-using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Business;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Infrastructure.Repositories;
