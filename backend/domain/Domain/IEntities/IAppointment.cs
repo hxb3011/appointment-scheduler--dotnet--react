@@ -1,9 +1,9 @@
-namespace AppointmentScheduler.Domain.Entities;
+namespace AppointmentScheduler.Domain.IEntities;
 
 public interface IAppointment : IBehavioralEntity
 {
     int Number { get; }
-    TimeOnly AtTime { get; set; }
+    DateTime AtTime { get; set; }
     int State { get; set; }
     IProfile Profile { get; set; }
     IExamination Examination { get; }

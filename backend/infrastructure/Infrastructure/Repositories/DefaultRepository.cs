@@ -2,6 +2,7 @@
 
 using AppointmentScheduler.Domain;
 using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.IEntities;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 
@@ -72,7 +73,7 @@ public class DefaultRepository : DbContext, IRepository
 
     bool IRepository.TryGetEntityBy<TKey, TEntity>(TKey key, out TEntity entity)
     {
-#if DEMO
+#if demo
         if (typeof(IUser).IsAssignableFrom(typeof(TEntity)))
         {
             if (key is string sk && sk == "testkey")
@@ -81,11 +82,17 @@ public class DefaultRepository : DbContext, IRepository
                 return true;
             }
         }
-        entity = default;
-        return false;
-#else
-        throw new NotImplementedException();
+        // else if(typeof(Appointment).IsAssignableFrom(typeof(TEntity))){
+        //     if(key is int sk){
+        //         entity = (TEntity)(IAppointment)new AppointmentImpl();
+        //         return true;
+        //     }
+        // }
+
+        
 #endif
+    entity = default;
+        return false;
     }
 
     bool IRepository.TryGetKeyOf<TEntity, TKey>(TEntity entity, out TKey key)

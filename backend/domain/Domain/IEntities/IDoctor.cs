@@ -1,4 +1,4 @@
-namespace AppointmentScheduler.Domain.Entities;
+namespace AppointmentScheduler.Domain.IEntities;
 
 public interface IDoctor : IUser
 {
