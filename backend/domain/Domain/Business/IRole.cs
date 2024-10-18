@@ -1,6 +1,6 @@
 using AppointmentScheduler.Domain.Entities;
 
-namespace AppointmentScheduler.Domain.IEntities;
+namespace AppointmentScheduler.Domain.Business;
 
 public interface IRole : IBehavioralEntity
 {

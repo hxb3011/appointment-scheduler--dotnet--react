@@ -1,8 +1,10 @@
 #define DEMO
 
 using AppointmentScheduler.Domain;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
-using AppointmentScheduler.Domain.IEntities;
+using AppointmentScheduler.Infrastructure.Business;
+using Infrastructure.Business;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 
@@ -73,32 +75,30 @@ public class DefaultRepository : DbContext, IRepository
 
     bool IRepository.TryGetEntityBy<TKey, TEntity>(TKey key, out TEntity entity)
     {
-#if demo
         if (typeof(IUser).IsAssignableFrom(typeof(TEntity)))
         {
             if (key is string sk && sk == "testkey")
             {
-                entity = (TEntity)(IUser)new DemoUserImpl();
+                entity = (TEntity)(IUser)new UserImpl();
                 return true;
             }
         }
-        // else if(typeof(Appointment).IsAssignableFrom(typeof(TEntity))){
-        //     if(key is int sk){
-        //         entity = (TEntity)(IAppointment)new AppointmentImpl();
-        //         return true;
-        //     }
-        // }
-
-        
-#endif
-    entity = default;
+        else if (typeof(Appointment).IsAssignableFrom(typeof(TEntity)))
+        {
+            if (key is int sk)
+            {
+                entity = (TEntity)(IAppointment)new AppointmentImpl();
+                return true;
+            }
+        }
+        entity = default;
         return false;
     }
 
     bool IRepository.TryGetKeyOf<TEntity, TKey>(TEntity entity, out TKey key)
     {
 #if DEMO
-        if (entity is DemoUserImpl demoUser)
+        if (entity is UserImpl demoUser)
         {
             string sk = "testkey";
             if (sk is TKey kk)
@@ -115,66 +115,3 @@ public class DefaultRepository : DbContext, IRepository
     }
 }
 
-#if DEMO
-
-public class DemoUserImpl : IUser
-{
-    private class RoleImpl : IRole
-    {
-        public string Name { get => "Role"; set => throw new NotImplementedException(); }
-        public string Description { get => "Description"; set => throw new NotImplementedException(); }
-
-        public IEnumerable<Permission> Permissions => [Permission.Perm2, Permission.Perm3];
-
-        public bool IsNameExisted => false;
-
-        public bool IsNameValid => true;
-
-        public bool IsDescriptionValid => true;
-
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsPermissionGranted(Permission permission)
-        {
-            return permission == Permission.Perm2 || permission == Permission.Perm3;
-        }
-
-        public bool SetPermissionGranted(Permission permission, bool granted = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public string UserName { get => "test@company.com"; set => throw new NotImplementedException(); }
-    public string Password { get => "HeLlo|12"; set => throw new NotImplementedException(); }
-    public string FullName { get => "Test"; set => throw new NotImplementedException(); }
-    public IRole Role { get => new RoleImpl(); set => throw new NotImplementedException(); }
-
-    public bool IsUserNameExisted => false;
-
-    public bool IsUserNameValid => true;
-
-    public bool IsPasswordValid => true;
-
-    public bool IsFullNameValid => true;
-
-    public bool Delete()
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Update()
-    {
-        throw new NotImplementedException();
-    }
-}
-
-#endif
