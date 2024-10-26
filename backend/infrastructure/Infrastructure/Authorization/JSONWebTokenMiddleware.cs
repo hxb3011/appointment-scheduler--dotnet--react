@@ -4,7 +4,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Nodes;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -45,8 +47,8 @@ public class JSONWebTokenMiddleware
                 IssuerSigningKey = key
             }, out SecurityToken validateToken);
             var jwtToken = (JwtSecurityToken)validateToken;
-            if (!_repository.TryGetEntityBy(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Id).FirstOrDefault(), out IUser user))
-                goto unauthorization;
+            var user = await _repository.GetEntityBy<string, IUser>(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Id).FirstOrDefault());
+            if (user == null) goto unauthorization;
 
             if (!attr.RequiredPermissions.Select(p => Enum.GetName(p)).ToHashSet().IsSubsetOf(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Permissions)))
             {

@@ -1,4 +1,4 @@
-namespace AppointmentScheduler.Domain.Entities;
+namespace AppointmentScheduler.Domain.Business;
 
 public interface IPrescription : IBehavioralEntity
 {

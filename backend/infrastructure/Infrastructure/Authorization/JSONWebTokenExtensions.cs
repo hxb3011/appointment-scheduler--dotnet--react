@@ -1,4 +1,4 @@
-using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Business;
 using Microsoft.AspNetCore.Http;
 
 namespace AppointmentScheduler.Infrastructure.Authorization;

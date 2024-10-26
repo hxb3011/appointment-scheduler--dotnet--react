@@ -25,7 +25,10 @@
         "recommendations": [
             "ms-dotnettools.csdevkit",
             "ms-dotnettools.csharp",
-            "ms-dotnettools.vscodeintellicode-csharp"
+            "ms-dotnettools.vscodeintellicode-csharp",
+            "VisualStudioExptTeam.vscodeintellicode",
+            "VisualStudioExptTeam.intellicode-api-usage-examples",
+            "VisualStudioExptTeam.vscodeintellicode-completions"
         ]
     },
     "launch": {

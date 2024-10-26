@@ -1,31 +1,18 @@
 #define DEMO
 
-using AppointmentScheduler.Domain;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
+using AppointmentScheduler.Infrastructure.Business;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
 
 namespace AppointmentScheduler.Infrastructure.Repositories;
 
 public class DefaultRepository : DbContext, IRepository
 {
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        string? database, server, user, password;
-        if (string.IsNullOrWhiteSpace(database = "DB_DATABASE".Env())) database = "apomtschedsys";
-        if (string.IsNullOrWhiteSpace(password = "DB_PASSWORD".Env())) password = "HeLlo|12";
-        if (!uint.TryParse("DB_PORT".Env(), out uint port)) port = 3306;
-        if (string.IsNullOrWhiteSpace(server = "DB_SERVER".Env())) server = "localhost";
-        if (string.IsNullOrWhiteSpace(user = "DB_USERNAME".Env())) user = "apomtschedsys";
-        optionsBuilder.UseMySQL(new MySqlConnectionStringBuilder
-        {
-            Database = database,
-            Password = password,
-            Port = port,
-            Server = server,
-            UserID = user,
-        }.ConnectionString);
-    }
+    private IResourceManagerService _resourceManager;
+    private IConfigurationPropertiesService _configurationProperties;
+    internal DefaultRepository(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -46,46 +33,93 @@ public class DefaultRepository : DbContext, IRepository
 
     IEnumerable<TEntity> IRepository.GetEntities<TEntity>()
     {
+        if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
+            return (
+                from role in Set<Role>()
+                select new RoleImpl(role)
+            ).Cast<TEntity>();
         throw new NotImplementedException();
     }
 
-    TService IRepository.GetService<TService>()
+    async Task<TService> IRepository.GetService<TService>()
     {
         if (this is TService myService) return myService;
-        if (typeof(IResourceManagerService).IsAssignableFrom(typeof(TService)))
+        if (typeof(TService).IsAssignableFrom(typeof(IResourceManagerService)))
         {
-            return (TService)(IResourceManagerService)
-                new ResourceManagerServiceImpl();
+            IResourceManagerService resourceManager = _resourceManager;
+            resourceManager ??= new ResourceManagerServiceImpl();
+            _resourceManager = resourceManager;
+            return (TService)resourceManager;
         }
-        if (typeof(IConfigurationPropertiesService).IsAssignableFrom(typeof(TService)))
+        else if (typeof(TService).IsAssignableFrom(typeof(IConfigurationPropertiesService)))
         {
-            return (TService)(IConfigurationPropertiesService)
-                new ConfigurationPropertiesServiceImpl(this);
+            IConfigurationPropertiesService configurationProperties = _configurationProperties;
+            configurationProperties ??= new ConfigurationPropertiesServiceImpl(this);
+            _configurationProperties = configurationProperties;
+            return (TService)configurationProperties;
         }
         throw new InvalidOperationException("This repository does not included service " + typeof(TService).FullName);
     }
 
-    TEntity IRepository.ObtainEntity<TEntity>()
+    async Task<TEntity> IRepository.GetEntityBy<TKey, TEntity>(TKey key)
     {
-        throw new NotImplementedException();
-    }
-
-    bool IRepository.TryGetEntityBy<TKey, TEntity>(TKey key, out TEntity entity)
-    {
+        TEntity entity;
 #if DEMO
-        if (typeof(IUser).IsAssignableFrom(typeof(TEntity)))
+        if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
         {
             if (key is string sk && sk == "testkey")
             {
                 entity = (TEntity)(IUser)new DemoUserImpl();
-                return true;
+                return entity is not IRepositoryEntityInitializer initializer
+                    || await initializer.Initilize(this) ? entity : null;
             }
         }
-        entity = default;
-        return false;
+        return null;
 #else
-        throw new NotImplementedException();
+        if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
+        {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var role = await FindAsync<Role>(id);
+                if (role != null)
+                {
+                    entity = (TEntity)(IRole)new RoleImpl(role);
+                    goto success;
+                }
+            }
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
+        {
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
+        {
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
+        {
+            var d = await ((IRepository)this).GetEntityBy<TKey, IDoctor>(key);
+            if (d != null) return (TEntity)d;
+            var p = await ((IRepository)this).GetEntityBy<TKey, IPatient>(key);
+            if (p != null) return (TEntity)p;
+        }
+        return null;
+    success:
+        return entity is not IRepositoryEntityInitializer initializer
+            || await initializer.Initilize(this) ? entity : null;
 #endif
+    }
+
+    async Task<TEntity> IRepository.ObtainEntity<TEntity>()
+    {
+        if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
+        {
+            var role = new Role();
+            return await this.IdGeneratedWrap(
+                from r in Set<Role>()
+                where r.Id == role.Id
+                select r, role, nameof(Role.Id)
+            ) ? (TEntity)(IRole)new RoleImpl(role) : null;
+        }
+        throw new NotImplementedException();
     }
 
     bool IRepository.TryGetKeyOf<TEntity, TKey>(TEntity entity, out TKey key)
@@ -119,13 +153,18 @@ public class DemoUserImpl : IUser
 
         public IEnumerable<Permission> Permissions => [Permission.Perm2, Permission.Perm3];
 
-        public bool IsNameExisted => false;
+        public async Task<bool> IsNameExisted() => false;
 
         public bool IsNameValid => true;
 
         public bool IsDescriptionValid => true;
 
-        public bool Delete()
+        public async Task<bool> Create()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> Delete()
         {
             throw new NotImplementedException();
         }
@@ -135,12 +174,12 @@ public class DemoUserImpl : IUser
             return permission == Permission.Perm2 || permission == Permission.Perm3;
         }
 
-        public bool SetPermissionGranted(Permission permission, bool granted = true)
+        public void SetPermissionGranted(Permission permission, bool granted = true)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update()
+        public async Task<bool> Update()
         {
             throw new NotImplementedException();
         }
@@ -159,12 +198,17 @@ public class DemoUserImpl : IUser
 
     public bool IsFullNameValid => true;
 
-    public bool Delete()
+    public async Task<bool> Create()
     {
         throw new NotImplementedException();
     }
 
-    public bool Update()
+    public async Task<bool> Delete()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> Update()
     {
         throw new NotImplementedException();
     }

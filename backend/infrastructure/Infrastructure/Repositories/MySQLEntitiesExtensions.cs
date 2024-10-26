@@ -58,7 +58,7 @@ public static class MySQLEntitiesExtensions
 
     internal static void BuildExaminationServiceEntity(EntityTypeBuilder<ExaminationService> builder)
     {
-        builder.ToTable("ExaminationService");
+        builder.ToTable("examinationservice");
         builder.HasKey(nameof(ExaminationService.Id));
         builder.Property<int>(nameof(ExaminationService.Id))
             .HasColumnName("Id")
@@ -77,7 +77,7 @@ public static class MySQLEntitiesExtensions
 
     internal static void BuildDiagnosticServiceEntity(EntityTypeBuilder<DiagnosticService> builder)
     {
-        builder.ToTable("examinationservice");
+        builder.ToTable("diagnosticservice");
         builder.HasKey(nameof(DiagnosticService.Id));
         builder.Property<int>(nameof(DiagnosticService.Id))
             .HasColumnName("Id")

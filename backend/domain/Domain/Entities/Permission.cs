@@ -1,6 +1,6 @@
 namespace AppointmentScheduler.Domain.Entities;
 
-public enum Permission : int
+public enum Permission : uint
 {
     Perm1 = 0,
     Perm2,
