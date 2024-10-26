@@ -10,18 +10,18 @@ if ! docker version >/dev/null 2>/dev/null ; then
     exit 1
 fi
 
-if docker ps -aqf name=dotnet | read -n 0 && docker ps -aqf name=mysql | read -n 0 && docker ps -aqf name=node | read -n 0 ; then
-    if docker ps -qf name=dotnet | read -n 0 ; then
+if docker ps -aqf name=^dotnet\$ | read -n 0 && docker ps -aqf name=^mysql\$ | read -n 0 && docker ps -aqf name=^node\$ | read -n 0 ; then
+    if docker ps -qf name=^dotnet\$ | read -n 0 ; then
         echo \"dotnet\" already Started.
     else
         docker start dotnet >/dev/null && echo \"dotnet\" Started.
     fi
-    if docker ps -qf name=mysql | read -n 0 ; then
+    if docker ps -qf name=^mysql\$ | read -n 0 ; then
         echo \"mysql\" already Started.
     else
         docker start mysql >/dev/null && echo \"mysql\" Started.
     fi
-    if docker ps -qf name=node | read -n 0 ; then
+    if docker ps -qf name=^node\$ | read -n 0 ; then
         echo \"node\" already Started.
     else
         docker start node >/dev/null && echo \"node\" Started.

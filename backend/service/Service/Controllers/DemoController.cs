@@ -2,6 +2,7 @@
 
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Infrastructure.Authorization;
 using AppointmentScheduler.Infrastructure.Business;
 using AppointmentScheduler.Infrastructure.Repositories;
@@ -9,15 +10,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppointmentScheduler.Service.Controllers;
 
-public record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+public record WeatherForecast(DateOnly Date, int TemperatureC, string Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
 public class AuthRequest
 {
-    public string? Email { get; set; }
-    public string? Password { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
 }
 
 public class AuthResponse

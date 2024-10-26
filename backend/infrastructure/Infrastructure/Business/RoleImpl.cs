@@ -1,44 +1,79 @@
-﻿using AppointmentScheduler.Domain.Business;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AppointmentScheduler.Domain.Repositories;
+using AppointmentScheduler.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace AppointmentScheduler.Infrastructure.Business
+namespace AppointmentScheduler.Infrastructure.Business;
+
+internal sealed class RoleImpl : BaseEntity, IRole
 {
-    public class RoleImpl : IRole
+    internal const string DefaultRoleKey = "config.default.role";
+    private string _originalName;
+    private Role _role;
+
+    public RoleImpl(Role role) => _role = role ?? throw new ArgumentNullException(nameof(role));
+
+    string IRole.Name { get => _role.Name; set => _role.Name = value; }
+    string IRole.Description { get => _role.Description; set => _role.Description = value; }
+
+    IEnumerable<Permission> IRole.Permissions => new PermissionEnumerator(_role.Permissions);
+
+    bool IRole.IsNameValid => _role.Name.IsValidName();
+
+    bool IRole.IsDescriptionValid => _role.Description.IsValidDescription();
+
+    Task<bool> IRole.IsNameExisted()
+        => !((IRole)this).IsNameValid ? Task.FromResult(false) : (
+            from role in _dbContext.Set<Role>()
+            where role.Id != _role.Id && (role.Name.Equals(_role.Name) || role.Name.Equals(_originalName))
+            select role
+        ).AnyAsync();
+
+    bool IRole.IsPermissionGranted(Permission permission)
     {
-        public string Name { get => "Role"; set => throw new NotImplementedException(); }
-        public string Description { get => "Description"; set => throw new NotImplementedException(); }
+        uint permissionCode = (uint)permission;
+        return ((((uint)_role.Permissions[permissionCode >>> 3]) >> (int)((~permissionCode) & 7)) & 1) != 0;
+    }
 
-        public IEnumerable<Permission> Permissions => [Permission.Perm2, Permission.Perm3];
+    void IRole.SetPermissionGranted(Permission permission, bool granted)
+    {
+        var permissions = _role.Permissions;
+        uint permissionCode = (uint)permission, x = permissionCode >>> 3, z = 1u << (int)((~permissionCode) & 7);
+        permissions[x] = (byte)(granted ? permissions[x] | z : permissions[x] & ~z);
+    }
 
-        public bool IsNameExisted => false;
+    private Task<bool> IsValid()
+        => !((IRole)this).IsDescriptionValid ? Task.FromResult(false)
+            : ((IRole)this).IsNameExisted().InvertTaskResult();
 
-        public bool IsNameValid => true;
+    private Task<bool> CanDelete() => (
+        from user in _dbContext.Set<User>()
+        where user.RoleId == _role.Id
+        select user
+    ).AnyAsync().InvertTaskResult();
 
-        public bool IsDescriptionValid => true;
+    protected override async Task<bool> Create()
+    {
+        var dataValid = await IsValid();
+        if (dataValid) _dbContext.Add(_role);
+        return dataValid;
+    }
 
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
+    protected override async Task<bool> Delete()
+    {
+        var canDelete = await CanDelete();
+        if (canDelete) _dbContext.Remove(_role);
+        return canDelete;
+    }
 
-        public bool IsPermissionGranted(Permission permission)
-        {
-            return permission == Permission.Perm2 || permission == Permission.Perm3;
-        }
+    protected override Task<bool> Initilize()
+        => Task.FromResult(true);
 
-        public bool SetPermissionGranted(Permission permission, bool granted = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
+    protected override async Task<bool> Update()
+    {
+        var dataValid = await IsValid();
+        if (dataValid) _dbContext.Update(_role);
+        return dataValid;
     }
 }

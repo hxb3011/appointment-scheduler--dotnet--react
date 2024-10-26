@@ -5,7 +5,7 @@ namespace AppointmentScheduler.Infrastructure.Authorization;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
 public sealed class JSONWebTokenAttribute : Attribute
 {
-    private Permission[]? _requiredPermissions;
+    private Permission[] _requiredPermissions;
     private bool _authenticationRequired;
 
     public JSONWebTokenAttribute() { }

@@ -1,8 +1,7 @@
 namespace AppointmentScheduler.Domain.Entities;
 
-public class Profile
+public class Profile : BaseEntity
 {
-    public int Id { get; set; }
     public int PatientId { get; set; }
     public string FullName { get; set; }
     public DateOnly DateOfBirth { get; set; }

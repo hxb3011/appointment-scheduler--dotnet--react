@@ -7,17 +7,12 @@ using System.Threading.Tasks;
 
 namespace AppointmentScheduler.Infrastructure.Business
 {
-    public class ProfileImpl : IProfile
+    internal sealed class ProfileImpl : BaseEntity, IProfile
     {
         public IPatient Patient { get => new PatientImpl(); set => throw new NotImplementedException(); }
         public string FullName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public DateOnly DateOfBirth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public char Gender { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
 
         public IEnumerable<IAppointment> LookupAppointments()
         {
@@ -34,7 +29,22 @@ namespace AppointmentScheduler.Infrastructure.Business
             throw new NotImplementedException();
         }
 
-        public bool Update()
+        protected override Task<bool> Create()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Initilize()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Update()
         {
             throw new NotImplementedException();
         }

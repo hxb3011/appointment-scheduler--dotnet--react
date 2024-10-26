@@ -10,26 +10,29 @@ if ! docker version >/dev/null 2>/dev/null ; then
     exit 1
 fi
 
-docker ps -aqf name=dotnet | read -n 0
+docker ps -aqf name=^dotnet\$ | read -n 0
 _dotnet=$?
-docker ps -aqf name=mysql | read -n 0
+docker ps -aqf name=^mysql\$ | read -n 0
 _mysql=$?
-docker ps -aqf name=node | read -n 0
+docker ps -aqf name=^node\$ | read -n 0
 _node=$?
 
 if [ $_dotnet -eq 0 ] || [ $_mysql -eq 0 ] || [ $_node -eq 0 ] ; then
     if [ "$*" == "force" ] ; then
         if [ $_dotnet -eq 0 ] ; then
-            docker ps -qf name=dotnet | read -n 0 && docker stop dotnet >/dev/null && echo \"dotnet\" Stopped.
+            docker ps -qf name=^dotnet\$ | read -n 0 && docker stop dotnet >/dev/null && echo \"dotnet\" Stopped.
             docker rm dotnet >/dev/null && echo \"dotnet\" Removed.
         fi
         if [ $_mysql -eq 0 ] ; then
-            docker ps -qf name=mysql | read -n 0 && docker stop mysql >/dev/null && echo \"mysql\" Stopped.
+            docker ps -qf name=^mysql\$ | read -n 0 && docker stop mysql >/dev/null && echo \"mysql\" Stopped.
             docker rm mysql >/dev/null && docker volume rm mysqld >/dev/null && echo \"mysql\" Removed.
         fi
         if [ $_node -eq 0 ] ; then
-            docker ps -qf name=node | read -n 0 && docker stop node >/dev/null && echo \"node\" Stopped.
+            docker ps -qf name=^node\$ | read -n 0 && docker stop node >/dev/null && echo \"node\" Stopped.
             docker rm node >/dev/null && echo \"node\" Removed.
+        fi
+        if docker network ls -qf name=^devEnvNET\$ | read -n 0 ; then
+            docker network rm devEnvNET >/dev/null && echo \"devEnvNET\" Removed.
         fi
     else
         if [ "$*" ] ; then
@@ -41,7 +44,9 @@ if [ $_dotnet -eq 0 ] || [ $_mysql -eq 0 ] || [ $_node -eq 0 ] ; then
         exit 1
     fi
 fi
-docker run -v ./:/tmp/workspace -v vscrm:/root/.vscode-server -e 'DB_SERVER=localhost' -e 'DB_PORT=64001' -e 'DB_USER=user0' -e 'DB_PASSWORD=HeLlo|12' -e 'DB_DATABASE=apomtschedsys' -e 'API_SERVER=localhost' -e 'API_PORT=8088' -w /tmp/workspace --name dotnet --pull always -td mcr.microsoft.com/dotnet/sdk:8.0 && echo \"dotnet\" Created.
-docker run -v ./:/tmp/workspace -v mysqld:/var/lib/mysql -e 'MYSQL_ROOT_PASSWORD=HeLlo|12' -e 'MYSQL_DATABASE=apomtschedsys' -e 'MYSQL_USER=user0' -e 'MYSQL_PASSWORD=HeLlo|12' -p 64001:3306 -w /tmp/workspace/database --name mysql --pull always -td mysql:8.3.0-oraclelinux8 && echo \"mysql\" Created.
-docker run -v ./:/tmp/workspace -v vscrm:/root/.vscode-server -w /tmp/workspace/frontend/public/react-appointment-scheduler --name node --pull always -td node:22.9.0-bullseye && echo \"node\" Created.
+
+docker network create --gateway 10.0.0.1 --subnet 10.0.0.0/8 devEnvNET && echo \"devEnvNET\" Created.
+docker run -v "$PWD:/tmp/workspace" -v vscrm:/root/.vscode-server -e 'DB_SERVER=10.0.0.2' -e 'DB_PORT=3306' -e 'DB_USER=user0' -e 'DB_PASSWORD=HeLlo|12' -e 'DB_DATABASE=apomtschedsys' -e 'API_SERVER=10.0.0.3' -e 'API_PORT=8087' -w /tmp/workspace --network devEnvNET --ip 10.0.0.3 --name dotnet --pull always -td mcr.microsoft.com/dotnet/sdk:8.0 && echo \"dotnet\" Created.
+docker run -v "$PWD:/tmp/workspace" -v mysqld:/var/lib/mysql -e 'MYSQL_ROOT_PASSWORD=HeLlo|12' -e 'MYSQL_DATABASE=apomtschedsys' -e 'MYSQL_USER=user0' -e 'MYSQL_PASSWORD=HeLlo|12' -p 64001:3306 -w /tmp/workspace/database --network devEnvNET --ip 10.0.0.2 --name mysql --pull always -td mysql:8.3.0-oraclelinux8 && echo \"mysql\" Created.
+docker run -v "$PWD:/tmp/workspace" -v vscrm:/root/.vscode-server -w /tmp/workspace/frontend/public/react-appointment-scheduler --network devEnvNET --ip 10.0.0.4 --name node --pull always -td node:22.9.0-bullseye && echo \"node\" Created.
 exit 0

@@ -7,14 +7,24 @@ using System.Threading.Tasks;
 
 namespace AppointmentScheduler.Infrastructure.Business
 {
-    public class DocumentImpl : IDocument
+    internal sealed class DocumentImpl : BaseEntity, IDocument
     {
-        public bool Delete()
+        protected override Task<bool> Create()
         {
             throw new NotImplementedException();
         }
 
-        public bool Update()
+        protected override Task<bool> Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Initilize()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Update()
         {
             throw new NotImplementedException();
         }

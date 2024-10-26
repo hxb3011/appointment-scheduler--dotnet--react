@@ -2,7 +2,6 @@ namespace AppointmentScheduler.Domain.Business;
 
 public interface IDoctor : IUser
 {
-    int Id { get; set; }
     string Email { get; set; }
     string Phone { get; set; }
     string Position { get; set; }

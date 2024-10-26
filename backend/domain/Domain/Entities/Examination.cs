@@ -1,8 +1,7 @@
 namespace AppointmentScheduler.Domain.Entities;
 
-public class Examination
+public class Examination : BaseEntity
 {
-    public int Id { get; set; }
     public int DoctorId { get; set; }
     public int AppointmentId { get; set; }
     public string Diagnostic { get; set; }

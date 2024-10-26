@@ -1,35 +1,61 @@
-﻿using AppointmentScheduler.Domain.Business;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AppointmentScheduler.Domain.Business;
+using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
+using AppointmentScheduler.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace AppointmentScheduler.Infrastructure.Business
+namespace AppointmentScheduler.Infrastructure.Business;
+
+internal abstract class UserImpl : BaseEntity, IUser
 {
-    public class UserImpl : IUser
+    private readonly string _originalUserName;
+    internal readonly User _user;
+    internal readonly Role _role;
+    internal UserImpl(User user) => _originalUserName = (_user = user ?? throw new ArgumentNullException(nameof(user))).UserName;
+    string IUser.UserName { get => _user.UserName; set => _user.UserName = value; }
+    string IUser.Password { get => _user.Password; set => _user.Password = value; }
+    string IUser.FullName { get => _user.FullName; set => _user.FullName = value; }
+    IRole IUser.Role { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    bool IUser.IsUserNameValid => _user.UserName.IsValidUserName();
+
+    bool IUser.IsPasswordValid => _user.Password.IsValidPassword();
+
+    bool IUser.IsFullNameValid => _user.FullName.IsValidName();
+
+    Task<bool> IUser.IsUserNameExisted() => throw new NotImplementedException();
+
+    protected virtual Task<bool> CanDelete() {
+        throw new NotImplementedException();
+    }
+
+    protected virtual Task<bool> IsValid() {
+        throw new NotImplementedException();
+    }
+
+    protected override async Task<bool> Create()
     {
-        public string UserName { get => "test@company.com"; set => throw new NotImplementedException(); }
-        public string Password { get => "HeLlo|12"; set => throw new NotImplementedException(); }
-        public string FullName { get => "Test"; set => throw new NotImplementedException(); }
-        public IRole Role { get => new RoleImpl(); set => throw new NotImplementedException(); }
+        bool dataValid = await IsValid();
+        if (dataValid) _dbContext.Add(_user);
+        return dataValid;
+    }
 
-        public bool IsUserNameExisted => false;
+    protected override async Task<bool> Delete()
+    {
+        bool canDelete = await CanDelete();
+        if (canDelete) _dbContext.Remove(_user);
+        return canDelete;
+    }
 
-        public bool IsUserNameValid => true;
+    protected override Task<bool> Initilize()
+    {
+        throw new NotImplementedException();
+    }
 
-        public bool IsPasswordValid => true;
-
-        public bool IsFullNameValid => true;
-
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
+    protected override async Task<bool> Update()
+    {
+        bool dataValid = await IsValid();
+        if (dataValid) _dbContext.Update(_user);
+        return dataValid;
     }
 }

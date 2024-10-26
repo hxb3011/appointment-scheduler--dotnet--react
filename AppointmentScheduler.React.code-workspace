@@ -11,7 +11,10 @@
     ],
     "extensions": {
         "recommendations": [
-            "ms-vscode.vscode-typescript-next"
+            "ms-vscode.vscode-typescript-next",
+            "VisualStudioExptTeam.vscodeintellicode",
+            "VisualStudioExptTeam.intellicode-api-usage-examples",
+            "VisualStudioExptTeam.vscodeintellicode-completions"
         ]
     },
     "launch": {

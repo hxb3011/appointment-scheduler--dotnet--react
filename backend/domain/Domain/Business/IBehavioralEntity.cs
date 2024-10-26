@@ -2,6 +2,7 @@ namespace AppointmentScheduler.Domain.Business;
 
 public interface IBehavioralEntity
 {
-    bool Update();
-    bool Delete();
+    Task<bool> Create();
+    Task<bool> Update();
+    Task<bool> Delete();
 }

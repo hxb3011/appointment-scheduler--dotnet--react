@@ -1,5 +1,4 @@
 ﻿using AppointmentScheduler.Domain.Business;
-using Infrastructure.Business;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AppointmentScheduler.Infrastructure.Business
 {
-    public class ExaminationImpl : IExamination
+    internal sealed class ExaminationImpl : BaseEntity, IExamination
     {
         public IDoctor Doctor { get => new DoctorImpl(); set => throw new NotImplementedException(); }
         public IAppointment Appointment { get => new AppointmentImpl(); set => throw new NotImplementedException(); }
@@ -20,17 +19,27 @@ namespace AppointmentScheduler.Infrastructure.Business
 
         public IEnumerable<IDiagnosticService> DiagnosticServices { get => new List<DiagnosticServiceImpl>(); }
 
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
-
         public IPrescription ObtainPrescription()
         {
             throw new NotImplementedException();
         }
 
-        public bool Update()
+        protected override Task<bool> Create()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Initilize()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Update()
         {
             throw new NotImplementedException();
         }

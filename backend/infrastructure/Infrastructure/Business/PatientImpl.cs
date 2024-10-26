@@ -1,48 +1,30 @@
-﻿using AppointmentScheduler.Domain.Business;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AppointmentScheduler.Domain.Business;
+using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
+using AppointmentScheduler.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace AppointmentScheduler.Infrastructure.Business
+namespace AppointmentScheduler.Infrastructure.Business;
+
+internal sealed class PatientImpl : UserImpl, IPatient
 {
-    public class PatientImpl : IPatient
+    private readonly Patient _patient;
+    public PatientImpl(User user, Patient patient) : base(user)
     {
-        public string Email { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Phone { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Image { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string UserName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Password { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string FullName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IRole Role { get => new RoleImpl(); set => throw new NotImplementedException(); }
+        _patient = patient ?? throw new ArgumentNullException(nameof(patient));
+    }
 
-        public bool IsUserNameExisted { get => throw new NotImplementedException(); }
+    string IPatient.Email { get => _patient.Email; set => _patient.Email = value; }
+    string IPatient.Phone { get => _patient.Phone; set => _patient.Phone = value; }
+    string IPatient.Image { get => _patient.Image; set => _patient.Image = value; }
 
-        public bool IsUserNameValid { get => throw new NotImplementedException(); }
+    IEnumerable<IProfile> IPatient.LookupProfiles()
+    {
+        throw new NotImplementedException();
+    }
 
-        public bool IsPasswordValid { get => throw new NotImplementedException(); }
-
-        public bool IsFullNameValid { get => throw new NotImplementedException(); }
-
-        public bool Delete()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<IProfile> LookupProfiles()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IProfile ObtainProfile()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update()
-        {
-            throw new NotImplementedException();
-        }
+    IProfile IPatient.ObtainProfile()
+    {
+        throw new NotImplementedException();
     }
 }

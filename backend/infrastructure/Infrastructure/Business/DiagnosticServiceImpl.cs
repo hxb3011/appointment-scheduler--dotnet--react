@@ -1,25 +1,30 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AppointmentScheduler.Domain.Business;
-using AppointmentScheduler.Infrastructure.Business;
 
-namespace Infrastructure.Business
+namespace AppointmentScheduler.Infrastructure.Business
 {
-    public class DiagnosticServiceImpl : IDiagnosticService
+    internal sealed class DiagnosticServiceImpl : BaseEntity, IDiagnosticService
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Price { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IDoctor Doctor { get => new DoctorImpl(); set => throw new NotImplementedException(); }
-        public IDocument Document { get => new DocumentImpl(); set => throw new NotImplementedException(); }
+        string IDiagnosticService.Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        double IDiagnosticService.Price { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        IDoctor IDiagnosticService.Doctor { get => new DoctorImpl(); }
+        IDocument IDiagnosticService.Document { get => new DocumentImpl(); set => throw new NotImplementedException(); }
 
-        public bool Delete()
+        protected override Task<bool> Create()
         {
             throw new NotImplementedException();
         }
 
-        public bool Update()
+        protected override Task<bool> Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Initilize()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Task<bool> Update()
         {
             throw new NotImplementedException();
         }
