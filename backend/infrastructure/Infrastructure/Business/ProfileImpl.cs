@@ -1,52 +1,52 @@
 ﻿using AppointmentScheduler.Domain.Business;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AppointmentScheduler.Domain.Entities;
 
-namespace AppointmentScheduler.Infrastructure.Business
+namespace AppointmentScheduler.Infrastructure.Business;
+
+internal sealed class ProfileImpl : BaseEntity, IProfile
 {
-    internal sealed class ProfileImpl : BaseEntity, IProfile
+    private readonly Profile _profile;
+    private readonly IPatient _patient;
+
+    internal ProfileImpl(Profile profile, IPatient patient)
     {
-        public IPatient Patient { get => new PatientImpl(); set => throw new NotImplementedException(); }
-        public string FullName { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateOnly DateOfBirth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public char Gender { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        _profile = profile ?? throw new ArgumentNullException(nameof(profile));
+        _patient = patient ?? throw new ArgumentNullException(nameof(patient));
+    }
 
-        public IEnumerable<IAppointment> LookupAppointments()
-        {
-            throw new NotImplementedException();
-        }
+    IPatient IProfile.Patient => _patient;
 
-        public IEnumerable<IExamination> LookupExaminations()
-        {
-            throw new NotImplementedException();
-        }
+    string IProfile.FullName { get => _profile.FullName; set => _profile.FullName = value; }
+    DateOnly IProfile.DateOfBirth { get => _profile.DateOfBirth; set => _profile.DateOfBirth = value; }
+    char IProfile.Gender { get => _profile.Gender; set => _profile.Gender = value; }
 
-        public IAppointment ObtainAppointment()
-        {
-            throw new NotImplementedException();
-        }
+    IEnumerable<IAppointment> IProfile.Appointments { get => throw new NotImplementedException(); }
 
-        protected override Task<bool> Create()
-        {
-            throw new NotImplementedException();
-        }
+    IEnumerable<IExamination> IProfile.Examinations { get => throw new NotImplementedException(); }
 
-        protected override Task<bool> Delete()
-        {
-            throw new NotImplementedException();
-        }
+    IAppointment IProfile.ObtainAppointment()
+    {
+        // TODO: Like IPatient.ObtainProfile();
+        throw new NotImplementedException();
+    }
 
-        protected override Task<bool> Initilize()
-        {
-            throw new NotImplementedException();
-        }
+    protected override Task<bool> Create()
+    {
+        throw new NotImplementedException();
+    }
 
-        protected override Task<bool> Update()
-        {
-            throw new NotImplementedException();
-        }
+    protected override Task<bool> Delete()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override Task<bool> Initilize()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override Task<bool> Update()
+    {
+        throw new NotImplementedException();
     }
 }

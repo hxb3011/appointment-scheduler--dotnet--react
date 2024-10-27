@@ -63,16 +63,11 @@ public class DefaultRepository : DbContext, IRepository
 
     async Task<TEntity> IRepository.GetEntityBy<TKey, TEntity>(TKey key)
     {
-        TEntity entity;
 #if DEMO
         if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
         {
-            if (key is string sk && sk == "testkey")
-            {
-                entity = (TEntity)(IUser)new DemoUserImpl();
-                return entity is not IRepositoryEntityInitializer initializer
-                    || await initializer.Initilize(this) ? entity : null;
-            }
+            if (key is string sk && sk == "testkey") return (TEntity)await
+                this.Initialize((IUser)new DemoUserImpl());
         }
         return null;
 #else
@@ -81,18 +76,45 @@ public class DefaultRepository : DbContext, IRepository
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
                 var role = await FindAsync<Role>(id);
-                if (role != null)
-                {
-                    entity = (TEntity)(IRole)new RoleImpl(role);
-                    goto success;
-                }
+                if (role != null) return (TEntity)await
+                    this.Initialize((IRole)new RoleImpl(role));
             }
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
         {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var user = await FindAsync<User>(id);
+                if (user != null)
+                {
+                    var doctor = await FindAsync<Doctor>(id);
+                    if (doctor != null)
+                    {
+                        IRole irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
+                        irole ??= await RoleImpl.GetDefault(this);
+                        IDoctor idoctor = new DoctorImpl(user, doctor, irole);
+                        return (TEntity)await this.Initialize(idoctor);
+                    }
+                }
+            }
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
         {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var user = await FindAsync<User>(id);
+                if (user != null)
+                {
+                    var patient = await FindAsync<Patient>(id);
+                    if (patient != null)
+                    {
+                        IRole irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
+                        irole ??= await RoleImpl.GetDefault(this);
+                        IPatient ipatient = new PatientImpl(user, patient, irole);
+                        return (TEntity)await this.Initialize(ipatient);
+                    }
+                }
+            }
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
         {
@@ -101,10 +123,8 @@ public class DefaultRepository : DbContext, IRepository
             var p = await ((IRepository)this).GetEntityBy<TKey, IPatient>(key);
             if (p != null) return (TEntity)p;
         }
+        // TODO: ...more Impl
         return null;
-    success:
-        return entity is not IRepositoryEntityInitializer initializer
-            || await initializer.Initilize(this) ? entity : null;
 #endif
     }
 
@@ -113,11 +133,40 @@ public class DefaultRepository : DbContext, IRepository
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
         {
             var role = new Role();
-            return await this.IdGeneratedWrap(
+            if (await this.IdGeneratedWrap(
                 from r in Set<Role>()
                 where r.Id == role.Id
                 select r, role, nameof(Role.Id)
-            ) ? (TEntity)(IRole)new RoleImpl(role) : null;
+            )) return null;
+            return (TEntity)(IRole)new RoleImpl(role);
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
+        {
+            var user = new User();
+            if (!await this.IdGeneratedWrap(
+                from r in Set<User>()
+                where r.Id == user.Id
+                select r, user, nameof(User.Id)
+            )) return null;
+            var doctor = new Doctor { Id = user.Id };
+            var role = await RoleImpl.GetDefault(this);
+            return (TEntity)(IUser)new DoctorImpl(user, doctor, role);
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
+        {
+            var user = new User();
+            if (!await this.IdGeneratedWrap(
+                from r in Set<User>()
+                where r.Id == user.Id
+                select r, user, nameof(User.Id)
+            )) return null;
+            var patient = new Patient { Id = user.Id };
+            var role = await RoleImpl.GetDefault(this);
+            return (TEntity)(IUser)new PatientImpl(user, patient, role);
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
+        {
+            throw new InvalidOperationException("Unsupported type: " + typeof(IUser).FullName);
         }
         throw new NotImplementedException();
     }
@@ -137,7 +186,31 @@ public class DefaultRepository : DbContext, IRepository
         key = default;
         return false;
 #else
-        throw new NotImplementedException();
+        if (entity is RoleImpl role)
+        {
+            uint id = role._role.Id;
+            if (id is TKey uk) {
+                key = uk;
+                return true;
+            } else if (id.ToString() is TKey sk) {
+                key = sk;
+                return true;
+            }
+        }
+        else if (entity is UserImpl user)
+        {
+            uint id = user._user.Id;
+            if (id is TKey uk) {
+                key = uk;
+                return true;
+            } else if (id.ToString() is TKey sk) {
+                key = sk;
+                return true;
+            }
+        }
+        // TODO: ...more Impl
+        key = default;
+        return false;
 #endif
     }
 }
@@ -152,6 +225,45 @@ public class DemoUserImpl : IUser
         public string Description { get => "Description"; set => throw new NotImplementedException(); }
 
         public IEnumerable<Permission> Permissions => [Permission.Perm2, Permission.Perm3];
+
+        event EventHandler IBehavioralEntity.Created
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        event EventHandler IBehavioralEntity.Updated
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        event EventHandler IBehavioralEntity.Deleted
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public async Task<bool> IsNameExisted() => false;
 
@@ -183,6 +295,36 @@ public class DemoUserImpl : IUser
         {
             throw new NotImplementedException();
         }
+
+        Task<bool> IRole.IsNameExisted()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IRole.IsPermissionGranted(Permission permission)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IRole.SetPermissionGranted(Permission permission, bool granted)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IBehavioralEntity.Create()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IBehavioralEntity.Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<bool> IBehavioralEntity.Delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public string UserName { get => "test@company.com"; set => throw new NotImplementedException(); }
@@ -195,6 +337,45 @@ public class DemoUserImpl : IUser
     public bool IsPasswordValid => true;
 
     public bool IsFullNameValid => true;
+
+    event EventHandler IBehavioralEntity.Created
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    event EventHandler IBehavioralEntity.Updated
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    event EventHandler IBehavioralEntity.Deleted
+    {
+        add
+        {
+            throw new NotImplementedException();
+        }
+
+        remove
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     public async Task<bool> Create()
     {
@@ -212,6 +393,26 @@ public class DemoUserImpl : IUser
     }
 
     Task<bool> IUser.IsUserNameExisted()
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<bool> IBehavioralEntity.Create()
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<bool> IBehavioralEntity.Update()
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<bool> IBehavioralEntity.Delete()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ChangeRole(IRole role)
     {
         throw new NotImplementedException();
     }

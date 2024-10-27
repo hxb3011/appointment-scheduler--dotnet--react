@@ -6,7 +6,7 @@ namespace AppointmentScheduler.Infrastructure.Business
     {
         string IDiagnosticService.Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         double IDiagnosticService.Price { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        IDoctor IDiagnosticService.Doctor { get => new DoctorImpl(); }
+        IDoctor IDiagnosticService.Doctor { get => throw new NotImplementedException(); }
         IDocument IDiagnosticService.Document { get => new DocumentImpl(); set => throw new NotImplementedException(); }
 
         protected override Task<bool> Create()

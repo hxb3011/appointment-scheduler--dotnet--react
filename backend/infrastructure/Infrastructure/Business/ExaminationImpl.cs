@@ -9,7 +9,7 @@ namespace AppointmentScheduler.Infrastructure.Business
 {
     internal sealed class ExaminationImpl : BaseEntity, IExamination
     {
-        public IDoctor Doctor { get => new DoctorImpl(); set => throw new NotImplementedException(); }
+        public IDoctor Doctor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IAppointment Appointment { get => new AppointmentImpl(); set => throw new NotImplementedException(); }
         public string Diagnostic { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

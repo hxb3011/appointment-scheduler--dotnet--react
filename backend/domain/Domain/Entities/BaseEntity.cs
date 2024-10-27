@@ -2,8 +2,8 @@ namespace AppointmentScheduler.Domain.Entities;
 
 public abstract class BaseEntity
 {
-    public int Id { get; set; }
-    public override int GetHashCode() => Id;
+    public uint Id { get; set; }
+    public override int GetHashCode() => (int)Id;
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(this, obj)) return true;

@@ -7,6 +7,8 @@ public interface IDoctor : IUser
     string Position { get; set; }
     string Certificate { get; set; }
     string Image { get; set; }
-    IExamination ObtainExamination(IAppointment appointment);
-    IEnumerable<IExamination> LookupExaminations();
+    bool IsEmailValid { get; }
+    bool IsPhoneValid { get; }
+    IEnumerable<IExamination> Examinations { get; }
+    Task<IExamination> ObtainExamination(IAppointment appointment);
 }

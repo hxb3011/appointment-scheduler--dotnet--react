@@ -1,4 +1,5 @@
 ﻿using AppointmentScheduler.Domain.Business;
+using AppointmentScheduler.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

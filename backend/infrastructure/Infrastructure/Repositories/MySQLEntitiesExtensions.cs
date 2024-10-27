@@ -10,13 +10,13 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("prescriptiondetail");
         builder.HasKey(nameof(PrescriptionDetail.Id));
-        builder.Property<int>(nameof(PrescriptionDetail.Id))
+        builder.Property<uint>(nameof(PrescriptionDetail.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(PrescriptionDetail.PrescriptionId))
+        builder.Property<uint>(nameof(PrescriptionDetail.PrescriptionId))
             .HasColumnName("PrescriptionId")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(PrescriptionDetail.MedicineId))
+        builder.Property<uint>(nameof(PrescriptionDetail.MedicineId))
             .HasColumnName("MedicineId")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(PrescriptionDetail.Description))
@@ -28,7 +28,7 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("medicine");
         builder.HasKey(nameof(Medicine.Id));
-        builder.Property<int>(nameof(Medicine.Id))
+        builder.Property<uint>(nameof(Medicine.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(Medicine.Name))
@@ -44,10 +44,10 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("prescription");
         builder.HasKey(nameof(Prescription.Id));
-        builder.Property<int>(nameof(Prescription.Id))
+        builder.Property<uint>(nameof(Prescription.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(Prescription.ExaminationId))
+        builder.Property<uint>(nameof(Prescription.ExaminationId))
             .HasColumnName("ExaminationId")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(Prescription.Description))
@@ -60,16 +60,16 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("examinationservice");
         builder.HasKey(nameof(ExaminationService.Id));
-        builder.Property<int>(nameof(ExaminationService.Id))
+        builder.Property<uint>(nameof(ExaminationService.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(ExaminationService.DoctorId))
+        builder.Property<uint>(nameof(ExaminationService.DoctorId))
             .HasColumnName("DoctorId")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(ExaminationService.DiagnosticServiceId))
+        builder.Property<uint>(nameof(ExaminationService.DiagnosticServiceId))
             .HasColumnName("DiagnosticServiceId")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(ExaminationService.ExaminationId))
+        builder.Property<uint>(nameof(ExaminationService.ExaminationId))
             .HasColumnName("ExaminationDetailId")
             .HasColumnType("int(11)");
         builder.Ignore(nameof(ExaminationService.Document));
@@ -79,7 +79,7 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("diagnosticservice");
         builder.HasKey(nameof(DiagnosticService.Id));
-        builder.Property<int>(nameof(DiagnosticService.Id))
+        builder.Property<uint>(nameof(DiagnosticService.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(DiagnosticService.Name))
@@ -94,13 +94,13 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("examinationdetail");
         builder.HasKey(nameof(Examination.Id));
-        builder.Property<int>(nameof(Examination.Id))
+        builder.Property<uint>(nameof(Examination.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(Examination.DoctorId))
+        builder.Property<uint>(nameof(Examination.DoctorId))
             .HasColumnName("DoctorId")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(Examination.AppointmentId))
+        builder.Property<uint>(nameof(Examination.AppointmentId))
             .HasColumnName("AppointmentId")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(Examination.Diagnostic))
@@ -109,7 +109,7 @@ public static class MySQLEntitiesExtensions
         builder.Property<string>(nameof(Examination.Description))
             .HasColumnName("Description")
             .HasColumnType("varchar(50)");
-        builder.Property<int>(nameof(Examination.State))
+        builder.Property<uint>(nameof(Examination.State))
             .HasColumnName("State")
             .HasColumnType("int(11)");
     }
@@ -118,16 +118,16 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("appointment");
         builder.HasKey(nameof(Appointment.Id));
-        builder.Property<int>(nameof(Appointment.Id))
+        builder.Property<uint>(nameof(Appointment.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
         builder.Property<DateTime>(nameof(Appointment.AtTime))
             .HasColumnName("Time")
             .HasColumnType("datetime");
-        builder.Property<int>(nameof(Appointment.State))
+        builder.Property<uint>(nameof(Appointment.State))
             .HasColumnName("State")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(Appointment.ProfileId))
+        builder.Property<uint>(nameof(Appointment.ProfileId))
             .HasColumnName("ProfileId")
             .HasColumnType("int(11)");
     }
@@ -136,10 +136,10 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("profile");
         builder.HasKey(nameof(Profile.Id));
-        builder.Property<int>(nameof(Profile.Id))
+        builder.Property<uint>(nameof(Profile.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
-        builder.Property<int>(nameof(Profile.PatientId))
+        builder.Property<uint>(nameof(Profile.PatientId))
             .HasColumnName("PatientId")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(Profile.FullName))
@@ -157,7 +157,7 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("doctor");
         builder.HasKey(nameof(Doctor.Id));
-        builder.Property<int>(nameof(Doctor.Id))
+        builder.Property<uint>(nameof(Doctor.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(Doctor.Email))
@@ -179,7 +179,7 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("patient");
         builder.HasKey(nameof(Patient.Id));
-        builder.Property<int>(nameof(Patient.Id))
+        builder.Property<uint>(nameof(Patient.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(Patient.Email))
@@ -195,7 +195,7 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("user");
         builder.HasKey(nameof(User.Id));
-        builder.Property<int>(nameof(User.Id))
+        builder.Property<uint>(nameof(User.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(User.UserName))
@@ -207,7 +207,7 @@ public static class MySQLEntitiesExtensions
         builder.Property<string>(nameof(User.Password))
             .HasColumnName("Password")
             .HasColumnType("varchar(50)");
-        builder.Property<int>(nameof(User.RoleId))
+        builder.Property<uint>(nameof(User.RoleId))
             .HasColumnName("RoleId")
             .HasColumnType("int(11)");
     }
@@ -216,7 +216,7 @@ public static class MySQLEntitiesExtensions
     {
         builder.ToTable("role");
         builder.HasKey(nameof(Role.Id));
-        builder.Property<int>(nameof(Role.Id))
+        builder.Property<uint>(nameof(Role.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
         builder.Property<string>(nameof(Role.Name))

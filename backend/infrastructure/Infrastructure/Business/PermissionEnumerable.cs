@@ -4,12 +4,12 @@ using AppointmentScheduler.Domain.Entities;
 
 namespace AppointmentScheduler.Infrastructure.Business;
 
-internal struct PermissionEnumerator : IEnumerable<Permission>, IEnumerable, IEnumerator<Permission>, IEnumerator, IDisposable
+internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEnumerator<Permission>, IEnumerator, IDisposable
 {
     private byte[] _permissions;
     private long _byteIndex, _bitIndex;
 
-    public PermissionEnumerator(byte[] permissions)
+    public PermissionEnumerable(byte[] permissions)
     {
         _permissions = permissions;
         _byteIndex = -1;
@@ -28,7 +28,7 @@ internal struct PermissionEnumerator : IEnumerable<Permission>, IEnumerable, IEn
 
     readonly object IEnumerator.Current => Current;
 
-    public readonly IEnumerator<Permission> GetEnumerator() => new PermissionEnumerator(_permissions);
+    public readonly IEnumerator<Permission> GetEnumerator() => new PermissionEnumerable(_permissions);
 
     void IDisposable.Dispose()
     {

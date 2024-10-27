@@ -2,8 +2,8 @@ namespace AppointmentScheduler.Domain.Business;
 
 public interface IExamination : IBehavioralEntity
 {
-    IDoctor Doctor { get; set; }
-    IAppointment Appointment { get; set; }
+    IDoctor Doctor { get; }
+    IAppointment Appointment { get; }
     string Diagnostic { get; set; }
     string Description { get; set; }
     int State { get; set; }

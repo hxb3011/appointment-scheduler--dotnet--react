@@ -1,5 +1,7 @@
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Infrastructure.Authorization;
+using AppointmentScheduler.Infrastructure.Business;
 using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,8 @@ namespace AppointmentScheduler.Infrastructure;
 
 public static class Extensions
 {
+    public static IEnumerable<T> Cached<T>(this IEnumerable<T> query) => new CachedEnumerable<T>(query);
+
     private static unsafe int NewId()
     {
         var guid = Guid.NewGuid();
@@ -28,6 +32,12 @@ public static class Extensions
         ) <= IdLimit);
         return countTask == null || countTask.Result <= IdLimit;
     }
+
+    public static async Task<TEntity> Initialize<TEntity>(this IRepository repository, TEntity entity)
+        where TEntity : class, IBehavioralEntity
+        => entity is not IRepositoryEntityInitializer initializer
+            || await initializer.Initialize(repository)
+            ? entity : null;
 
     private static bool InvertTaskResultContinuation(Task<bool> task) => !task.Result;
     public static Task<bool> InvertTaskResult(this Task<bool> task) => task.ContinueWith(InvertTaskResultContinuation);
