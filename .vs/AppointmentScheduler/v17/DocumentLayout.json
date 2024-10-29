@@ -3,36 +3,28 @@
   "WorkspaceRootPath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\democontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\democontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\appointmentimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\appointmentimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\resourcemanagerserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\resourcemanagerserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\doctorimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\doctorimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\configurationpropertiesserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\configurationpropertiesserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\examinationimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\examinationimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\authorization\\jsonwebtokenmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\authorization\\jsonwebtokenmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\authorization\\jsonwebtokenextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\authorization\\jsonwebtokenextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\examination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\examination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\defaultrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\defaultrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\service\\service\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\diagnosticserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\diagnosticserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|f:\\c#\\project-appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\roleimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -46,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 211,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -55,122 +47,98 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ResourceManagerServiceImpl.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAiAAAA",
+              "Title": "DoctorImpl.cs",
+              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
+              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACEAAAAwAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T04:10:00.919Z",
+              "WhenOpened": "2024-10-29T08:00:53.968Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DiagnosticServiceImpl.cs",
+              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAmAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-29T06:53:50.567Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ConfigurationPropertiesServiceImpl.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBMAAAAJAAAA",
+              "Title": "ExaminationImpl.cs",
+              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAqwAwAAAAPAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T04:09:22.508Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "JSONWebTokenMiddleware.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenMiddleware.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenMiddleware.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenMiddleware.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenMiddleware.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBIAAAA4AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T04:09:08.13Z",
+              "WhenOpened": "2024-10-29T06:48:43.558Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "JSONWebTokenExtensions.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenExtensions.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenExtensions.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenExtensions.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Authorization\\JSONWebTokenExtensions.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwA4AAAA/AAAA",
+              "Title": "Examination.cs",
+              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Examination.cs",
+              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Examination.cs",
+              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Examination.cs",
+              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Examination.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAIAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T04:08:46.944Z",
+              "WhenOpened": "2024-10-29T06:33:53.601Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Program.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Program.cs",
-              "RelativeDocumentMoniker": "backend\\service\\Service\\Program.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Program.cs",
-              "RelativeToolTip": "backend\\service\\Service\\Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAiAAAA",
+              "DocumentIndex": 3,
+              "Title": "Appointment.cs",
+              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Appointment.cs",
+              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Appointment.cs",
+              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Appointment.cs",
+              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Appointment.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAgAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T03:52:48.675Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "AppointmentController.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "RelativeToolTip": "backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAATAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T03:09:37.259Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "RoleImpl.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAvAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T03:04:25.482Z"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 189,
-          "SelectedChildIndex": 1,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DefaultRepository.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "ViewState": "AQIAAC0AAAAAAAAAAAAowEcAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T03:55:04.966Z",
+              "WhenOpened": "2024-10-29T06:33:31.004Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DemoController.cs",
-              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\DemoController.cs",
-              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\DemoController.cs",
-              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\DemoController.cs",
-              "RelativeToolTip": "backend\\service\\Service\\Controllers\\DemoController.cs",
-              "ViewState": "AQIAAF8AAAAAAAAAAAAswHsAAAATAAAA",
+              "Title": "AppointmentImpl.cs",
+              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAA9wCgAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T03:34:52.707Z",
+              "WhenOpened": "2024-10-29T06:27:34.655Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 211,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "RoleImpl.cs",
+              "DocumentMoniker": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
+              "ToolTip": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\RoleImpl.cs",
+              "ViewState": "AQIAACQAAAAAAAAAAAAxwDcAAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-29T07:12:40.78Z",
               "EditorCaption": ""
             }
           ]

@@ -3,9 +3,10 @@ namespace AppointmentScheduler.Domain.Business;
 public interface IAppointment : IBehavioralEntity
 {
     int Number { get; }
-    DateTime AtTime { get; set; }
-    int State { get; set; }
+    DateTime AtTime { get; }
+    uint State { get; set; }
+    IDoctor Doctor { get; }
     IProfile Profile { get; set; }
     IExamination Examination { get; }
-    IExamination ObtainExamination(IDoctor doctor);
+    IExamination ObtainExamination();
 }

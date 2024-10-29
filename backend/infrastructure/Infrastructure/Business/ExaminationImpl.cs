@@ -1,4 +1,5 @@
 ﻿using AppointmentScheduler.Domain.Business;
+using AppointmentScheduler.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,12 @@ namespace AppointmentScheduler.Infrastructure.Business
 {
     internal sealed class ExaminationImpl : BaseEntity, IExamination
     {
+        public ExaminationImpl(Examination examination, IAppointment appointment)
+        { 
+            //examination = new NotImplementedException();
+            Appointment = appointment;
+        }
+
         public IDoctor Doctor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public IAppointment Appointment { get => new AppointmentImpl(); set => throw new NotImplementedException(); }
         public string Diagnostic { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

@@ -31,7 +31,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
 
     protected override async Task<bool> CanDelete()
         => !await (
-            from e in _dbContext.Set<Examination>()
+            from e in _dbContext.Set<Appointment>()
             where e.DoctorId == _doctor.Id
             select e
         ).AnyAsync() && !await (
