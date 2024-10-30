@@ -9,7 +9,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     private readonly Doctor _doctor;
     private IEnumerable<IAppointment> _appointments;
     private IEnumerable<IExamination> _examinations;
-    internal DoctorImpl(User user, Doctor doctor, IRole role = null) : base(user, role)
+    internal DoctorImpl(User user, Doctor doctor, IRole role) : base(user, role)
     {
         _doctor = doctor ?? throw new ArgumentNullException(nameof(doctor));
     }
@@ -55,9 +55,9 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     Task<IExamination> IDoctor.ObtainExamination(IAppointment appointment)
         => appointment.ObtainExamination();
 
-    private Task<IAppointment> CreateAppointment(Appointment profile)
+    private Task<IAppointment> CreateAppointment(Appointment appointment)
     {
-        IAppointment impl = new AppointmentImpl(profile, this);
+        IAppointment impl = new AppointmentImpl(appointment, this);
         impl.Created += InvalidateLoadedEntities;
         impl.Updated += InvalidateLoadedEntities;
         impl.Deleted += InvalidateLoadedEntities;

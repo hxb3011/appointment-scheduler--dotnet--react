@@ -8,7 +8,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
 {
     private readonly Patient _patient;
     private IEnumerable<IProfile> _profiles;
-    internal PatientImpl(User user, Patient patient, IRole role = null) : base(user, role)
+    internal PatientImpl(User user, Patient patient, IRole role) : base(user, role)
     {
         _patient = patient ?? throw new ArgumentNullException(nameof(patient));
     }

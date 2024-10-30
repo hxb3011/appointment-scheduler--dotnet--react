@@ -10,10 +10,10 @@ internal abstract class UserImpl : BaseEntity, IUser
 {
     internal readonly User _user;
     private IRole _role;
-    internal UserImpl(User user, IRole role = null)
+    internal UserImpl(User user, IRole role)
     {
         _user = user ?? throw new ArgumentNullException(nameof(user));
-        _role = role;
+        _role = role ?? throw new ArgumentNullException(nameof(role));
     }
 
     string IUser.UserName { get => _user.UserName; set => _user.UserName = value; }

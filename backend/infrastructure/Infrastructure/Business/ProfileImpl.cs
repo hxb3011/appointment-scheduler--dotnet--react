@@ -6,7 +6,7 @@ namespace AppointmentScheduler.Infrastructure.Business;
 
 internal sealed class ProfileImpl : BaseEntity, IProfile
 {
-    private readonly Profile _profile;
+    internal readonly Profile _profile;
     private readonly IPatient _patient;
     private IEnumerable<IAppointment> _appointments;
     private IEnumerable<IExamination> _examinations;
@@ -54,11 +54,12 @@ internal sealed class ProfileImpl : BaseEntity, IProfile
     {
         IAppointment impl = new AppointmentImpl(appointment,
             await _repository.GetEntityBy<uint, IDoctor>(appointment.DoctorId));
+        impl = await _repository.Initialize(impl);
         impl.Profile = this;
         impl.Created += InvalidateLoadedEntities;
         impl.Updated += InvalidateLoadedEntities;
         impl.Deleted += InvalidateLoadedEntities;
-        return await _repository.Initialize(impl);
+        return impl;
     }
 
     private void InvalidateLoadedEntities(object sender, EventArgs e)
@@ -84,14 +85,14 @@ internal sealed class ProfileImpl : BaseEntity, IProfile
     protected override async Task<bool> Delete()
     {
         var canDelete = await CanDelete();
-        if (canDelete) _dbContext.Add(_profile);
+        if (canDelete) _dbContext.Remove(_profile);
         return canDelete;
     }
 
     protected override async Task<bool> Update()
     {
         var dataValid = await IsValid();
-        if (dataValid) _dbContext.Add(_profile);
+        if (dataValid) _dbContext.Update(_profile);
         return dataValid;
     }
 }

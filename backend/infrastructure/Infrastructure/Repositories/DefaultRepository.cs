@@ -1,4 +1,4 @@
-#define DEMO
+// #define DEMO
 
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
@@ -36,9 +36,10 @@ public class DefaultRepository : DbContext, IRepository
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
             return (
                 from role in Set<Role>()
-                select new RoleImpl(role)
+                select this.Initialize((IRole)new RoleImpl(role)) // FIXME: Init
             ).Cast<TEntity>();
-        throw new NotImplementedException();
+        // Get with cached
+        return Enumerable.Empty<TEntity>();
     }
 
     async Task<TService> IRepository.GetService<TService>()
@@ -90,7 +91,7 @@ public class DefaultRepository : DbContext, IRepository
                     var doctor = await FindAsync<Doctor>(id);
                     if (doctor != null)
                     {
-                        IRole irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
+                        var irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
                         irole ??= await RoleImpl.GetDefault(this);
                         IDoctor idoctor = new DoctorImpl(user, doctor, irole);
                         return (TEntity)await this.Initialize(idoctor);
@@ -108,7 +109,7 @@ public class DefaultRepository : DbContext, IRepository
                     var patient = await FindAsync<Patient>(id);
                     if (patient != null)
                     {
-                        IRole irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
+                        var irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
                         irole ??= await RoleImpl.GetDefault(this);
                         IPatient ipatient = new PatientImpl(user, patient, irole);
                         return (TEntity)await this.Initialize(ipatient);
@@ -122,6 +123,32 @@ public class DefaultRepository : DbContext, IRepository
             if (d != null) return (TEntity)d;
             var p = await ((IRepository)this).GetEntityBy<TKey, IPatient>(key);
             if (p != null) return (TEntity)p;
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
+        {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var profile = await FindAsync<Profile>(id);
+                if (profile != null)
+                {
+                    var patient = await ((IRepository)this).GetEntityBy<uint, IPatient>(profile.PatientId);
+                    IProfile iprofile = new ProfileImpl(profile, patient);
+                    return (TEntity)await this.Initialize(iprofile);
+                }
+            }
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IAppointment)))
+        {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var appointment = await FindAsync<Appointment>(id);
+                if (appointment != null)
+                {
+                    var doctor = await ((IRepository)this).GetEntityBy<uint, IDoctor>(appointment.DoctorId);
+                    IAppointment iappointment = new AppointmentImpl(appointment, doctor);
+                    return (TEntity)await this.Initialize(iappointment);
+                }
+            }
         }
         // TODO: ...more Impl
         return null;
@@ -138,9 +165,9 @@ public class DefaultRepository : DbContext, IRepository
                 where r.Id == role.Id
                 select r, role, nameof(Role.Id)
             )) return null;
-            return (TEntity)(IRole)new RoleImpl(role);
+            return (TEntity)await this.Initialize((IRole)new RoleImpl(role));
         }
-        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
+        if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
         {
             var user = new User();
             if (!await this.IdGeneratedWrap(
@@ -150,9 +177,9 @@ public class DefaultRepository : DbContext, IRepository
             )) return null;
             var doctor = new Doctor { Id = user.Id };
             var role = await RoleImpl.GetDefault(this);
-            return (TEntity)(IUser)new DoctorImpl(user, doctor, role);
+            return (TEntity)await this.Initialize((IUser)new DoctorImpl(user, doctor, role));
         }
-        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
+        if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
         {
             var user = new User();
             if (!await this.IdGeneratedWrap(
@@ -162,13 +189,9 @@ public class DefaultRepository : DbContext, IRepository
             )) return null;
             var patient = new Patient { Id = user.Id };
             var role = await RoleImpl.GetDefault(this);
-            return (TEntity)(IUser)new PatientImpl(user, patient, role);
+            return (TEntity)await this.Initialize((IUser)new PatientImpl(user, patient, role));
         }
-        else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
-        {
-            throw new InvalidOperationException("Unsupported type: " + typeof(IUser).FullName);
-        }
-        throw new NotImplementedException();
+        return null;
     }
 
     bool IRepository.TryGetKeyOf<TEntity, TKey>(TEntity entity, out TKey key)
@@ -189,10 +212,13 @@ public class DefaultRepository : DbContext, IRepository
         if (entity is RoleImpl role)
         {
             uint id = role._role.Id;
-            if (id is TKey uk) {
+            if (id is TKey uk)
+            {
                 key = uk;
                 return true;
-            } else if (id.ToString() is TKey sk) {
+            }
+            else if (id.ToString() is TKey sk)
+            {
                 key = sk;
                 return true;
             }
@@ -200,10 +226,41 @@ public class DefaultRepository : DbContext, IRepository
         else if (entity is UserImpl user)
         {
             uint id = user._user.Id;
-            if (id is TKey uk) {
+            if (id is TKey uk)
+            {
                 key = uk;
                 return true;
-            } else if (id.ToString() is TKey sk) {
+            }
+            else if (id.ToString() is TKey sk)
+            {
+                key = sk;
+                return true;
+            }
+        }
+        else if (entity is ProfileImpl profile)
+        {
+            uint id = profile._profile.Id;
+            if (id is TKey uk)
+            {
+                key = uk;
+                return true;
+            }
+            else if (id.ToString() is TKey sk)
+            {
+                key = sk;
+                return true;
+            }
+        }
+        else if (entity is AppointmentImpl appointment)
+        {
+            uint id = appointment._appointment.Id;
+            if (id is TKey uk)
+            {
+                key = uk;
+                return true;
+            }
+            else if (id.ToString() is TKey sk)
+            {
                 key = sk;
                 return true;
             }

@@ -4,9 +4,9 @@ public interface IAppointment : IBehavioralEntity
 {
     int Number { get; }
     DateTime AtTime { get; }
-    int State { get; set; }
-    IProfile Profile { get; set; }
+    uint State { get; set; }
     IDoctor Doctor { get; }
+    IProfile Profile { get; set; }
     IExamination Examination { get; }
     Task<IExamination> ObtainExamination();
 }
