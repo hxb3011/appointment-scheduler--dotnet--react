@@ -6,7 +6,8 @@ public interface IProfile : IBehavioralEntity
     string FullName { get; set; }
     DateOnly DateOfBirth { get; set; }
     char Gender { get; set; }
+    bool IsFullNameValid { get; }
     IEnumerable<IAppointment> Appointments { get; }
     IEnumerable<IExamination> Examinations { get; }
-    IAppointment ObtainAppointment();
+    Task<IAppointment> ObtainAppointment(DateTime atTime, IDoctor doctor);
 }

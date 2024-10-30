@@ -1,4 +1,4 @@
-using AppointmentScheduler.Domain.Business;
+﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Infrastructure.Repositories;
@@ -10,7 +10,6 @@ internal abstract class UserImpl : BaseEntity, IUser
 {
     internal readonly User _user;
     private IRole _role;
-    private IConfigurationPropertiesService _configurationProperties;
     internal UserImpl(User user, IRole role = null)
     {
         _user = user ?? throw new ArgumentNullException(nameof(user));
@@ -72,16 +71,6 @@ internal abstract class UserImpl : BaseEntity, IUser
         bool canDelete = await CanDelete();
         if (canDelete) _dbContext.Remove(_user);
         return canDelete;
-    }
-
-    protected override async Task<bool> Initilize()
-    {
-        var result = await base.Initilize();
-        if (result)
-        {
-            _configurationProperties = await _repository.GetService<IConfigurationPropertiesService>();
-        }
-        return result;
     }
 
     protected override async Task<bool> Update()

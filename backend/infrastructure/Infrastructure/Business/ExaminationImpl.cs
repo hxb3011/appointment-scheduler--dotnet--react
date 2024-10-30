@@ -1,16 +1,20 @@
 ﻿using AppointmentScheduler.Domain.Business;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AppointmentScheduler.Domain.Entities;
 
 namespace AppointmentScheduler.Infrastructure.Business
 {
     internal sealed class ExaminationImpl : BaseEntity, IExamination
     {
-        public IDoctor Doctor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IAppointment Appointment { get => new AppointmentImpl(); set => throw new NotImplementedException(); }
+        internal Examination _examination;
+        internal IAppointment _appointment;
+        internal ExaminationImpl(Examination examination, IAppointment appointment)
+        {
+            _examination = examination ?? throw new ArgumentNullException(nameof(examination));
+            _appointment = appointment ?? throw new ArgumentNullException(nameof(appointment));
+        }
+
+        IDoctor IExamination.Doctor { get => _appointment.Doctor; }
+        IAppointment IExamination.Appointment { get => _appointment; }
         public string Diagnostic { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int State { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

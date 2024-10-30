@@ -1,7 +1,5 @@
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
-using AppointmentScheduler.Domain.Repositories;
-using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Infrastructure.Business;
@@ -28,7 +26,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
         get => _profiles ??= (
             from p in _dbContext.Set<Profile>()
             where p.PatientId == _patient.Id
-            select new ProfileImpl(p, this)
+            select CreateProfile(p).WaitForResult(Timeout.Infinite, default)
         ).Cached();
     }
 
@@ -41,11 +39,16 @@ internal sealed class PatientImpl : UserImpl, IPatient
             select p, profile, nameof(Profile.Id)
         )) return null;
         profile.PatientId = _patient.Id;
+        return await CreateProfile(profile);
+    }
+
+    private Task<IProfile> CreateProfile(Profile profile)
+    {
         IProfile impl = new ProfileImpl(profile, this);
         impl.Created += InvalidateLoadedEntities;
         impl.Updated += InvalidateLoadedEntities;
         impl.Deleted += InvalidateLoadedEntities;
-        return await _repository.Initialize(impl);
+        return _repository.Initialize(impl);
     }
 
     private void InvalidateLoadedEntities(object sender, EventArgs e)

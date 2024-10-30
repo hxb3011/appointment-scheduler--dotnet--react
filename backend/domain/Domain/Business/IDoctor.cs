@@ -9,6 +9,8 @@ public interface IDoctor : IUser
     string Image { get; set; }
     bool IsEmailValid { get; }
     bool IsPhoneValid { get; }
+    IEnumerable<IAppointment> Appointments { get; }
     IEnumerable<IExamination> Examinations { get; }
+    Task<IAppointment> ObtainAppointment(DateTime atTime);
     Task<IExamination> ObtainExamination(IAppointment appointment);
 }

@@ -97,9 +97,6 @@ public static class MySQLEntitiesExtensions
         builder.Property<uint>(nameof(Examination.Id))
             .HasColumnName("Id")
             .HasColumnType("int(11)");
-        builder.Property<uint>(nameof(Examination.DoctorId))
-            .HasColumnName("DoctorId")
-            .HasColumnType("int(11)");
         builder.Property<uint>(nameof(Examination.AppointmentId))
             .HasColumnName("AppointmentId")
             .HasColumnType("int(11)");
@@ -126,6 +123,9 @@ public static class MySQLEntitiesExtensions
             .HasColumnType("datetime");
         builder.Property<uint>(nameof(Appointment.State))
             .HasColumnName("State")
+            .HasColumnType("int(11)");
+        builder.Property<uint>(nameof(Appointment.DoctorId))
+            .HasColumnName("DoctorId")
             .HasColumnType("int(11)");
         builder.Property<uint>(nameof(Appointment.ProfileId))
             .HasColumnName("ProfileId")

@@ -1,7 +1,5 @@
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
-using AppointmentScheduler.Domain.Repositories;
-using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Infrastructure.Business;
@@ -9,6 +7,8 @@ namespace AppointmentScheduler.Infrastructure.Business;
 internal sealed class DoctorImpl : UserImpl, IDoctor
 {
     private readonly Doctor _doctor;
+    private IEnumerable<IAppointment> _appointments;
+    private IEnumerable<IExamination> _examinations;
     internal DoctorImpl(User user, Doctor doctor, IRole role = null) : base(user, role)
     {
         _doctor = doctor ?? throw new ArgumentNullException(nameof(doctor));
@@ -21,17 +21,57 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     string IDoctor.Image { get => _doctor.Image; set => _doctor.Image = value; }
     bool IDoctor.IsEmailValid { get => _doctor.Email.IsValidEmail(emptyAllowed: true); }
     bool IDoctor.IsPhoneValid { get => _doctor.Phone.IsValidPhone(emptyAllowed: true); }
+    IEnumerable<IAppointment> IDoctor.Appointments
+    {
+        get => _appointments ??= (
+            from ap in _dbContext.Set<Appointment>()
+            where ap.DoctorId == _doctor.Id
+            select CreateAppointment(ap).WaitForResult(Timeout.Infinite, default)
+        ).Cached();
+    }
 
-    IEnumerable<IExamination> IDoctor.Examinations { get => throw new NotImplementedException(); }
+    IEnumerable<IExamination> IDoctor.Examinations
+    {
+        get => _examinations ??= (
+            from ap in ((IDoctor)this).Appointments
+            where ap.Examination != null
+            select ap.Examination
+        );
+    }
+
+    async Task<IAppointment> IDoctor.ObtainAppointment(DateTime atTime)
+    {
+        var appointment = new Appointment();
+        if (!await _dbContext.IdGeneratedWrap(
+            from ap in _dbContext.Set<Appointment>()
+            where ap.Id == appointment.Id
+            select ap, appointment, nameof(Appointment.Id)
+        )) return null;
+        appointment.AtTime = atTime;
+        appointment.DoctorId = _doctor.Id;
+        return await CreateAppointment(appointment);
+    }
 
     Task<IExamination> IDoctor.ObtainExamination(IAppointment appointment)
+        => appointment.ObtainExamination();
+
+    private Task<IAppointment> CreateAppointment(Appointment profile)
     {
-        throw new NotImplementedException();
+        IAppointment impl = new AppointmentImpl(profile, this);
+        impl.Created += InvalidateLoadedEntities;
+        impl.Updated += InvalidateLoadedEntities;
+        impl.Deleted += InvalidateLoadedEntities;
+        return _repository.Initialize(impl);
+    }
+
+    private void InvalidateLoadedEntities(object sender, EventArgs e)
+    {
+        _appointments = (IEnumerable<IAppointment>)((ICloneable)_appointments).Clone();
     }
 
     protected override async Task<bool> CanDelete()
         => !await (
-            from e in _dbContext.Set<Examination>()
+            from e in _dbContext.Set<Appointment>()
             where e.DoctorId == _doctor.Id
             select e
         ).AnyAsync() && !await (

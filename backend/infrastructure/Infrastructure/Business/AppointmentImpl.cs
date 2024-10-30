@@ -1,14 +1,19 @@
 using AppointmentScheduler.Domain.Business;
+using AppointmentScheduler.Domain.Entities;
 
 namespace AppointmentScheduler.Infrastructure.Business
 {
     internal sealed class AppointmentImpl : BaseEntity, IAppointment
     {
+        internal AppointmentImpl(Appointment appointment, IDoctor doctor, IProfile profile = null)
+            => throw new NotImplementedException();
+
         int IAppointment.Number => throw new NotImplementedException();
 
-        DateTime IAppointment.AtTime { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        DateTime IAppointment.AtTime { get => throw new NotImplementedException(); }
         int IAppointment.State { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         IProfile IAppointment.Profile { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        IDoctor IAppointment.Doctor { get => throw new NotImplementedException(); }
 
         IExamination IAppointment.Examination => throw new NotImplementedException();
 
@@ -32,7 +37,7 @@ namespace AppointmentScheduler.Infrastructure.Business
             throw new NotImplementedException();
         }
 
-        IExamination IAppointment.ObtainExamination(IDoctor doctor)
+        IExamination IAppointment.ObtainExamination()
         {
             throw new NotImplementedException();
         }
