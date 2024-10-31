@@ -6,8 +6,9 @@ public interface IExamination : IBehavioralEntity
     IAppointment Appointment { get; }
     string Diagnostic { get; set; }
     string Description { get; set; }
-    int State { get; set; }
+    uint State { get; set; }
     IPrescription Prescription { get; }
     IEnumerable<IDiagnosticService> DiagnosticServices { get; }
-    IPrescription ObtainPrescription();
+    Task<IPrescription> ObtainPrescription();
+    Task<IDiagnosticService> ObtainDiagnostic(IDoctor doctor, IDiagnosticService diagnosticService);
 }

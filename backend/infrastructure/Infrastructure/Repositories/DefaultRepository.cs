@@ -38,7 +38,7 @@ public class DefaultRepository : DbContext, IRepository
                 from role in Set<Role>()
                 select this.Initialize((IRole)new RoleImpl(role)) // FIXME: Init
             ).Cast<TEntity>();
-        // Get with cached
+        // TODO: Get with cached
         return Enumerable.Empty<TEntity>();
     }
 
@@ -150,6 +150,57 @@ public class DefaultRepository : DbContext, IRepository
                 }
             }
         }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IExamination)))
+        {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var examination = await FindAsync<Examination>(id);
+                if (examination != null)
+                {
+                    var appointment = await ((IRepository)this).GetEntityBy<uint, IAppointment>(examination.AppointmentId);
+                    IExamination iexamination = new ExaminationImpl(examination, appointment);
+                    return (TEntity)await this.Initialize(iexamination);
+                }
+            }
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))
+        {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                IDiagnosticService iappointment;
+                var diagsv = await FindAsync<DiagnosticService>(id);
+                if (diagsv != null)
+                {
+                    iappointment = new DiagnosticServiceImpl(diagsv);
+                    return (TEntity)await this.Initialize(iappointment);
+                }
+                var exdiag = await FindAsync<ExaminationService>(id);
+                if (exdiag != null)
+                {
+                    diagsv = await FindAsync<DiagnosticService>(exdiag.DiagnosticServiceId);
+                    if (diagsv != null)
+                    {
+                        var doctor = await ((IRepository)this).GetEntityBy<uint, IDoctor>(exdiag.DoctorId);
+                        var examination = await ((IRepository)this).GetEntityBy<uint, IExamination>(exdiag.ExaminationId);
+                        iappointment = new DiagnosticServiceImpl(diagsv, exdiag, doctor, examination);
+                        return (TEntity)await this.Initialize(iappointment);
+                    }
+                }
+            }
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPrescription)))
+        {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var prescription = await FindAsync<Prescription>(id);
+                if (prescription != null)
+                {
+                    var examination = await ((IRepository)this).GetEntityBy<uint, IExamination>(prescription.ExaminationId);
+                    IPrescription iprescription = new PrescriptionImpl(prescription, examination);
+                    return (TEntity)await this.Initialize(iprescription);
+                }
+            }
+        }
         // TODO: ...more Impl
         return null;
 #endif
@@ -190,6 +241,16 @@ public class DefaultRepository : DbContext, IRepository
             var patient = new Patient { Id = user.Id };
             var role = await RoleImpl.GetDefault(this);
             return (TEntity)await this.Initialize((IUser)new PatientImpl(user, patient, role));
+        }
+        if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))
+        {
+            var diagnosticService = new DiagnosticService();
+            if (!await this.IdGeneratedWrap(
+                from ds in Set<DiagnosticService>()
+                where ds.Id == diagnosticService.Id
+                select ds, diagnosticService, nameof(DiagnosticService.Id)
+            )) return null;
+            return (TEntity)await this.Initialize((IDiagnosticService)new DiagnosticServiceImpl(diagnosticService));
         }
         return null;
     }
@@ -254,6 +315,49 @@ public class DefaultRepository : DbContext, IRepository
         else if (entity is AppointmentImpl appointment)
         {
             uint id = appointment._appointment.Id;
+            if (id is TKey uk)
+            {
+                key = uk;
+                return true;
+            }
+            else if (id.ToString() is TKey sk)
+            {
+                key = sk;
+                return true;
+            }
+        }
+        else if (entity is ExaminationImpl examination)
+        {
+            uint id = examination._examination.Id;
+            if (id is TKey uk)
+            {
+                key = uk;
+                return true;
+            }
+            else if (id.ToString() is TKey sk)
+            {
+                key = sk;
+                return true;
+            }
+        }
+        else if (entity is PrescriptionImpl prescription)
+        {
+            uint id = prescription._prescription.Id;
+            if (id is TKey uk)
+            {
+                key = uk;
+                return true;
+            }
+            else if (id.ToString() is TKey sk)
+            {
+                key = sk;
+                return true;
+            }
+        }
+        else if (entity is DiagnosticServiceImpl diagnosticService)
+        {
+            var e = diagnosticService._exdiag;
+            uint id = e == null ? e.Id : diagnosticService._diagsv.Id;
             if (id is TKey uk)
             {
                 key = uk;
