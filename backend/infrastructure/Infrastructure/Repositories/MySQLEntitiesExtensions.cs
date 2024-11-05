@@ -127,7 +127,7 @@ public static class MySQLEntitiesExtensions
         builder.Property<uint>(nameof(Appointment.DoctorId))
             .HasColumnName("DoctorId")
             .HasColumnType("int(11)");
-        builder.Property<uint>(nameof(Appointment.ProfileId))
+        builder.Property<uint?>(nameof(Appointment.ProfileId))
             .HasColumnName("ProfileId")
             .HasColumnType("int(11)");
     }
@@ -147,7 +147,8 @@ public static class MySQLEntitiesExtensions
             .HasColumnType("varchar(100)");
         builder.Property<DateOnly>(nameof(Profile.DateOfBirth))
             .HasColumnName("BirthDate")
-            .HasColumnType("date");
+            .HasColumnType("date")
+            .HasConversion(d => new DateTime(d, default), dt => DateOnly.FromDateTime(dt));
         builder.Property<char>(nameof(Profile.Gender))
             .HasColumnName("Gender")
             .HasColumnType("char(1)");

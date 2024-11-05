@@ -12,7 +12,7 @@ public class DefaultRepository : DbContext, IRepository
 {
     private IResourceManagerService _resourceManager;
     private IConfigurationPropertiesService _configurationProperties;
-    internal DefaultRepository(DbContextOptions options) : base(options) { }
+    public DefaultRepository(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,9 +36,57 @@ public class DefaultRepository : DbContext, IRepository
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
             return (
                 from role in Set<Role>()
-                select this.Initialize((IRole)new RoleImpl(role)) // FIXME: Init
+                select GetEntityBy<uint, IRole>(role.Id, role)
+                    .WaitForResult(Timeout.Infinite, default)
             ).Cast<TEntity>();
-        // TODO: Get with cached
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
+            return (
+                from doctor in Set<Doctor>()
+                select GetEntityBy<uint, IDoctor>(doctor.Id, doctor)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
+            return (
+                from patient in Set<Patient>()
+                select GetEntityBy<uint, IPatient>(patient.Id, patient)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
+            return (
+                from user in Set<User>()
+                select GetEntityBy<uint, IUser>(user.Id, user)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
+            return (
+                from profile in Set<Profile>()
+                select GetEntityBy<uint, IProfile>(profile.Id, profile)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IAppointment)))
+            return (
+                from appointment in Set<Appointment>()
+                select GetEntityBy<uint, IAppointment>(appointment.Id, appointment)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IExamination)))
+            return (
+                from examination in Set<Examination>()
+                select GetEntityBy<uint, IExamination>(examination.Id, examination)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))
+            return (
+                from diagsv in Set<DiagnosticService>()
+                select GetEntityBy<uint, IDiagnosticService>(diagsv.Id, diagsv)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPrescription)))
+            return (
+                from prescription in Set<Prescription>()
+                select GetEntityBy<uint, IPrescription>(prescription.Id, prescription)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
         return Enumerable.Empty<TEntity>();
     }
 
@@ -62,7 +110,9 @@ public class DefaultRepository : DbContext, IRepository
         throw new InvalidOperationException("This repository does not included service " + typeof(TService).FullName);
     }
 
-    async Task<TEntity> IRepository.GetEntityBy<TKey, TEntity>(TKey key)
+    Task<TEntity> IRepository.GetEntityBy<TKey, TEntity>(TKey key) => GetEntityBy<TKey, TEntity>(key, null);
+
+    private async Task<TEntity> GetEntityBy<TKey, TEntity>(TKey key, object row = null) where TEntity : class, IBehavioralEntity
     {
 #if DEMO
         if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
@@ -76,7 +126,7 @@ public class DefaultRepository : DbContext, IRepository
         {
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                var role = await FindAsync<Role>(id);
+                var role = row as Role ?? await FindAsync<Role>(id);
                 if (role != null) return (TEntity)await
                     this.Initialize((IRole)new RoleImpl(role));
             }
@@ -85,13 +135,13 @@ public class DefaultRepository : DbContext, IRepository
         {
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                var user = await FindAsync<User>(id);
+                var user = row as User ?? await FindAsync<User>(id);
                 if (user != null)
                 {
-                    var doctor = await FindAsync<Doctor>(id);
+                    var doctor = row as Doctor ?? await FindAsync<Doctor>(id);
                     if (doctor != null)
                     {
-                        var irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
+                        var irole = await GetEntityBy<uint, IRole>(user.RoleId, null);
                         irole ??= await RoleImpl.GetDefault(this);
                         IDoctor idoctor = new DoctorImpl(user, doctor, irole);
                         return (TEntity)await this.Initialize(idoctor);
@@ -103,13 +153,13 @@ public class DefaultRepository : DbContext, IRepository
         {
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                var user = await FindAsync<User>(id);
+                var user = row as User ?? await FindAsync<User>(id);
                 if (user != null)
                 {
-                    var patient = await FindAsync<Patient>(id);
+                    var patient = row as Patient ?? await FindAsync<Patient>(id);
                     if (patient != null)
                     {
-                        var irole = await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId);
+                        var irole = await GetEntityBy<uint, IRole>(user.RoleId, null);
                         irole ??= await RoleImpl.GetDefault(this);
                         IPatient ipatient = new PatientImpl(user, patient, irole);
                         return (TEntity)await this.Initialize(ipatient);
@@ -119,19 +169,19 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
         {
-            var d = await ((IRepository)this).GetEntityBy<TKey, IDoctor>(key);
+            var d = await GetEntityBy<TKey, IDoctor>(key, row);
             if (d != null) return (TEntity)d;
-            var p = await ((IRepository)this).GetEntityBy<TKey, IPatient>(key);
+            var p = await GetEntityBy<TKey, IPatient>(key, row);
             if (p != null) return (TEntity)p;
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
         {
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                var profile = await FindAsync<Profile>(id);
+                var profile = (Profile)row ?? await FindAsync<Profile>(id);
                 if (profile != null)
                 {
-                    var patient = await ((IRepository)this).GetEntityBy<uint, IPatient>(profile.PatientId);
+                    var patient = await GetEntityBy<uint, IPatient>(profile.PatientId, null);
                     IProfile iprofile = new ProfileImpl(profile, patient);
                     return (TEntity)await this.Initialize(iprofile);
                 }
@@ -141,10 +191,10 @@ public class DefaultRepository : DbContext, IRepository
         {
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                var appointment = await FindAsync<Appointment>(id);
+                var appointment = (Appointment)row ?? await FindAsync<Appointment>(id);
                 if (appointment != null)
                 {
-                    var doctor = await ((IRepository)this).GetEntityBy<uint, IDoctor>(appointment.DoctorId);
+                    var doctor = await GetEntityBy<uint, IDoctor>(appointment.DoctorId, null);
                     IAppointment iappointment = new AppointmentImpl(appointment, doctor);
                     return (TEntity)await this.Initialize(iappointment);
                 }
@@ -154,10 +204,10 @@ public class DefaultRepository : DbContext, IRepository
         {
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                var examination = await FindAsync<Examination>(id);
+                var examination = (Examination)row ?? await FindAsync<Examination>(id);
                 if (examination != null)
                 {
-                    var appointment = await ((IRepository)this).GetEntityBy<uint, IAppointment>(examination.AppointmentId);
+                    var appointment = await GetEntityBy<uint, IAppointment>(examination.AppointmentId, null);
                     IExamination iexamination = new ExaminationImpl(examination, appointment);
                     return (TEntity)await this.Initialize(iexamination);
                 }
@@ -168,20 +218,20 @@ public class DefaultRepository : DbContext, IRepository
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
                 IDiagnosticService iappointment;
-                var diagsv = await FindAsync<DiagnosticService>(id);
+                var diagsv = row as DiagnosticService ?? await FindAsync<DiagnosticService>(id);
                 if (diagsv != null)
                 {
                     iappointment = new DiagnosticServiceImpl(diagsv);
                     return (TEntity)await this.Initialize(iappointment);
                 }
-                var exdiag = await FindAsync<ExaminationService>(id);
+                var exdiag = row as ExaminationService ?? await FindAsync<ExaminationService>(id);
                 if (exdiag != null)
                 {
                     diagsv = await FindAsync<DiagnosticService>(exdiag.DiagnosticServiceId);
                     if (diagsv != null)
                     {
-                        var doctor = await ((IRepository)this).GetEntityBy<uint, IDoctor>(exdiag.DoctorId);
-                        var examination = await ((IRepository)this).GetEntityBy<uint, IExamination>(exdiag.ExaminationId);
+                        var doctor = await GetEntityBy<uint, IDoctor>(exdiag.DoctorId, null);
+                        var examination = await GetEntityBy<uint, IExamination>(exdiag.ExaminationId, null);
                         iappointment = new DiagnosticServiceImpl(diagsv, exdiag, doctor, examination);
                         return (TEntity)await this.Initialize(iappointment);
                     }
@@ -192,10 +242,10 @@ public class DefaultRepository : DbContext, IRepository
         {
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                var prescription = await FindAsync<Prescription>(id);
+                var prescription = (Prescription)row ?? await FindAsync<Prescription>(id);
                 if (prescription != null)
                 {
-                    var examination = await ((IRepository)this).GetEntityBy<uint, IExamination>(prescription.ExaminationId);
+                    var examination = await GetEntityBy<uint, IExamination>(prescription.ExaminationId);
                     IPrescription iprescription = new PrescriptionImpl(prescription, examination);
                     return (TEntity)await this.Initialize(iprescription);
                 }
