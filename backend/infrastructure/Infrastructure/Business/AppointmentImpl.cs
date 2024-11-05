@@ -10,7 +10,7 @@ internal sealed class AppointmentImpl : BaseEntity, IAppointment
     private IProfile _profile;
     private Task<IExamination> _examinationTask;
     private IDoctor _doctor;
-
+    
     internal AppointmentImpl(Appointment appointment, IDoctor doctor, IProfile profile = null)
     {
         _appointment = appointment ?? throw new ArgumentNullException(nameof(appointment));

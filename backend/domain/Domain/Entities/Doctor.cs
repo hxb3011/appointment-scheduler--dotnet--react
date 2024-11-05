@@ -7,4 +7,5 @@ public class Doctor : BaseEntity
     public string Position { get; set; }
     public string Certificate { get; set; }
     public string Image { get; set; }
+ 
 }
