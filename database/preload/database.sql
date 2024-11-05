@@ -3,7 +3,7 @@ CREATE TABLE `appointment` (
   `Time` datetime DEFAULT NULL,
   `State` int UNSIGNED DEFAULT NULL,
   `ProfileId` int UNSIGNED DEFAULT NULL,
-  `DoctorId` int UNSIGNED DEFAULT NULL,
+  `DoctorId` int UNSIGNED NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
