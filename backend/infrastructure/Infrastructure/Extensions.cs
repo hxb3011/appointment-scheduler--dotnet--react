@@ -46,7 +46,7 @@ public static class Extensions
     {
         const long IdLimit = uint.MaxValue + 1L;
         Task<long> countTask = null;
-        var setId = entity.Setter<uint>($"set_{idPropertyName}");
+        var setId = entity.Setter<uint>(idPropertyName);
         do setId(NewId());
         while (await query.AnyAsync() && (
             (countTask ??= context.Set<TEntity>().LongCountAsync())
