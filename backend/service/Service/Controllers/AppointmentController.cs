@@ -5,6 +5,7 @@ using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Service.Controllers
 {
@@ -24,7 +25,9 @@ namespace AppointmentScheduler.Service.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetAppointmentById(uint id)
         {
-            var appointment = await _repository.GetEntityBy<uint, IAppointment>(id);
+            var dbContext = await _repository.GetService<DbContext>();
+            var appointment = await dbContext.FindAsync<Appointment>(id);
+
             if (appointment != null)
             {
                 return Ok(appointment);
