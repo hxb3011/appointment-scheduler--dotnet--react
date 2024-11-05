@@ -64,7 +64,7 @@ internal sealed class ProfileImpl : BaseEntity, IProfile
 
     private void InvalidateLoadedEntities(object sender, EventArgs e)
     {
-        _appointments = (IEnumerable<IAppointment>)((ICloneable)_appointments).Clone();
+        _appointments = (IEnumerable<IAppointment>)((ICloneable)((IProfile)this).Appointments).Clone();
     }
 
     private Task<bool> CanDelete() => (

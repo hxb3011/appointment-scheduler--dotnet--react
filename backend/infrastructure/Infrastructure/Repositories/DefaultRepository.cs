@@ -12,7 +12,7 @@ public class DefaultRepository : DbContext, IRepository
 {
     private IResourceManagerService _resourceManager;
     private IConfigurationPropertiesService _configurationProperties;
-    internal DefaultRepository(DbContextOptions options) : base(options) { }
+    public DefaultRepository(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

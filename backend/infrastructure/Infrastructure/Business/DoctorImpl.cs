@@ -66,7 +66,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
 
     private void InvalidateLoadedEntities(object sender, EventArgs e)
     {
-        _appointments = (IEnumerable<IAppointment>)((ICloneable)_appointments).Clone();
+        _appointments = (IEnumerable<IAppointment>)((ICloneable)((IDoctor)this).Appointments).Clone();
     }
 
     protected override async Task<bool> CanDelete()
