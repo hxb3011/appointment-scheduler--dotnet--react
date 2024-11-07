@@ -13,6 +13,7 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         var services = builder.Services;
+        services.AddSwaggerGen();
 
         services.AddInfrastructure
         (
@@ -26,6 +27,15 @@ public static class Program
         services.AddRouting(ConfigureRoute);
 
         var app = builder.Build();
+
+        
+        app.UseSwagger();
+
+      
+        app.UseSwaggerUI(c => {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Appointment Scheduler API v1");
+            c.RoutePrefix = string.Empty;
+        });
 
         app.UseInfrastructure();
 

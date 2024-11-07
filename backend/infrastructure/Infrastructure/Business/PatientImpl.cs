@@ -38,6 +38,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
             where p.Id == profile.Id
             select p, profile, nameof(Profile.Id)
         )) return null;
+        profile.Id %= 100000;
         profile.PatientId = _patient.Id;
         return await CreateProfile(profile);
     }
