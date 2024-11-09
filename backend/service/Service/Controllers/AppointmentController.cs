@@ -1,7 +1,7 @@
 ﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
-using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Domain.Requests.Appointment;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +20,19 @@ namespace AppointmentScheduler.Service.Controllers
         {
             _repository = repository;
             _logger = logger;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllAppointments()
+        {
+            var dbContext = await _repository.GetService<DbContext>();
+            var appointments = await dbContext.Set<Appointment>().ToListAsync();
+
+            if (appointments.Any())
+            {
+                return Ok(appointments);
+            }
+            return NotFound("No Appointments found");
         }
 
         [HttpGet("{id}")]
@@ -47,6 +60,7 @@ namespace AppointmentScheduler.Service.Controllers
             {
                 return NotFound("Can not find this profile");
             }
+
             if(appointment.DoctorId == null)
                 return BadRequest("Doctor id can not be null");
             var doctor = await _repository.GetEntityBy<uint, IDoctor>((uint)appointment.DoctorId);
@@ -107,13 +121,13 @@ namespace AppointmentScheduler.Service.Controllers
 
         [HttpDelete("{id}")]
         [JSONWebToken(AuthenticationRequired = false)]
-        public async Task<ActionResult> UpdateAppointment(uint id)
+        public async Task<ActionResult> DeleteAppointment(uint id)
         {
             var appointmentExist = await _repository.GetEntityBy<uint, IAppointment>(id);
 
             if (appointmentExist == null)
             {
-                return NotFound("Can not to find this appointment");
+                return NotFound("Can not find this appointment");
             }
 
             if (!await appointmentExist.Delete())

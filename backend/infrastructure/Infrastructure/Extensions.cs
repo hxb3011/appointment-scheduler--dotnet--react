@@ -29,7 +29,7 @@ public static class Extensions
     {
         var guid = Guid.NewGuid();
         uint* p = (uint*)&guid;
-        return p[0] ^ p[1] ^ p[2] ^ p[3];
+        return (p[0] ^ p[1] ^ p[2] ^ p[3]) / 100000;
     }
 
     public static TDelegate Method<TDelegate>(this object entity, string methodName)
