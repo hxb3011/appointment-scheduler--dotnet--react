@@ -1,6 +1,7 @@
 ﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Infrastructure.Business;
 
@@ -17,10 +18,15 @@ internal class PrescriptionImpl : BaseEntity, IPrescription
     }
 
     public IDocument Document { get => new DocumentImpl(); set => throw new NotImplementedException(); }
-    public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public string Description { get => _prescription.Description; set => _prescription.Description = value; }
 
     public IEnumerable<IMedicine> Medicines { get => throw new NotImplementedException(); }
 
+    private Task<bool> CanDelete() => (
+        from ap in _dbContext.Set<Examination>()
+        where ap.Id == _prescription.Id
+        select ap
+    ).AnyAsync();
     protected override Task<bool> Create()
     {
         // TODO: Process Document
@@ -28,11 +34,12 @@ internal class PrescriptionImpl : BaseEntity, IPrescription
         return Task.FromResult(true);
     }
 
-    protected override Task<bool> Delete()
+    protected override async Task<bool> Delete()
     {
         // TODO: Process Document
-        _dbContext.Remove(_prescription);
-        return Task.FromResult(true);
+        var canDelete = await CanDelete();
+        if (canDelete) _dbContext.Remove(_prescription);
+        return canDelete;
     }
 
     protected override async Task<bool> Initilize()

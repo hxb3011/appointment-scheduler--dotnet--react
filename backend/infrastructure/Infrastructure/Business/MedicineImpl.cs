@@ -1,5 +1,7 @@
 ﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Net.WebSockets;
 
 namespace AppointmentScheduler.Infrastructure.Business
 {
@@ -31,24 +33,30 @@ namespace AppointmentScheduler.Infrastructure.Business
             }
         }
 
+        protected async Task<bool> CanDelete()
+        => !await (
+            from e in _dbContext.Set<PrescriptionDetail>()
+            where e.MedicineId == _medicine.Id
+            select e
+        ).AnyAsync();
+
         protected override Task<bool> Create()
         {
-            throw new NotImplementedException();
+            _dbContext.Add(_medicine);
+            return Task.FromResult(true);
         }
 
-        protected override Task<bool> Delete()
+        protected override async Task<bool> Delete()
         {
-            throw new NotImplementedException();
-        }
-
-        protected override Task<bool> Initilize()
-        {
-            throw new NotImplementedException();
+            var canDelete = await CanDelete();
+            if (canDelete) _dbContext.Remove(_medicine);
+            return canDelete;
         }
 
         protected override Task<bool> Update()
         {
-            throw new NotImplementedException();
+            _dbContext.Update(_medicine);
+            return Task.FromResult(true);
         }
     }
 }
