@@ -3,184 +3,52 @@
   "WorkspaceRootPath": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\prescriptiondetailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\prescriptiondetailcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\doctorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\doctorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\prescriptioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\prescriptioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\profileimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\profileimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\prescriptionimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\prescriptionimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\defaultrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\defaultrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\medicineimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\medicineimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\prescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\prescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\examinationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\examinationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\iprescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\iprescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\requests\\createprescriptionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\requests\\createprescriptionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\requests\\updateprescriptionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\requests\\updateprescriptionrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\requests\\updatemedicinerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\requests\\updatemedicinerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\iuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\iuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\iexamination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\iexamination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\iprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\iprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\ipatient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\ipatient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\irole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\irole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\prescriptiondetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\prescriptiondetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\permission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\permission.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\patient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\patient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\medicine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\medicine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\appointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\examination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\examination.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\doctor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\doctor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\entities\\diagnosticservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\entities\\diagnosticservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\permissionenumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\permissionenumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\requests\\createprescriptiondetailrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\requests\\createprescriptiondetailrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\examinationimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\examinationimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\defaultrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\defaultrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\prescriptiondetailimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\prescriptiondetailimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\prescriptionimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\prescriptionimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\iprescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\iprescription.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\documentimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\documentimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\diagnosticserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\diagnosticserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\doctorimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\doctorimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\appointmentimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\appointmentimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\patientimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\patientimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\iprescriptiondetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\iprescriptiondetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\idocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\idocument.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\repositories\\iresourcemanagerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\repositories\\iresourcemanagerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\repositories\\irepositoryentityinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\repositories\\irepositoryentityinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\medicinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\medicinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\iappointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\iappointment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\service\\controllers\\democontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\democontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\ibehavioralentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\ibehavioralentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\domain\\business\\entitiesextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\business\\entitiesextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\resourcemanagerserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\resourcemanagerserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\mysqlentitiesextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\mysqlentitiesextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\repositories\\configurationpropertiesserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\configurationpropertiesserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\userimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\userimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\infrastructure\\business\\diagnosticserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\diagnosticserviceimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -190,436 +58,97 @@
       "DocumentGroups": [
         {
           "DockedWidth": 211,
-          "SelectedChildIndex": 31,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PrescriptionImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T20:44:18.263Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "UpdatePrescriptionRequest.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\UpdatePrescriptionRequest.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Requests\\UpdatePrescriptionRequest.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\UpdatePrescriptionRequest.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Requests\\UpdatePrescriptionRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:38:33.661Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "UpdateMedicineRequest.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\UpdateMedicineRequest.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Requests\\UpdateMedicineRequest.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\UpdateMedicineRequest.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Requests\\UpdateMedicineRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:38:31.004Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "IRole.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IRole.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IRole.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IRole.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IRole.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:30:53.93Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "IUser.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IUser.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IUser.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IUser.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IUser.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:30:51.896Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "PrescriptionDetail.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\PrescriptionDetail.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\PrescriptionDetail.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\PrescriptionDetail.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\PrescriptionDetail.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:30:24.62Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "Permission.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Permission.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Permission.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Permission.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Permission.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:30:17.969Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "Patient.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Patient.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Patient.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Patient.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Patient.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:30:16.747Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "BaseEntity.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\BaseEntity.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\BaseEntity.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\BaseEntity.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\BaseEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:30:12.211Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "DiagnosticService.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\DiagnosticService.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\DiagnosticService.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\DiagnosticService.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\DiagnosticService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:30:08.606Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 36,
-              "Title": "MedicineController.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\MedicineController.cs",
-              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\MedicineController.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\MedicineController.cs",
-              "RelativeToolTip": "backend\\service\\Service\\Controllers\\MedicineController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAF8AAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T11:40:11.761Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "PermissionEnumerable.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PermissionEnumerable.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\PermissionEnumerable.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PermissionEnumerable.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\PermissionEnumerable.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:22:03.331Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "DocumentImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:22:56.539Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ProfileImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ProfileImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\ProfileImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ProfileImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\ProfileImpl.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAuwEkAAAAQAAAAAAAAAA==",
+              "Title": "CreatePrescriptionDetailRequest.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\CreatePrescriptionDetailRequest.cs",
+              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Requests\\CreatePrescriptionDetailRequest.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\CreatePrescriptionDetailRequest.cs",
+              "RelativeToolTip": "backend\\domain\\Domain\\Requests\\CreatePrescriptionDetailRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:22:21.161Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "CreatePrescriptionRequest.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\CreatePrescriptionRequest.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Requests\\CreatePrescriptionRequest.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Requests\\CreatePrescriptionRequest.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Requests\\CreatePrescriptionRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:17:24.77Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
-              "Title": "IResourceManagerService.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Repositories\\IResourceManagerService.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Repositories\\IResourceManagerService.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Repositories\\IResourceManagerService.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Repositories\\IResourceManagerService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:17:13.602Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 35,
-              "Title": "IRepositoryEntityInitializer.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Repositories\\IRepositoryEntityInitializer.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Repositories\\IRepositoryEntityInitializer.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Repositories\\IRepositoryEntityInitializer.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Repositories\\IRepositoryEntityInitializer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:17:11.735Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Prescription.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Prescription.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Prescription.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Prescription.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Prescription.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T09:16:56.02Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "IExamination.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IExamination.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IExamination.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IExamination.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IExamination.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAgwAoAAAA/AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:56:46.664Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "Examination.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Examination.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Examination.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Examination.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Examination.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:56:31.491Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "Doctor.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Doctor.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Doctor.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Doctor.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Doctor.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:56:30.602Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "Appointment.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Appointment.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Appointment.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Appointment.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Appointment.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:56:23.026Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DoctorController.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\DoctorController.cs",
-              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\DoctorController.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\DoctorController.cs",
-              "RelativeToolTip": "backend\\service\\Service\\Controllers\\DoctorController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:55:02.714Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 38,
-              "Title": "DemoController.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\DemoController.cs",
-              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\DemoController.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\DemoController.cs",
-              "RelativeToolTip": "backend\\service\\Service\\Controllers\\DemoController.cs",
-              "ViewState": "AgIAACIBAAAAAAAAAAAwwDkBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:53:51.379Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "IAppointment.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IAppointment.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IAppointment.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IAppointment.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IAppointment.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:50:12.348Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "Medicine.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Medicine.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\Medicine.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\Medicine.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\Medicine.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:49:54.664Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 39,
-              "Title": "IBehavioralEntity.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IBehavioralEntity.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IBehavioralEntity.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IBehavioralEntity.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IBehavioralEntity.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:49:27.862Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 40,
-              "Title": "EntitiesExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\EntitiesExtensions.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\EntitiesExtensions.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\EntitiesExtensions.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\EntitiesExtensions.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAAABQAAABZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:49:14.943Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "IDocument.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IDocument.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IDocument.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IDocument.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IDocument.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAIAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:28:55.583Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "IProfile.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IProfile.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IProfile.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IProfile.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IProfile.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAhwAsAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:27:00.231Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IPrescription.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPrescription.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IPrescription.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPrescription.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IPrescription.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAYAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:26:56.743Z",
+              "WhenOpened": "2024-11-15T21:26:41.116Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AppointmentController.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "RelativeToolTip": "backend\\service\\Service\\Controllers\\AppointmentController.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAswEAAAAAJAAAAAAAAAA==",
+              "Title": "PrescriptionDetailController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\PrescriptionDetailController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\PrescriptionDetailController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\PrescriptionDetailController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\PrescriptionDetailController.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAuwFAAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:25:23.985Z",
+              "WhenOpened": "2024-11-15T21:18:54.401Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "IPatient.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPatient.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IPatient.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPatient.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IPatient.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAIA7wAoAAAATAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "DefaultRepository.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
+              "ViewState": "AgIAAAQBAAAAAAAAAAAswB0BAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:17:05.607Z",
+              "WhenOpened": "2024-11-15T21:15:23.716Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DocumentImpl.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\DocumentImpl.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-15T21:08:07.189Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DiagnosticServiceImpl.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAAB8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-15T20:29:36.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AppointmentImpl.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
+              "ViewState": "AgIAADYAAAAAAAAAAAAlwEQAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-15T19:49:14.386Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ExaminationImpl.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAAADIAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-15T18:43:33.365Z",
               "EditorCaption": ""
             },
             {
@@ -675,155 +204,72 @@
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "DefaultRepository.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\DefaultRepository.cs",
-              "ViewState": "AgIAAPYAAAAAAAAAAAAAAPYAAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-09T08:11:55.25Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 41,
-              "Title": "ResourceManagerServiceImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\ResourceManagerServiceImpl.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T21:12:54.629Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 42,
-              "Title": "MySQLEntitiesExtensions.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\MySQLEntitiesExtensions.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\MySQLEntitiesExtensions.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\MySQLEntitiesExtensions.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\MySQLEntitiesExtensions.cs",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAIwJIAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T21:10:20.69Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 43,
-              "Title": "ConfigurationPropertiesServiceImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\ConfigurationPropertiesServiceImpl.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T20:47:26.543Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "DiagnosticServiceImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\DiagnosticServiceImpl.cs",
-              "ViewState": "AgIAADMAAAAAAAAAAADwv0UAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:53:04.254Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 44,
-              "Title": "UserImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\UserImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\UserImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\UserImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\UserImpl.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:51:15.599Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 32,
-              "Title": "PatientImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:50:32.726Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "ExaminationImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\ExaminationImpl.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAAADgAAAAHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:44:00.724Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "DoctorImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\DoctorImpl.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAA8wCAAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:45:02.16Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "MedicineImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\MedicineImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\MedicineImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\MedicineImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\MedicineImpl.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAYwD4AAAAAAAAAAAAAAA==",
+              "Title": "PrescriptionDetailImpl.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PrescriptionDetailImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\PrescriptionDetailImpl.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PrescriptionDetailImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\PrescriptionDetailImpl.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAABEAAABqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:44:01.609Z",
+              "WhenOpened": "2024-11-15T13:28:43.605Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
-              "Title": "AppointmentImpl.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
-              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
-              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\AppointmentImpl.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAAAAIAAAALAAAAAAAAAA==",
+              "DocumentIndex": 10,
+              "Title": "IPrescriptionDetail.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPrescriptionDetail.cs",
+              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IPrescriptionDetail.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPrescriptionDetail.cs",
+              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IPrescriptionDetail.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:43:38.269Z",
+              "WhenOpened": "2024-11-15T12:58:51.478Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "ExaminationService.cs",
-              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\ExaminationService.cs",
-              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Entities\\ExaminationService.cs",
-              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Entities\\ExaminationService.cs",
-              "RelativeToolTip": "backend\\domain\\Domain\\Entities\\ExaminationService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "IPrescription.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPrescription.cs",
+              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Business\\IPrescription.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\domain\\Domain\\Business\\IPrescription.cs",
+              "RelativeToolTip": "backend\\domain\\Domain\\Business\\IPrescription.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-08T19:35:03.212Z",
+              "WhenOpened": "2024-11-15T12:30:16.792Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PrescriptionImpl.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\PrescriptionImpl.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAAACAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-08T20:44:18.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PrescriptionController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\PrescriptionController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\PrescriptionController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\source\\repos\\appointment-scheduler--dotnet--react\\backend\\service\\Service\\Controllers\\PrescriptionController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\PrescriptionController.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAAACMAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-09T09:52:28.014Z",
               "EditorCaption": ""
             }
           ]

@@ -93,6 +93,12 @@ public class DefaultRepository : DbContext, IRepository
                 select GetEntityBy<uint, IMedicine>(medicine.Id, medicine)
                     .WaitForResult(Timeout.Infinite, default)
             ).Cast<TEntity>();
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPrescriptionDetail)))
+            return (
+                from prescriptionDetail in Set<PrescriptionDetail>()
+                select GetEntityBy<uint, IPrescription>(prescriptionDetail.Id, prescriptionDetail)
+                    .WaitForResult(Timeout.Infinite, default)
+            ).Cast<TEntity>();
         return Enumerable.Empty<TEntity>();
     }
 
@@ -253,6 +259,21 @@ public class DefaultRepository : DbContext, IRepository
                 {
                     var examination = await GetEntityBy<uint, IExamination>(prescription.ExaminationId);
                     IPrescription iprescription = new PrescriptionImpl(prescription, examination);
+                    return (TEntity)await this.Initialize(iprescription);
+                }
+            }
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPrescriptionDetail)))
+        {
+            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
+            {
+                var prescriptionDetail = (PrescriptionDetail)row ?? await FindAsync<PrescriptionDetail>(id);
+                if (prescriptionDetail != null)
+                {
+                    var prescription = await GetEntityBy<uint, IPrescription>(prescriptionDetail.PrescriptionId);
+                    var medicine = await GetEntityBy<uint, IMedicine>(prescriptionDetail.MedicineId);
+
+                    IPrescriptionDetail iprescription = new PrescriptionDetailImpl(prescriptionDetail, prescription, medicine);
                     return (TEntity)await this.Initialize(iprescription);
                 }
             }

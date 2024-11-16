@@ -33,7 +33,7 @@ namespace AppointmentScheduler.Service.Controllers
 
                 if (prescriptions == null || prescriptions.Count == 0)
                 {
-                    return NotFound("No medicines found.");
+                    return NotFound("No prescriptions found.");
                 }
 
                 return Ok(prescriptions);
@@ -87,9 +87,64 @@ namespace AppointmentScheduler.Service.Controllers
             newPrescription.Document = prescription.Document;
 
             if (!await newPrescription.Create())
-                return BadRequest("Cannot create profile.");
+                return BadRequest("Cannot create prescription.");
 
             return Ok(newPrescription);
+        }
+
+        [HttpPut("{id}")]
+        [JSONWebToken(AuthenticationRequired = false)]
+        public async Task<ActionResult> UpdatePrescription([FromBody] UpdatePrescriptionRequest prescription, uint id)
+        {
+            var prescriptionExist = await _repository.GetEntityBy<uint, IPrescription>(id);
+
+            if (prescriptionExist == null)
+            {
+                return NotFound("Can not find this prescription");
+            }
+
+            var change = false;
+
+            if (prescription.Document != null && prescription.Document != prescriptionExist.Document)
+            {
+                prescriptionExist.Document = prescription.Document;
+                change = true;
+            }
+
+            if (prescription.Description != null && prescription.Description != prescriptionExist.Description)
+            {
+                prescriptionExist.Description = prescription.Description;
+                change = true;
+            }
+
+            if (change)
+            {
+                if (!await prescriptionExist.Update())
+                {
+                    return BadRequest("Can not update prescription");
+                }
+                return Ok("Changed successfull");
+            }
+            return Ok("No change");
+        }
+
+        [HttpDelete("{id}")]
+        [JSONWebToken(AuthenticationRequired = false)]
+        public async Task<ActionResult> DeletePrescription(uint id)
+        {
+            var prescriptionExist = await _repository.GetEntityBy<uint, IPrescription>(id);
+
+            if (prescriptionExist == null)
+            {
+                return NotFound("Can not find this prescription");
+            }
+
+            if (!await prescriptionExist.Delete())
+            {
+                return BadRequest("Can not delete this prescription");
+            }
+
+            return Ok("This prescription has been delete");
         }
 
     }
