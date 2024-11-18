@@ -1,7 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
+    <Content Remove="Views\Layouts\_Layout-footer.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Layouts\_Layout-footer.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\backend\domain\Domain\AppointmentScheduler.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\..\..\Services\Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Shared\_LayoutProject.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <PropertyGroup>
