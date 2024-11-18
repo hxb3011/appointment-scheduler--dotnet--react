@@ -1,6 +1,8 @@
 
 
 using AppointmentScheduler.Domain;
+using Services.IService;
+using Services.Service;
 
 namespace AppointmentScheduler.Presentation;
 
@@ -13,7 +15,10 @@ public static class Program
         // Add services to the container
         builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
 
-        builder.Services.AddControllersWithViews();
+		builder.Services.AddSingleton<IUserService, UserService>();
+        builder.Services.AddSingleton<IPatientService, PatientService>();
+
+		builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
 
