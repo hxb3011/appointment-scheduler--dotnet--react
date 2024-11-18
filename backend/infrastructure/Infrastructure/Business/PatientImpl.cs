@@ -38,7 +38,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
             where p.Id == profile.Id
             select p, profile, nameof(Profile.Id)
         )) return null;
-        profile.Id %= 100000;
+        profile.Id %= 1000000000;
         profile.PatientId = _patient.Id;
         return await CreateProfile(profile);
     }
@@ -54,8 +54,11 @@ internal sealed class PatientImpl : UserImpl, IPatient
 
     private void InvalidateLoadedEntities(object sender, EventArgs e)
     {
-        _profiles = (IEnumerable<IProfile>)((ICloneable)_profiles).Clone();
+        //_profiles = (IEnumerable<IProfile>)((ICloneable)_profiles).Clone();
+        _profiles = null;
     }
+
+
 
     protected override Task<bool> CanDelete() => (
         from e in _dbContext.Set<Profile>()
