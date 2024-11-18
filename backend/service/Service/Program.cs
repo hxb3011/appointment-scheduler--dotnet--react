@@ -1,4 +1,4 @@
-using AppointmentScheduler.Domain;
+﻿using AppointmentScheduler.Domain;
 using AppointmentScheduler.Infrastructure;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -20,22 +20,13 @@ public static class Program
             dbConfigure: ConfigureDbContext,
             jwtConfigure: builder.Configuration.GetSection("JWTSettings").ConfigureJSONWebToken
         );
-        
+
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddProblemDetails();
         services.AddRouting(ConfigureRoute);
 
         var app = builder.Build();
-
-        
-        app.UseSwagger();
-
-      
-        app.UseSwaggerUI(c => {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Appointment Scheduler API v1");
-            c.RoutePrefix = string.Empty;
-        });
 
         app.UseInfrastructure();
 

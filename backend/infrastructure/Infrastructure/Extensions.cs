@@ -45,15 +45,28 @@ public static class Extensions
     internal static async Task<bool> IdGeneratedWrap<TEntity>(this DbContext context, IQueryable<TEntity> query, TEntity entity, string idPropertyName) where TEntity : class
     {
         const long IdLimit = uint.MaxValue + 1L;
-        Task<long> countTask = null;
-        var setId = entity.Setter<uint>(idPropertyName);
-        do setId(NewId());
-        while (await query.AnyAsync() && (
-            (countTask ??= context.Set<TEntity>().LongCountAsync())
-                .IsCompleted ? countTask.Result : await countTask
-        ) <= IdLimit);
-        return countTask == null || countTask.Result <= IdLimit;
+
+        // Sử dụng reflection để lấy setter của Id
+        var propertyInfo = typeof(TEntity).GetProperty(idPropertyName);
+        if (propertyInfo == null || propertyInfo.PropertyType != typeof(uint))
+        {
+            throw new ArgumentException("The specified property is not of type uint.");
+        }
+
+        // Tạo ra một task đếm số bản ghi hiện tại trong database
+        Task<long> countTask = context.Set<TEntity>().LongCountAsync();
+
+        // Lặp cho đến khi tìm được Id hợp lệ
+        while (await query.AnyAsync() && (await countTask) <= IdLimit)
+        {
+            var newId = NewId();
+            propertyInfo.SetValue(entity, newId);
+        }
+
+        // Trả về true nếu số bản ghi trong database không vượt quá giới hạn Id
+        return (await countTask) <= IdLimit;
     }
+
 
     public static async Task<TEntity> Initialize<TEntity>(this IRepository repository, TEntity entity)
         where TEntity : class, IBehavioralEntity
