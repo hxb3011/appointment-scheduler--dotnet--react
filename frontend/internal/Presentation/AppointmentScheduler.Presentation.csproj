@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\backend\domain\Domain\AppointmentScheduler.Domain.csproj" />
-    <ProjectReference Include="..\..\..\Models\Models.csproj" />
-    <ProjectReference Include="..\..\..\Services\Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
