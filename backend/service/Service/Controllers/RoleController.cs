@@ -16,18 +16,18 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     private readonly ILogger<RoleController> _logger = logger;
 
     [HttpGet]
-    public async Task<ActionResult<RoleResponse>> GetPagedRoles([FromBody] PagedGetAllRequest request)
+    public async Task<ActionResult<IEnumerable<RoleResponse>>> GetPagedRoles([FromBody] PagedGetAllRequest request)
     {
         var db = await _repository.GetService<DbContext>();
-        var query =
-            from r in db.Set<Role>()
-            orderby r.Name ascending
-            select r;
+        var query = from r in db.Set<Role>() orderby r.Name ascending select r;
+        return Ok(query.Skip(request.Offset).Take(request.Count).Select(RoleResponse.GetResponse));
+    }
 
-        return Ok(
-            from r in query.Skip(request.Offset).Take(request.Count)
-            select new RoleResponse() { Id = r.Id, Name = r.Name, Description = r.Description }
-        );
+    [HttpGet("{id}")]
+    public async Task<ActionResult<RoleResponse>> GetRole(uint id)
+    {
+        var db = await _repository.GetService<DbContext>();
+        return Ok(RoleResponse.GetResponse(db.Find<Role>(id)));
     }
 
     [HttpPost]
@@ -94,6 +94,40 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
 
         if (!await role.Delete())
             return BadRequest("can not delete");
+
+        return Ok("success");
+    }
+
+    [HttpGet("permissions")]
+    public ActionResult<IEnumerable<string>> GetPermissions() => Ok(Enum.GetNames<Permission>());
+
+    [HttpGet("{id}/permissions")]
+    public async Task<ActionResult<IEnumerable<string>>> GetPermissions(uint id)
+    {
+        var role = await _repository.GetEntityBy<uint, IRole>(id);
+        if (role == null)
+            return BadRequest("not found");
+
+        if (!await role.Delete())
+            return BadRequest("can not delete");
+
+        return Ok(role.Permissions.Select(Enum.GetName));
+    }
+
+    [HttpPut("{id}/permission/{permid}")]
+    public async Task<ActionResult> GrantPermission(uint id, string permid, bool granted)
+    {
+        var role = await _repository.GetEntityBy<uint, IRole>(id);
+        if (role == null)
+            return BadRequest("not found");
+
+        if (!Enum.TryParse(permid, out Permission permission))
+            return BadRequest("invalid permission");
+
+        role.SetPermissionGranted(permission, granted);
+
+        if (!await role.Update())
+            return BadRequest("can not update");
 
         return Ok("success");
     }

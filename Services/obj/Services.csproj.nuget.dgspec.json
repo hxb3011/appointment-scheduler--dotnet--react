@@ -1,28 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Services\\Services.csproj": {}
+    "/tmp/workspace/Services/Services.csproj": {}
   },
   "projects": {
-    "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Models\\Models.csproj": {
+    "/tmp/workspace/Models/Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Models\\Models.csproj",
+        "projectUniqueName": "/tmp/workspace/Models/Models.csproj",
         "projectName": "Models",
-        "projectPath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Models\\Models.csproj",
-        "packagesPath": "C:\\Users\\MSI\\.nuget\\packages\\",
-        "outputPath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Models\\obj\\",
+        "projectPath": "/tmp/workspace/Models/Models.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/tmp/workspace/Models/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\MSI\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -61,37 +58,34 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Services\\Services.csproj": {
+    "/tmp/workspace/Services/Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Services\\Services.csproj",
+        "projectUniqueName": "/tmp/workspace/Services/Services.csproj",
         "projectName": "Services",
-        "projectPath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Services\\Services.csproj",
-        "packagesPath": "C:\\Users\\MSI\\.nuget\\packages\\",
-        "outputPath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Services\\obj\\",
+        "projectPath": "/tmp/workspace/Services/Services.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/tmp/workspace/Services/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\MSI\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Models\\Models.csproj": {
-                "projectPath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Models\\Models.csproj"
+              "/tmp/workspace/Models/Models.csproj": {
+                "projectPath": "/tmp/workspace/Models/Models.csproj"
               }
             }
           }
@@ -126,7 +120,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
