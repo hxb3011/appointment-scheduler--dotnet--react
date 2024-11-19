@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "9efa++2D7Hw=",
+  "dgSpecHash": "OGjSCH2J3Y8=",
   "success": true,
   "projectFilePath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\Models\\Models.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\MSI\\.nuget\\packages\\jsonconverter.abstractions\\0.7.1\\jsonconverter.abstractions.0.7.1.nupkg.sha512",
+    "C:\\Users\\MSI\\.nuget\\packages\\jsonconverter.newtonsoft.json\\0.7.1\\jsonconverter.newtonsoft.json.0.7.1.nupkg.sha512",
+    "C:\\Users\\MSI\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\MSI\\.nuget\\packages\\stef.validation\\0.1.1\\stef.validation.0.1.1.nupkg.sha512"
+  ],
   "logs": []
 }

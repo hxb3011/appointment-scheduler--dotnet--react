@@ -1,0 +1,144 @@
+﻿@using Models.Enum
+@{
+    ViewData["Title"] = "Thêm mới đặt lịch";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+}
+
+@model Models.AppointmentViewModel
+
+<div>
+    <!-- BREADCRUMB -->
+    <div class="page-meta">
+        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Đặt lịch</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("Index", "Appointment")">Quản lý đặt lịch</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Thêm mới đặt lịch</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- /BREADCRUMB -->
+    <div class="layout-top-spacing col-12">
+        <a href="@Url.Action("Index", "Appointment")" class="btn">
+            Trở lại
+        </a>
+    </div>
+
+
+    <div class="row layout-top-spacing">
+        <div id="user-management" class="col-lg-12 layout-spacing">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4>Thêm mới</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+
+                    <div class="col-12">
+                        <form asp-action="Create" method="POST" id="general-settings">
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label for="profile">Hồ sơ <strong class="text-danger">*</strong></label>
+                                        <select id="profile" asp-for="ProfileId" asp-items="ViewBag.Profiles"
+                                                class="form-control @(ViewData.ModelState["ProfileId"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                autocomplete="off">
+                                            <option value="">Chọn hồ sơ...</option>
+                                        </select>
+                                        <span asp-validation-for="ProfileId" class="invalid-feedback" role="alert"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label for="doctor">Bác sĩ<strong class="text-danger">*</strong></label>
+                                        <select id="doctor" asp-for="DoctorId" asp-items="ViewBag.Doctors"
+                                                class="form-control @(ViewData.ModelState["DoctorId"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                placeholder="Chọn bác sĩ" autocomplete="off">
+                                            <option value="">Chọn bác sĩ...</option>
+                                        </select>
+                                        <span asp-validation-for="ProfileId" class="invalid-feedback" role="alert"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label for="date">Ngày đặt lịch<strong class="text-danger">*</strong></label>
+                                        <!-- Sử dụng type=datetime-local thay vì type=date -->
+                                        <input asp-for="AtTime" id="date" placeholder="Chọn ngày và giờ đặt" type="datetime-local"
+                                               class="form-control @(ViewData.ModelState["AtTime"]?.Errors?.Count > 0 ? "is-invalid" : "")" />
+                                        <span asp-validation-for="AtTime" class="invalid-feedback" role="alert"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label for="state">Trạng thái <strong class="text-danger">*</strong></label>
+                                        <select asp-for="State" id="state"
+                                                class="form-control @(ViewData.ModelState["State"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                asp-items="Html.GetEnumSelectList<EAppointmentState>()">
+                                            <option value="">Chọn</option>
+
+                                        </select>
+                                        <span asp-validation-for="State" class="invalid-feedback" role="alert"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <p class="text-muted mb-4">!!! Vui lòng chọn hồ sơ, bác sĩ và thời gian đặt.</p>
+                            <button type="submit" class="btn btn-primary">Hoàn tất</button>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script src="~/plugins/tomselect/tom-select.base.js"></script>
+    <script src="~/plugins/tomselect/custom-tom-select.js"></script>
+    <script src="~/plugins/flatpickr/custom-flatpickr.js"></script>
+    <script src="~/plugins/flatpickr/flatpickr.js"></script>
+
+    <script>
+        window.onload = function () {
+            // Lấy ngày và giờ hiện tại
+            var now = new Date();
+
+            // Định dạng thời gian hiện tại theo định dạng YYYY-MM-DDTHH:MM
+            var year = now.getFullYear();
+            var month = ("0" + (now.getMonth() + 1)).slice(-2); // Đảm bảo tháng có 2 chữ số
+            var day = ("0" + now.getDate()).slice(-2); // Đảm bảo ngày có 2 chữ số
+            var hour = ("0" + now.getHours()).slice(-2); // Đảm bảo giờ có 2 chữ số
+            var minute = ("0" + now.getMinutes()).slice(-2); // Đảm bảo phút có 2 chữ số
+
+            var currentTime = year + "-" + month + "-" + day + "T" + hour + ":" + minute;
+
+            // Cập nhật giá trị min cho input datetime-local
+            var dateInput = document.getElementById('date');
+            if (dateInput) {
+                dateInput.setAttribute('min', currentTime);
+            }
+        }
+    </script>
+}

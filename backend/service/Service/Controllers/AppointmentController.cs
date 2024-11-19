@@ -22,6 +22,14 @@ namespace AppointmentScheduler.Service.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetAllAppointments()
+        {
+            var dbContext = await _repository.GetService<DbContext>();
+            var appointments = await dbContext.Set<Appointment>().ToListAsync();
+            return Ok(appointments);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> GetAppointmentById(uint id)
         {

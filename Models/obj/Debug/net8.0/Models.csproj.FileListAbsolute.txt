@@ -10,3 +10,4 @@ F:\C#\Project-Appointment\appointment-scheduler--dotnet--react\Models\obj\Debug\
 F:\C#\Project-Appointment\appointment-scheduler--dotnet--react\Models\obj\Debug\net8.0\refint\Models.dll
 F:\C#\Project-Appointment\appointment-scheduler--dotnet--react\Models\obj\Debug\net8.0\Models.pdb
 F:\C#\Project-Appointment\appointment-scheduler--dotnet--react\Models\obj\Debug\net8.0\ref\Models.dll
+F:\C#\Project-Appointment\appointment-scheduler--dotnet--react\Models\obj\Debug\net8.0\Models.csproj.AssemblyReference.cache

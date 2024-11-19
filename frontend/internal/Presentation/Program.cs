@@ -12,11 +12,20 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        var httpClientBaseAddress = builder.Configuration.GetSection("HttpClientSettings:BaseAddress").Value;
+
         // Add services to the container
         builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
 
 		builder.Services.AddSingleton<IUserService, UserService>();
         builder.Services.AddSingleton<IPatientService, PatientService>();
+
+        builder.Services.AddHttpClient<IAppointmentService, AppointmentService>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
+
+
 
 		builder.Services.AddControllersWithViews();
 

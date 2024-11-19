@@ -22,7 +22,6 @@ namespace Models
             Address = address;
         }
 
-        public uint Id { get; set; }
 
         [Required(ErrorMessage = "UserName không được bỏ trống")]
         public string UserName { get; set; }
