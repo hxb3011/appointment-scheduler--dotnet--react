@@ -121,6 +121,9 @@ public static class MySQLEntitiesExtensions
         builder.Property<DateTime>(nameof(Appointment.AtTime))
             .HasColumnName("Time")
             .HasColumnType("datetime");
+        builder.Property<uint>(nameof(Appointment.Number))
+            .HasColumnName("Number")
+            .HasColumnType("int");
         builder.Property<uint>(nameof(Appointment.State))
             .HasColumnName("State")
             .HasColumnType("int");

@@ -18,7 +18,7 @@ internal sealed class AppointmentImpl : BaseEntity, IAppointment
         _profile = profile;
     }
 
-    int IAppointment.Number => throw new NotImplementedException(); // TODO
+    int IAppointment.Number { get => _appointment.Number; }
     DateTime IAppointment.AtTime { get => _appointment.AtTime; }
     uint IAppointment.State { get => _appointment.State; set => _appointment.State = value; }
     IProfile IAppointment.Profile

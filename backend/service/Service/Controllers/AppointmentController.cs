@@ -56,7 +56,7 @@ public class AppointmentController : ControllerBase
             return NotFound("Can not find this doctor");
         }
 
-        var newAppointment = await profile.ObtainAppointment(appointment.AtTime, doctor);
+        var newAppointment = await profile.ObtainAppointment(appointment.AtTime, 0, doctor);
 
         if (!await newAppointment.Create())
         {

@@ -11,6 +11,6 @@ public interface IDoctor : IUser
     bool IsPhoneValid { get; }
     IEnumerable<IAppointment> Appointments { get; }
     IEnumerable<IExamination> Examinations { get; }
-    Task<IAppointment> ObtainAppointment(DateTime atTime);
+    Task<IAppointment> ObtainAppointment(DateTime atTime, uint number);
     Task<IExamination> ObtainExamination(IAppointment appointment);
 }

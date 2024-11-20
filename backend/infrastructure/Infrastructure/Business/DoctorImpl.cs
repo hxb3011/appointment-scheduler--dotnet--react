@@ -40,7 +40,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
         );
     }
 
-    async Task<IAppointment> IDoctor.ObtainAppointment(DateTime atTime)
+    async Task<IAppointment> IDoctor.ObtainAppointment(DateTime atTime, uint number)
     {
         var appointment = new Appointment();
         if (!await _dbContext.IdGeneratedWrap(
@@ -49,6 +49,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
             select ap, appointment, nameof(Appointment.Id)
         )) return null;
         appointment.AtTime = atTime;
+        appointment.Number = number;
         appointment.DoctorId = _doctor.Id;
         return await CreateAppointment(appointment);
     }

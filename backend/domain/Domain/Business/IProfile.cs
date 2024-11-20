@@ -9,5 +9,5 @@ public interface IProfile : IBehavioralEntity
     bool IsFullNameValid { get; }
     IEnumerable<IAppointment> Appointments { get; }
     IEnumerable<IExamination> Examinations { get; }
-    Task<IAppointment> ObtainAppointment(DateTime atTime, IDoctor doctor);
+    Task<IAppointment> ObtainAppointment(DateTime atTime, uint number, IDoctor doctor);
 }

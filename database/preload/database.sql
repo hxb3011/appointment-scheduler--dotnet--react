@@ -27,7 +27,8 @@ DROP TABLE IF EXISTS `appointment`;
 CREATE TABLE `appointment` (
   `Id` int unsigned NOT NULL,
   `Time` datetime DEFAULT NULL,
-  `State` int unsigned DEFAULT NULL,
+  `Number` int unsigned DEFAULT 0,
+  `State` int unsigned DEFAULT 0,
   `ProfileId` int unsigned DEFAULT NULL,
   `DoctorId` int unsigned DEFAULT NULL,
   PRIMARY KEY (`Id`)

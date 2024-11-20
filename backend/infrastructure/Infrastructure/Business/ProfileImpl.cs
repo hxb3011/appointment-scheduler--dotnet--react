@@ -40,9 +40,9 @@ internal sealed class ProfileImpl : BaseEntity, IProfile
         );
     }
 
-    async Task<IAppointment> IProfile.ObtainAppointment(DateTime atTime, IDoctor doctor)
+    async Task<IAppointment> IProfile.ObtainAppointment(DateTime atTime, uint number, IDoctor doctor)
     {
-        var impl = await doctor.ObtainAppointment(atTime);
+        var impl = await doctor.ObtainAppointment(atTime, number);
         impl.Profile = this;
         impl.Created += InvalidateLoadedEntities;
         impl.Updated += InvalidateLoadedEntities;
