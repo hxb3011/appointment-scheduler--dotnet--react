@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppointmentScheduler.Domain.Requests
+namespace AppointmentScheduler.Domain.Requests.Update
 {
     public class UpdateDiagnosticRequest
     {

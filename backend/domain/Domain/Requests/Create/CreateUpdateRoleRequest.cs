@@ -1,4 +1,4 @@
-namespace AppointmentScheduler.Domain.Requests;
+namespace AppointmentScheduler.Domain.Requests.Create;
 
 public class CreateUpdateRoleRequest
 {
