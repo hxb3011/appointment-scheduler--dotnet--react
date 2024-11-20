@@ -1,6 +1,7 @@
 
 
 using AppointmentScheduler.Domain;
+using AppointmentScheduler.Presentation.Services.AppointmentService;
 using Services.IService;
 using Services.Service;
 
@@ -15,8 +16,18 @@ public static class Program
         // Add services to the container
         builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
 
+		var httpClientBaseAddress = builder.Configuration.GetSection("HttpClientSettings:BaseAddress").Value;
+
+
+
 		builder.Services.AddSingleton<IUserService, UserService>();
         builder.Services.AddSingleton<IPatientService, PatientService>();
+
+
+        builder.Services.AddHttpClient<IAppointmentService, AppointmentService>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
 
 		builder.Services.AddControllersWithViews();
 

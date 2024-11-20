@@ -2,6 +2,7 @@ using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Domain.Requests.Create;
 using AppointmentScheduler.Domain.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

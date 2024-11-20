@@ -1,12 +1,14 @@
 ﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
-using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Domain.Requests.Create;
+using AppointmentScheduler.Domain.Requests.Update;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AppointmentScheduler.Service.Controllers {
+namespace AppointmentScheduler.Service.Controllers
+{
     [Route("api/[controller]")]
     [ApiController]
     public class ProfileController : ControllerBase {
