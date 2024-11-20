@@ -26,6 +26,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
         get => _appointments ??= (
             from ap in _dbContext.Set<Appointment>()
             where ap.DoctorId == _doctor.Id
+            orderby ap.AtTime ascending
             select CreateAppointment(ap).WaitForResult(Timeout.Infinite, default)
         ).Cached();
     }

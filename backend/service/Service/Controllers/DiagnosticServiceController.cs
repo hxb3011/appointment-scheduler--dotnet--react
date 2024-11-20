@@ -8,95 +8,94 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace AppointmentScheduler.Service.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DiagnosticServiceController : ControllerBase
-    {
-        private readonly IRepository _repository;
-        private readonly ILogger<DiagnosticServiceController> _logger;
+namespace AppointmentScheduler.Service.Controllers;
 
-        public DiagnosticServiceController(IRepository repository, ILogger<DiagnosticServiceController> logger)
+[Route("api/[controller]")]
+[ApiController]
+public class DiagnosticServiceController : ControllerBase
+{
+    private readonly IRepository _repository;
+    private readonly ILogger<DiagnosticServiceController> _logger;
+
+    public DiagnosticServiceController(IRepository repository, ILogger<DiagnosticServiceController> logger)
+    {
+        _repository = repository;
+        _logger = logger;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetDiagnosticServiceById(uint id)
+    {
+        var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+
+        if (diagnosticService != null)
         {
-            _repository = repository;
-            _logger = logger;
+            return Ok(diagnosticService);
+        }
+        return NotFound("Diagnostic service not found.");
+    }
+
+    [HttpPost]
+    [JSONWebToken(AuthenticationRequired = false)]
+    public async Task<ActionResult> CreateDiagnosticService([FromBody] CreateDiagnosticRequest request)
+    {
+        if (request.AppointmentId == null)
+            return BadRequest("Appointment ID cannot be null.");
+
+        var appointment = await _repository.GetEntityBy<uint, IAppointment>(request.AppointmentId);
+        if (appointment == null)
+        {
+            return NotFound("Appointment not found.");
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetDiagnosticServiceById(uint id)
-        {
-            var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+        var newDiagnosticService = await _repository.ObtainEntity<IDiagnosticService>();
+        newDiagnosticService.Name = request.Name;
+        newDiagnosticService.Price = request.Price;
 
-            if (diagnosticService != null)
-            {
-                return Ok(diagnosticService);
-            }
+        if (!await newDiagnosticService.Create())
+        {
+            return BadRequest("Cannot create diagnostic service.");
+        }
+        return Ok(newDiagnosticService);
+    }
+
+    [HttpPut("{id}")]
+    [JSONWebToken(AuthenticationRequired = false)]
+    public async Task<ActionResult> UpdateDiagnosticService(uint id, [FromBody] CreateDiagnosticRequest request)
+    {
+        var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+
+        if (diagnosticService == null)
+        {
             return NotFound("Diagnostic service not found.");
         }
 
-        [HttpPost]
-        [JSONWebToken(AuthenticationRequired = false)]
-        public async Task<ActionResult> CreateDiagnosticService([FromBody] CreateDiagnosticRequest request)
+        diagnosticService.Name = request.Name ?? diagnosticService.Name;
+        diagnosticService.Price = request.Price;
+
+        if (!await diagnosticService.Update())
         {
-            if (request.AppointmentId == null)
-                return BadRequest("Appointment ID cannot be null.");
+            return BadRequest("Cannot update diagnostic service.");
+        }
+        return Ok("Diagnostic service updated successfully.");
+    }
 
-            var appointment = await _repository.GetEntityBy<uint, IAppointment>(request.AppointmentId);
-            if (appointment == null)
-            {
-                return NotFound("Appointment not found.");
-            }
+    [HttpDelete("{id}")]
+    [JSONWebToken(AuthenticationRequired = false)]
+    public async Task<ActionResult> DeleteDiagnosticService(uint id)
+    {
+        var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
 
-            var newDiagnosticService = await _repository.ObtainEntity<IDiagnosticService>();
-            newDiagnosticService.Name = request.Name;
-            newDiagnosticService.Price = request.Price;
-
-            if (!await newDiagnosticService.Create())
-            {
-                return BadRequest("Cannot create diagnostic service.");
-            }
-            return Ok(newDiagnosticService);
+        if (diagnosticService == null)
+        {
+            return NotFound("Diagnostic service not found.");
         }
 
-        [HttpPut("{id}")]
-        [JSONWebToken(AuthenticationRequired = false)]
-        public async Task<ActionResult> UpdateDiagnosticService(uint id, [FromBody] CreateDiagnosticRequest request)
+        if (!await diagnosticService.Delete())
         {
-            var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
-
-            if (diagnosticService == null)
-            {
-                return NotFound("Diagnostic service not found.");
-            }
-
-            diagnosticService.Name = request.Name ?? diagnosticService.Name;
-            diagnosticService.Price = request.Price;
-
-            if (!await diagnosticService.Update())
-            {
-                return BadRequest("Cannot update diagnostic service.");
-            }
-            return Ok("Diagnostic service updated successfully.");
+            return BadRequest("Cannot delete diagnostic service.");
         }
 
-        [HttpDelete("{id}")]
-        [JSONWebToken(AuthenticationRequired = false)]
-        public async Task<ActionResult> DeleteDiagnosticService(uint id)
-        {
-            var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
-
-            if (diagnosticService == null)
-            {
-                return NotFound("Diagnostic service not found.");
-            }
-
-            if (!await diagnosticService.Delete())
-            {
-                return BadRequest("Cannot delete diagnostic service.");
-            }
-
-            return Ok("Diagnostic service deleted successfully.");
-        }
+        return Ok("Diagnostic service deleted successfully.");
     }
 }
