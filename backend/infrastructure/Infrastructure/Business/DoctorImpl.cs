@@ -6,6 +6,7 @@ namespace AppointmentScheduler.Infrastructure.Business;
 
 internal sealed class DoctorImpl : UserImpl, IDoctor
 {
+    private IResourceManagerService _resourceManager;
     private readonly Doctor _doctor;
     private IEnumerable<IAppointment> _appointments;
     private IEnumerable<IExamination> _examinations;
@@ -18,7 +19,6 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     string IDoctor.Phone { get => _doctor.Phone; set => _doctor.Phone = value; }
     string IDoctor.Position { get => _doctor.Position; set => _doctor.Position = value; }
     string IDoctor.Certificate { get => _doctor.Certificate; set => _doctor.Certificate = value; }
-    string IDoctor.Image { get => _doctor.Image; set => _doctor.Image = value; }
     bool IDoctor.IsEmailValid { get => _doctor.Email.IsValidEmail(emptyAllowed: true); }
     bool IDoctor.IsPhoneValid { get => _doctor.Phone.IsValidPhone(emptyAllowed: true); }
     IEnumerable<IAppointment> IDoctor.Appointments
@@ -57,6 +57,9 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     Task<IExamination> IDoctor.ObtainExamination(IAppointment appointment)
         => appointment.ObtainExamination();
 
+    Stream IDoctor.Image(bool readOnly)
+        => _resourceManager.Resource<DoctorImpl>(_doctor.Id, readOnly);
+
     private Task<IAppointment> CreateAppointment(Appointment appointment)
     {
         IAppointment impl = new AppointmentImpl(appointment, this);
@@ -69,6 +72,12 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     private void InvalidateLoadedEntities(object sender, EventArgs e)
     {
         _appointments = (IEnumerable<IAppointment>)((ICloneable)((IDoctor)this).Appointments).Clone();
+    }
+
+    protected override async Task<bool> Initilize()
+    {
+        _resourceManager = await _repository.GetService<IResourceManagerService>();
+        return true;
     }
 
     protected override async Task<bool> CanDelete()

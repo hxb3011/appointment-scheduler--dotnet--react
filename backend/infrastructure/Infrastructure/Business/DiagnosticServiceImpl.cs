@@ -30,7 +30,9 @@ internal sealed class DiagnosticServiceImpl : BaseEntity, IDiagnosticService
             return _doctor;
         }
     }
-    IDocument IDiagnosticService.Document { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    Stream IDiagnosticService.Document(bool readOnly) => _exdiag == null ? null
+        : _resourceManager.Resource<DiagnosticServiceImpl>(_exdiag.Id, readOnly);
 
     protected override Task<bool> Create()
     {

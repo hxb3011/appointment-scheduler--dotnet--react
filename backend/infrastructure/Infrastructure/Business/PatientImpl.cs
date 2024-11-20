@@ -6,6 +6,7 @@ namespace AppointmentScheduler.Infrastructure.Business;
 
 internal sealed class PatientImpl : UserImpl, IPatient
 {
+    private IResourceManagerService _resourceManager;
     private readonly Patient _patient;
     private IEnumerable<IProfile> _profiles;
     internal PatientImpl(User user, Patient patient, IRole role) : base(user, role)
@@ -43,6 +44,9 @@ internal sealed class PatientImpl : UserImpl, IPatient
         return await CreateProfile(profile);
     }
 
+    Stream IPatient.Image(bool readOnly)
+        => _resourceManager.Resource<PatientImpl>(_doctor.Id, readOnly);
+
     private Task<IProfile> CreateProfile(Profile profile)
     {
         IProfile impl = new ProfileImpl(profile, this);
@@ -58,8 +62,6 @@ internal sealed class PatientImpl : UserImpl, IPatient
         _profiles = null;
     }
 
-
-
     protected override Task<bool> CanDelete() => (
         from e in _dbContext.Set<Profile>()
         where e.PatientId == _patient.Id
@@ -69,6 +71,12 @@ internal sealed class PatientImpl : UserImpl, IPatient
     protected override Task<bool> IsValid()
         => !((IPatient)this).IsEmailValid || !((IPatient)this).IsPhoneValid
             ? Task.FromResult(false) : base.IsValid();
+
+    protected override async Task<bool> Initilize()
+    {
+        _resourceManager = await _repository.GetService<IResourceManagerService>();
+        return true;
+    }
 
     protected override async Task<bool> Create()
     {

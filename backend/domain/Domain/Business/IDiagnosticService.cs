@@ -6,5 +6,5 @@ public interface IDiagnosticService : IBehavioralEntity
     double Price { get; set; }
     bool IsNameValid { get; }
     IDoctor Doctor { get; }
-    IDocument Document { get; set; }
+    Stream Document(bool readOnly = true);
 }
