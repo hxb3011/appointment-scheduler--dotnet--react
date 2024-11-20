@@ -4,6 +4,8 @@ using AppointmentScheduler.Infrastructure.Authorization;
 using AppointmentScheduler.Infrastructure.Business;
 using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -83,18 +85,36 @@ public static class Extensions
         return options;
     }
 
+    private static FormOptions Factory(this Action<IServiceProvider, FormOptions> configure, IServiceProvider provider)
+    {
+        var options = new FormOptions() { MultipartBodyLengthLimit = 1L << 30 };
+        configure?.Invoke(provider, options);
+        return options;
+    }
+
+    private static PasswordHasherOptions Factory(this Action<IServiceProvider, PasswordHasherOptions> configure, IServiceProvider provider)
+    {
+        if (configure == null) return null;
+        var options = new PasswordHasherOptions();
+        configure(provider, options);
+        return options;
+    }
+
     private static IServiceCollection AddDescriptor<TService>(this IServiceCollection services, Func<IServiceProvider, TService> factory, ServiceLifetime lifetime) where TService : class
     {
-        services.Add(new ServiceDescriptor(typeof(JSONWebTokenOptions), factory, lifetime));
+        services.Add(new ServiceDescriptor(typeof(TService), factory, lifetime));
         return services;
     }
 
-    public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services,
         Action<IServiceProvider, DbContextOptionsBuilder> dbConfigure = null,
-        Action<IServiceProvider, JSONWebTokenOptions> jwtConfigure = null
+        Action<IServiceProvider, JSONWebTokenOptions> jwtConfigure = null,
+        Action<IServiceProvider, FormOptions> formConfigure = null,
+        Action<IServiceProvider, PasswordHasherOptions> passwordHasherConfigure = null
     ) => services.AddDbContext<IRepository, DefaultRepository>(dbConfigure, ServiceLifetime.Singleton)
-        .AddDescriptor(jwtConfigure.Factory, ServiceLifetime.Singleton);
+        .AddDescriptor(jwtConfigure.Factory, ServiceLifetime.Singleton)
+        .AddDescriptor(formConfigure.Factory, ServiceLifetime.Singleton)
+        .AddDescriptor(passwordHasherConfigure.Factory, ServiceLifetime.Singleton);
 
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         => app.UseMiddleware<JSONWebTokenMiddleware>();

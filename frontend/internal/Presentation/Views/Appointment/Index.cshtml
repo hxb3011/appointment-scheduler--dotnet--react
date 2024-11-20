@@ -73,8 +73,11 @@
 										<td>@appointment.DoctorId</td>
 										<td>@appointment.AtTime</td>
 										<td>
-											<span class="badge badge-light-@appointment.State.GetBadge()">
-												@appointment.State.GetDisplayName()
+											@{
+												var meta = appointment.State.GetMetadata();
+											}
+											<span class="badge badge-light-@meta.Badge">
+												@meta.DisplayName
 											</span>
 										</td>
 

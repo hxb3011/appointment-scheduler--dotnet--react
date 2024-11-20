@@ -33,8 +33,13 @@ public class JSONWebTokenMiddleware
         var attr = context.GetEndpoint()?.Metadata.GetMetadata<JSONWebTokenAttribute>();
         if (attr != null && attr.AuthenticationRequired)
         {
-            var token = context.Request.Headers.Authorization.FirstOrDefault()?.Split(" ").Last();
-            if (token == null) goto unauthorization;
+            var auth = context.Request.Headers["Authorization"].FirstOrDefault();
+            if (auth == null) goto unauthorization;
+            var authInfo = auth.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            string token;
+            if (authInfo.Length != 2
+                || authInfo.First().Equals("bearer", StringComparison.InvariantCultureIgnoreCase)
+                || (token = authInfo.Last()) == null) goto unauthorization;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SymmetricSecurityKey));

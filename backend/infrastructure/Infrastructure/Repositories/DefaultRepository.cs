@@ -12,6 +12,7 @@ public class DefaultRepository : DbContext, IRepository
 {
     private IResourceManagerService _resourceManager;
     private IConfigurationPropertiesService _configurationProperties;
+    private ISchedulerService _scheduler;
     public DefaultRepository(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -107,6 +108,13 @@ public class DefaultRepository : DbContext, IRepository
             configurationProperties ??= new ConfigurationPropertiesServiceImpl(this);
             _configurationProperties = configurationProperties;
             return (TService)configurationProperties;
+        }
+        else if (typeof(TService).IsAssignableFrom(typeof(ISchedulerService)))
+        {
+            ISchedulerService scheduler = _scheduler;
+            scheduler ??= new SchedulerServiceImpl(this);
+            _scheduler = scheduler;
+            return (TService)scheduler;
         }
         throw new InvalidOperationException("This repository does not included service " + typeof(TService).FullName);
     }
