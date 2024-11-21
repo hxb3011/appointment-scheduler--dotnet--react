@@ -2,7 +2,7 @@ namespace AppointmentScheduler.Domain.Business;
 
 public interface IAppointment : IBehavioralEntity
 {
-    int Number { get; }
+    uint Number { get; }
     DateTime AtTime { get; }
     uint State { get; set; }
     IDoctor Doctor { get; }

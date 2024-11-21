@@ -48,9 +48,7 @@ public class AppointmentController : ControllerBase
         {
             return NotFound("Can not find this profile");
         }
-        if (appointment.DoctorId == null)
-            return BadRequest("Doctor id can not be null");
-        var doctor = await _repository.GetEntityBy<uint, IDoctor>((uint)appointment.DoctorId);
+        var doctor = await _repository.GetEntityBy<uint, IDoctor>(appointment.DoctorId);
         if (doctor == null)
         {
             return NotFound("Can not find this doctor");

@@ -32,7 +32,7 @@ internal sealed class DiagnosticServiceImpl : BaseEntity, IDiagnosticService
     }
 
     Stream IDiagnosticService.Document(bool readOnly) => _exdiag == null ? null
-        : _resourceManager.Resource<DiagnosticServiceImpl>(_exdiag.Id, readOnly);
+        : _resourceManager.Resource<DiagnosticServiceImpl>(_exdiag.Id.ToString(), readOnly);
 
     protected override Task<bool> Create()
     {

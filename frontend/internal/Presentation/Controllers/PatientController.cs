@@ -1,23 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Models;
-using Services.IService;
+﻿using AppointmentScheduler.Presentation.Services;
+using Microsoft.AspNetCore.Mvc;
 
-namespace AppointmentScheduler.Presentation.Controllers
+namespace AppointmentScheduler.Presentation.Controllers;
+
+public class PatientController : Controller
 {
-	public class PatientController : Controller
+	private readonly PatientService _patientService;
+
+	public PatientController(PatientService patientService)
 	{
-		private readonly IPatientService _patientService;
+		_patientService = patientService;
+	}
 
-		public PatientController(IPatientService patientService)
-		{
-			_patientService = patientService;
-		}
+	public IActionResult Index()
+	{
+		var patients = _patientService.GetAllPatients();
 
-		public IActionResult Index()
-		{
-			var patients = _patientService.GetAllPatients();
-
-			return View(patients);
-		}
+		return View(patients);
 	}
 }

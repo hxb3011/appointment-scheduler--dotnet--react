@@ -17,9 +17,9 @@ internal class PrescriptionImpl : BaseEntity, IPrescription
     }
 
     Stream IPrescription.Document(bool readOnly)
-        => _resourceManager.Resource<PrescriptionImpl>(_doctor.Id, readOnly);
+        => _resourceManager.Resource<PrescriptionImpl>(_prescription.Id.ToString(), readOnly);
 
-    public string IPrescription.Description { get => _prescription.Description; set => _prescription.Description = value; }
+    string IPrescription.Description { get => _prescription.Description; set => _prescription.Description = value; }
 
     public IEnumerable<IMedicine> Medicines { get => throw new NotImplementedException(); }
 

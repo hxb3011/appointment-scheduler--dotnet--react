@@ -1,5 +1,6 @@
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Infrastructure.Business;
@@ -15,8 +16,8 @@ internal sealed class PatientImpl : UserImpl, IPatient
     }
 
     string IPatient.Email { get => _patient.Email; set => _patient.Email = value; }
+
     string IPatient.Phone { get => _patient.Phone; set => _patient.Phone = value; }
-    string IPatient.Image { get => _patient.Image; set => _patient.Image = value; }
 
     bool IPatient.IsEmailValid => _patient.Email.IsValidEmail(true);
 
@@ -45,7 +46,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
     }
 
     Stream IPatient.Image(bool readOnly)
-        => _resourceManager.Resource<PatientImpl>(_doctor.Id, readOnly);
+        => _resourceManager.Resource<PatientImpl>(_patient.Id.ToString(), readOnly);
 
     private Task<IProfile> CreateProfile(Profile profile)
     {

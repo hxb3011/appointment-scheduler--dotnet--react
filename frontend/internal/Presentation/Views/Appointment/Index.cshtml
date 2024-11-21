@@ -1,10 +1,9 @@
-﻿@using AppointmentScheduler.Presentation.Helper
-@{
+﻿@{
     ViewData["Title"] = "Đặt lịchs";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 
-@model IEnumerable<AppointmentScheduler.Presentation.Models.AppointmentViewModel>
+@model IEnumerable<AppointmentModel>
 
 
 <!-- CSS riêng cho lớp con -->
@@ -66,6 +65,7 @@
 							{
 								@foreach (var appointment in Model)
 								{
+									var meta = appointment.State.GetMetadata();
 									<tr>
 										<td>@stt</td>
 										<td>@appointment.Id</td>
@@ -73,9 +73,6 @@
 										<td>@appointment.DoctorId</td>
 										<td>@appointment.AtTime</td>
 										<td>
-											@{
-												var meta = appointment.State.GetMetadata();
-											}
 											<span class="badge badge-light-@meta.Badge">
 												@meta.DisplayName
 											</span>

@@ -1,5 +1,6 @@
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Infrastructure.Business;
@@ -58,7 +59,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
         => appointment.ObtainExamination();
 
     Stream IDoctor.Image(bool readOnly)
-        => _resourceManager.Resource<DoctorImpl>(_doctor.Id, readOnly);
+        => _resourceManager.Resource<DoctorImpl>(_doctor.Id.ToString(), readOnly);
 
     private Task<IAppointment> CreateAppointment(Appointment appointment)
     {

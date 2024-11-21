@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AppointmentScheduler.Domain;
 using AppointmentScheduler.Presentation.Attributes;
-using AppointmentScheduler.Presentation.Services.AppointmentService;
+using AppointmentScheduler.Presentation.Services;
 
 namespace AppointmentScheduler.Presentation;
 
@@ -18,10 +18,6 @@ public static class Program
 
         // Add services to the container
         builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
-
-        builder.Services.AddSingleton<IUserService, UserService>();
-        builder.Services.AddSingleton<IPatientService, PatientService>();
-        builder.Services.AddSingleton<IAppointmentService, AppointmentService>();
 
         builder.Services.AddControllersWithViews();
 

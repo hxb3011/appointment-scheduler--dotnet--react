@@ -56,7 +56,6 @@ namespace AppointmentScheduler.Service.Controllers
 			newDoctor.Phone = doctor.Phone;
 			newDoctor.Position = doctor.Position;
 			newDoctor.Certificate = doctor.Certificate;
-			newDoctor.Image = doctor.Image;
 
 			if(!await newDoctor.Create())
 			{
