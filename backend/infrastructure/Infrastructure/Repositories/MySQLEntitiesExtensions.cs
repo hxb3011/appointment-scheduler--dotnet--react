@@ -12,13 +12,13 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(PrescriptionDetail.Id));
         builder.Property<uint>(nameof(PrescriptionDetail.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(PrescriptionDetail.PrescriptionId))
             .HasColumnName("PrescriptionId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(PrescriptionDetail.MedicineId))
             .HasColumnName("MedicineId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(PrescriptionDetail.Description))
             .HasColumnName("Description")
             .HasColumnType("varchar(500)");
@@ -30,7 +30,7 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Medicine.Id));
         builder.Property<uint>(nameof(Medicine.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(Medicine.Name))
             .HasColumnName("Name")
             .HasColumnType("varchar(100)");
@@ -46,10 +46,10 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Prescription.Id));
         builder.Property<uint>(nameof(Prescription.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(Prescription.ExaminationId))
             .HasColumnName("ExaminationId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(Prescription.Description))
             .HasColumnName("Description")
             .HasColumnType("varchar(500)");
@@ -62,16 +62,16 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(ExaminationService.Id));
         builder.Property<uint>(nameof(ExaminationService.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(ExaminationService.DoctorId))
             .HasColumnName("DoctorId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(ExaminationService.DiagnosticServiceId))
             .HasColumnName("DiagnosticServiceId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(ExaminationService.ExaminationId))
             .HasColumnName("ExaminationDetailId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Ignore(nameof(ExaminationService.Document));
     }
 
@@ -81,7 +81,7 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(DiagnosticService.Id));
         builder.Property<uint>(nameof(DiagnosticService.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(DiagnosticService.Name))
             .HasColumnName("Name")
             .HasColumnType("varchar(250)");
@@ -96,10 +96,10 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Examination.Id));
         builder.Property<uint>(nameof(Examination.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(Examination.AppointmentId))
             .HasColumnName("AppointmentId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(Examination.Diagnostic))
             .HasColumnName("Diagnostic")
             .HasColumnType("varchar(50)");
@@ -108,7 +108,7 @@ public static class MySQLEntitiesExtensions
             .HasColumnType("varchar(50)");
         builder.Property<uint>(nameof(Examination.State))
             .HasColumnName("State")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
     }
 
     internal static void BuildAppointmentEntity(EntityTypeBuilder<Appointment> builder)
@@ -117,7 +117,7 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Appointment.Id));
         builder.Property<uint>(nameof(Appointment.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<DateTime>(nameof(Appointment.AtTime))
             .HasColumnName("Time")
             .HasColumnType("datetime");
@@ -126,13 +126,13 @@ public static class MySQLEntitiesExtensions
             .HasColumnType("int");
         builder.Property<uint>(nameof(Appointment.State))
             .HasColumnName("State")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(Appointment.DoctorId))
             .HasColumnName("DoctorId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint?>(nameof(Appointment.ProfileId))
             .HasColumnName("ProfileId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
     }
 
     internal static void BuildProfileEntity(EntityTypeBuilder<Profile> builder)
@@ -141,10 +141,10 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Profile.Id));
         builder.Property<uint>(nameof(Profile.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<uint>(nameof(Profile.PatientId))
             .HasColumnName("PatientId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(Profile.FullName))
             .HasColumnName("Fullname")
             .HasColumnType("varchar(100)");
@@ -164,7 +164,7 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Doctor.Id));
         builder.Property<uint>(nameof(Doctor.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(Doctor.Email))
             .HasColumnName("Email")
             .HasColumnType("varchar(50)");
@@ -186,7 +186,7 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Patient.Id));
         builder.Property<uint>(nameof(Patient.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(Patient.Email))
             .HasColumnName("Email")
             .HasColumnType("varchar(50)");
@@ -202,7 +202,7 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(User.Id));
         builder.Property<uint>(nameof(User.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(User.UserName))
             .HasColumnName("Username")
             .HasColumnType("varchar(50)");
@@ -211,10 +211,10 @@ public static class MySQLEntitiesExtensions
             .HasColumnType("varchar(50)");
         builder.Property<string>(nameof(User.Password))
             .HasColumnName("Password")
-            .HasColumnType("varchar(50)");
+            .HasColumnType("varchar(63)");
         builder.Property<uint>(nameof(User.RoleId))
             .HasColumnName("RoleId")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
     }
 
     internal static void BuildRoleEntity(EntityTypeBuilder<Role> builder)
@@ -223,7 +223,7 @@ public static class MySQLEntitiesExtensions
         builder.HasKey(nameof(Role.Id));
         builder.Property<uint>(nameof(Role.Id))
             .HasColumnName("Id")
-            .HasColumnType("int");
+            .HasColumnType("int unsigned");
         builder.Property<string>(nameof(Role.Name))
             .HasColumnName("Name")
             .HasColumnType("varchar(50)");

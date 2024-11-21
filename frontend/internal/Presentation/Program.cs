@@ -15,11 +15,11 @@ public static class Program
     public static int Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        var services = builder.Services;
+        
+        services.AddConfigurator<HttpClient>(ConfigureApiHttpClient, ServiceLifetime.Singleton);
 
-        // Add services to the container
-        builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
-
-        builder.Services.AddControllersWithViews();
+        services.AddControllersWithViews();
 
         var app = builder.Build();
 
@@ -55,6 +55,23 @@ public static class Program
         if (string.IsNullOrWhiteSpace(host = "API_SERVER".Env())) host = "localhost";
         if (!int.TryParse("API_PORT".Env(), out int portNumber)) portNumber = 8080;
         client.BaseAddress = new UriBuilder("https", host, portNumber).Uri;
+    }
+
+    private static TOptions Factory<TOptions>(
+        this Action<IServiceProvider, TOptions> configure,
+        IServiceProvider provider) where TOptions : class, new()
+    {
+        var options = new TOptions();
+        configure?.Invoke(provider, options);
+        return options;
+    }
+
+    private static IServiceCollection AddConfigurator<TService>(
+        this IServiceCollection services, Action<IServiceProvider, TService> configurator,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped) where TService : class, new()
+    {
+        services.Add(new ServiceDescriptor(typeof(TService), configurator.Factory, lifetime));
+        return services;
     }
 
     public static dynamic GetMetadata<T>(this T value) where T : struct, Enum

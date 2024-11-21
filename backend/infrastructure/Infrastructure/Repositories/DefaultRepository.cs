@@ -270,7 +270,7 @@ public class DefaultRepository : DbContext, IRepository
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
         {
             var role = new Role();
-            if (await this.IdGeneratedWrap(
+            if (!await this.IdGeneratedWrap(
                 from r in Set<Role>()
                 where r.Id == role.Id
                 select r, role, nameof(Role.Id)

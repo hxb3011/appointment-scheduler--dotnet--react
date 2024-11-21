@@ -1,4 +1,6 @@
-﻿using AppointmentScheduler.Domain.Business;
+﻿using AppointmentScheduler.Domain;
+using AppointmentScheduler.Domain.Business;
+using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Infrastructure.Authorization;
 using AppointmentScheduler.Infrastructure.Business;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace AppointmentScheduler.Infrastructure;
 
@@ -47,28 +50,15 @@ public static class Extensions
     internal static async Task<bool> IdGeneratedWrap<TEntity>(this DbContext context, IQueryable<TEntity> query, TEntity entity, string idPropertyName) where TEntity : class
     {
         const long IdLimit = uint.MaxValue + 1L;
-
-        // Sử dụng reflection để lấy setter của Id
-        var propertyInfo = typeof(TEntity).GetProperty(idPropertyName);
-        if (propertyInfo == null || propertyInfo.PropertyType != typeof(uint))
-        {
-            throw new ArgumentException("The specified property is not of type uint.");
-        }
-
-        // Tạo ra một task đếm số bản ghi hiện tại trong database
-        Task<long> countTask = context.Set<TEntity>().LongCountAsync();
-
-        // Lặp cho đến khi tìm được Id hợp lệ
-        while (await query.AnyAsync() && (await countTask) <= IdLimit)
-        {
-            var newId = NewId();
-            propertyInfo.SetValue(entity, newId);
-        }
-
-        // Trả về true nếu số bản ghi trong database không vượt quá giới hạn Id
-        return (await countTask) <= IdLimit;
+        Task<long> countTask = null;
+        var setId = entity.Setter<uint>(idPropertyName);
+        do setId(NewId());
+        while (await query.AnyAsync() && (
+            (countTask ??= context.Set<TEntity>().LongCountAsync())
+                .IsCompleted ? countTask.Result : await countTask
+        ) <= IdLimit);
+        return countTask == null || countTask.Result <= IdLimit;
     }
-
 
     public static async Task<TEntity> Initialize<TEntity>(this IRepository repository, TEntity entity)
         where TEntity : class, IBehavioralEntity
@@ -78,31 +68,23 @@ public static class Extensions
     private static bool InvertTaskResultContinuation(Task<bool> task) => !task.Result;
     public static Task<bool> InvertTaskResult(this Task<bool> task) => task.ContinueWith(InvertTaskResultContinuation);
 
-    private static JSONWebTokenOptions Factory(this Action<IServiceProvider, JSONWebTokenOptions> configure, IServiceProvider provider)
+    private static TOptions Factory<TOptions>(
+        this Action<IServiceProvider, TOptions> configure,
+        IServiceProvider provider) where TOptions : class, new()
     {
-        var options = new JSONWebTokenOptions();
+        var options = new TOptions();
         configure?.Invoke(provider, options);
         return options;
     }
 
-    private static FormOptions Factory(this Action<IServiceProvider, FormOptions> configure, IServiceProvider provider)
-    {
-        var options = new FormOptions() { MultipartBodyLengthLimit = 1L << 30 };
-        configure?.Invoke(provider, options);
-        return options;
-    }
+    private static void ConfigureFormOptions(IServiceProvider provider, FormOptions options)
+        => options.MultipartBodyLengthLimit = 1L << 30;
 
-    private static PasswordHasherOptions Factory(this Action<IServiceProvider, PasswordHasherOptions> configure, IServiceProvider provider)
+    private static IServiceCollection AddConfigurator<TService>(
+        this IServiceCollection services, Action<IServiceProvider, TService> configurator,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped) where TService : class, new()
     {
-        if (configure == null) return null;
-        var options = new PasswordHasherOptions();
-        configure(provider, options);
-        return options;
-    }
-
-    private static IServiceCollection AddDescriptor<TService>(this IServiceCollection services, Func<IServiceProvider, TService> factory, ServiceLifetime lifetime) where TService : class
-    {
-        services.Add(new ServiceDescriptor(typeof(TService), factory, lifetime));
+        services.Add(new ServiceDescriptor(typeof(TService), configurator.Factory, lifetime));
         return services;
     }
 
@@ -112,10 +94,83 @@ public static class Extensions
         Action<IServiceProvider, FormOptions> formConfigure = null,
         Action<IServiceProvider, PasswordHasherOptions> passwordHasherConfigure = null
     ) => services.AddDbContext<IRepository, DefaultRepository>(dbConfigure, ServiceLifetime.Singleton)
-        .AddDescriptor(jwtConfigure.Factory, ServiceLifetime.Singleton)
-        .AddDescriptor(formConfigure.Factory, ServiceLifetime.Singleton)
-        .AddDescriptor(passwordHasherConfigure.Factory, ServiceLifetime.Singleton);
+        .AddConfigurator(jwtConfigure, ServiceLifetime.Singleton)
+        .AddConfigurator(ConfigureFormOptions + formConfigure, ServiceLifetime.Singleton)
+        .AddConfigurator(passwordHasherConfigure, ServiceLifetime.Singleton)
+        .AddSingleton<IPasswordHasher<IUser>, PasswordHasher<IUser>>();
 
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         => app.UseMiddleware<JSONWebTokenMiddleware>();
+
+    public static async Task Preload(this IRepository repository, IPasswordHasher<IUser> passwordHasher, ILogger logger = null)
+    {
+        string PreloadKey = "config.preloader.state";
+        string PreloadPrefix = typeof(Extensions).Namespace + ".Preloader";
+        string PreloadSuccess = PreloadPrefix + ".Success";
+        string PreloadAbort = PreloadPrefix + ".Abort";
+
+        var db = await repository.GetService<DbContext>();
+        using var transaction = db.Database.BeginTransaction();
+        var configs = await repository.GetService<IConfigurationPropertiesService>();
+        var preload = configs.GetProperty(PreloadKey, PreloadAbort);
+
+        if (!PreloadSuccess.Equals(preload))
+        {
+            var admin_role = await repository.ObtainEntity<IRole>();
+            admin_role.Name = "Doctor Administrator Role";
+            admin_role.Description = "Created by Preloader";
+            Enum.GetValues<Permission>().GrantTo(admin_role);
+            await admin_role.Create();
+
+            var doctor_role = await repository.ObtainEntity<IRole>();
+            doctor_role.Name = "Doctor";
+            doctor_role.Description = "Created by Preloader";
+            Enum.GetValues<Permission>().Exclude(
+                Permission.SystemPrivilege,
+                Permission.ReadRole,
+                Permission.CreateRole,
+                Permission.UpdateRole,
+                Permission.DeleteRole,
+                Permission.DeleteUser,
+                Permission.CreateDiagnosticService,
+                Permission.UpdateDiagnosticService,
+                Permission.DeleteDiagnosticService
+            ).GrantTo(doctor_role);
+            await doctor_role.Create();
+
+            var user_role = await repository.ObtainEntity<IRole>();
+            user_role.Name = "User";
+            user_role.Description = "Created by Preloader";
+            new Permission[] {
+                    Permission.ReadUser,
+                    Permission.UpdateUser,
+                    Permission.ReadProfile,
+                    Permission.CreateProfile,
+                    Permission.UpdateProfile,
+                    Permission.DeleteProfile,
+                    Permission.ReadDiagnosticService,
+                    Permission.ReadAppointment,
+                    Permission.CreateAppointment,
+                    Permission.DeleteAppointment,
+                    Permission.ReadExamination,
+                    Permission.ReadPrescription
+                }.GrantTo(user_role);
+            await user_role.Create();
+
+            var admin_user = await repository.ObtainEntity<IDoctor>();
+            admin_user.UserName = "root00";
+            admin_user.Password = passwordHasher.HashPassword(admin_user, "HeLlo|12");
+            admin_user.FullName = "Nguyễn Văn A";
+            admin_user.Email = "admin@scheduler-appointment.localhost";
+            admin_user.Phone = "0987654321";
+            admin_user.Position = "";
+            admin_user.Certificate = "";
+            await admin_user.Create();
+
+            if (repository.TryGetKeyOf(user_role, out string role_id)
+                && configs.SetProperty(RoleImpl.DefaultRoleKey, role_id)
+                && configs.SetProperty(PreloadKey, PreloadSuccess)) ;
+        }
+        transaction.Commit();
+    }
 }
