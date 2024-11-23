@@ -6,7 +6,7 @@ namespace AppointmentScheduler.Domain.Repositories;
 public interface IRepository
 {
     IEnumerable<TEntity> GetEntities<TEntity>(
-        int offset = 0, int count = 20, string orderByProperty = null, bool descending = false,
+        int skip = 0, int take = 20, string orderByProperty = null, bool descending = false,
         string whereProperty = null, object andValue = null, bool areEqual = true
     ) where TEntity : class, IBehavioralEntity;
     Task<TService> GetService<TService>();

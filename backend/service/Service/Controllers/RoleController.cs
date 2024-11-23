@@ -4,8 +4,8 @@ using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Requests.Create;
 using AppointmentScheduler.Domain.Responses;
+using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -16,22 +16,22 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     private readonly IRepository _repository = repository;
     private readonly ILogger<RoleController> _logger = logger;
 
+    private RoleResponse MakeResponse(IRole role)
+        => !_repository.TryGetKeyOf(role, out Role key) ? null
+        : new() { Id = key.Id, Name = key.Name, Description = key.Description };
+
     [HttpGet]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
     public async Task<ActionResult<IEnumerable<RoleResponse>>> GetPagedRoles([FromBody] PagedGetAllRequest request)
-    {
-        var db = await _repository.GetService<DbContext>();
-        var query = from r in db.Set<Role>() orderby r.Name ascending select r;
-        return Ok(query.Skip(request.Offset).Take(request.Count).Select(RoleResponse.GetResponse));
-    }
+        => Ok(_repository.GetEntities<IRole>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
     [HttpGet("{id}")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
     public async Task<ActionResult<RoleResponse>> GetRole(uint id)
-    {
-        var db = await _repository.GetService<DbContext>();
-        return Ok(RoleResponse.GetResponse(db.Find<Role>(id)));
-    }
+        => Ok(MakeResponse(await _repository.GetEntityBy<uint, IRole>(id)));
 
     [HttpPost]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateRole])]
     public async Task<ActionResult> CreateRole([FromBody] CreateUpdateRoleRequest request)
     {
         var role = await _repository.ObtainEntity<IRole>();
@@ -56,6 +56,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     }
 
     [HttpPut("{id}")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateRole])]
     public async Task<ActionResult> UpdateRole([FromBody] CreateUpdateRoleRequest request, uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
@@ -87,6 +88,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     }
 
     [HttpDelete("{id}")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.DeleteRole])]
     public async Task<ActionResult> DeleteRole(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
@@ -100,9 +102,11 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     }
 
     [HttpGet("permissions")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege])]
     public ActionResult<IEnumerable<string>> GetPermissions() => Ok(Enum.GetNames<Permission>());
 
     [HttpGet("{id}/permissions")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
     public async Task<ActionResult<IEnumerable<string>>> GetPermissions(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
@@ -116,7 +120,8 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     }
 
     [HttpPut("{id}/permission/{permid}")]
-    public async Task<ActionResult> GrantPermission(uint id, string permid, bool granted)
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateRole])]
+    public async Task<ActionResult> ChangePermission(uint id, string permid, bool granted)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
         if (role == null)

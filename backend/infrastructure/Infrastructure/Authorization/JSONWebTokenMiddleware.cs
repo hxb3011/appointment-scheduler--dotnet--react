@@ -8,6 +8,7 @@ using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AppointmentScheduler.Infrastructure.Authorization;
@@ -17,12 +18,14 @@ public class JSONWebTokenMiddleware
     private readonly RequestDelegate _next;
     private readonly IRepository _repository;
     private readonly JSONWebTokenOptions _options;
+    private readonly ILogger<JSONWebTokenMiddleware> _logger;
 
-    public JSONWebTokenMiddleware(RequestDelegate next, IRepository repository, JSONWebTokenOptions options)
+    public JSONWebTokenMiddleware(RequestDelegate next, IRepository repository, JSONWebTokenOptions options, ILogger<JSONWebTokenMiddleware> logger)
     {
         _next = next;
         _repository = repository;
         _options = options;
+        _logger = logger;
     }
     private static IEnumerable<string> ValueOfType(IEnumerable<Claim> claims, string type)
     {
@@ -34,13 +37,14 @@ public class JSONWebTokenMiddleware
         if (attr != null && attr.AuthenticationRequired)
         {
             var auth = context.Request.Headers["Authorization"].FirstOrDefault();
+            _logger.LogInformation("(Authorization: {0})", auth);
             if (auth == null) goto unauthorization;
             var authInfo = auth.Split(" ", StringSplitOptions.RemoveEmptyEntries);
             string token;
             if (authInfo.Length != 2
-                || authInfo.First().Equals("bearer", StringComparison.InvariantCultureIgnoreCase)
+                || !authInfo.First().Equals("bearer", StringComparison.InvariantCultureIgnoreCase)
                 || (token = authInfo.Last()) == null) goto unauthorization;
-
+            _logger.LogInformation("(Token: {0})", token);
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SymmetricSecurityKey));
             tokenHandler.ValidateToken(token, new TokenValidationParameters
