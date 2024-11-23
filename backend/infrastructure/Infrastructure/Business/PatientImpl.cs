@@ -7,8 +7,8 @@ namespace AppointmentScheduler.Infrastructure.Business;
 
 internal sealed class PatientImpl : UserImpl, IPatient
 {
+    internal readonly Patient _patient;
     private IResourceManagerService _resourceManager;
-    private readonly Patient _patient;
     private IEnumerable<IProfile> _profiles;
     internal PatientImpl(User user, Patient patient, IRole role) : base(user, role)
     {

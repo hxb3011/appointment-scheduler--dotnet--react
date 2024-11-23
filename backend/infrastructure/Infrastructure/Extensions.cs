@@ -165,6 +165,7 @@ public static class Extensions
             admin_user.Phone = "0987654321";
             admin_user.Position = "";
             admin_user.Certificate = "";
+            await admin_user.ChangeRole(admin_role);
             await admin_user.Create();
 
             if (repository.TryGetKeyOf(user_role, out string role_id)

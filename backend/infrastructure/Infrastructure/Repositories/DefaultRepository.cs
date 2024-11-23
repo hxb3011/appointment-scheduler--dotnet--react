@@ -1,5 +1,6 @@
 // #define DEMO
 
+using System.Linq.Expressions;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
@@ -33,63 +34,46 @@ public class DefaultRepository : DbContext, IRepository
 
     }
 
-    IEnumerable<TEntity> IRepository.GetEntities<TEntity>()
+    private IEnumerable<TEntity> GetEntitiesBy<TEntity, TKey>(
+        int skip, int take, string orderByProperty, bool descending,
+        string whereProperty, object andValue, bool areEqual
+    ) where TEntity : class, IBehavioralEntity where TKey : class
+    {
+        var para = Expression.Parameter(typeof(TKey));
+        Func<Expression, Expression, BinaryExpression> op
+            = areEqual ? Expression.Equal : Expression.NotEqual;
+        IQueryable<TKey> query = Set<TKey>();
+        if (whereProperty != null) query = query.Where(Expression.Lambda<Func<TKey, bool>>(
+            op(Expression.Property(para, whereProperty), Expression.Constant(andValue)), para));
+        Func<IQueryable<TKey>, Expression<Func<TKey, object>>, IOrderedQueryable<TKey>> orderBy
+            = descending ? Queryable.OrderByDescending : Queryable.OrderBy;
+        return orderBy(query, Expression.Lambda<Func<TKey, object>>(Expression.Property(para, orderByProperty), para))
+            .Skip(skip).Take(take).ToList().Select(x => ((IRepository)this).GetEntityBy<TKey, TEntity>(x).WaitForResult());
+    }
+
+    IEnumerable<TEntity> IRepository.GetEntities<TEntity>(
+        int offset, int count, string orderByProperty, bool descending,
+        string whereProperty, object andValue, bool areEqual)
     {
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
-            return (
-                from role in Set<Role>()
-                select GetEntityBy<uint, IRole>(role.Id, role)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
-        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
-            return (
-                from doctor in Set<Doctor>()
-                select GetEntityBy<uint, IDoctor>(doctor.Id, doctor)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
-        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
-            return (
-                from patient in Set<Patient>()
-                select GetEntityBy<uint, IPatient>(patient.Id, patient)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
+            return GetEntitiesBy<TEntity, Role>(offset, count, orderByProperty ?? nameof(Role.Name), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
-            return (
-                from user in Set<User>()
-                select GetEntityBy<uint, IUser>(user.Id, user)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
+            return GetEntitiesBy<TEntity, User>(offset, count, orderByProperty ?? nameof(User.FullName), descending, whereProperty, andValue, areEqual);
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
+            return GetEntitiesBy<TEntity, Doctor>(offset, count, orderByProperty ?? nameof(Doctor.Position), descending, whereProperty, andValue, areEqual);
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
+            return GetEntitiesBy<TEntity, Patient>(offset, count, orderByProperty ?? nameof(Patient.Phone), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
-            return (
-                from profile in Set<Profile>()
-                select GetEntityBy<uint, IProfile>(profile.Id, profile)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
+            return GetEntitiesBy<TEntity, Doctor>(offset, count, orderByProperty ?? nameof(Profile.FullName), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IAppointment)))
-            return (
-                from appointment in Set<Appointment>()
-                select GetEntityBy<uint, IAppointment>(appointment.Id, appointment)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
+            return GetEntitiesBy<TEntity, Appointment>(offset, count, orderByProperty ?? nameof(Appointment.Number), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IExamination)))
-            return (
-                from examination in Set<Examination>()
-                select GetEntityBy<uint, IExamination>(examination.Id, examination)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
+            return GetEntitiesBy<TEntity, Examination>(offset, count, orderByProperty ?? nameof(Examination.Diagnostic), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))
-            return (
-                from diagsv in Set<DiagnosticService>()
-                select GetEntityBy<uint, IDiagnosticService>(diagsv.Id, diagsv)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
+            return GetEntitiesBy<TEntity, DiagnosticService>(offset, count, orderByProperty ?? nameof(DiagnosticService.Name), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IPrescription)))
-            return (
-                from prescription in Set<Prescription>()
-                select GetEntityBy<uint, IPrescription>(prescription.Id, prescription)
-                    .WaitForResult(Timeout.Infinite, default)
-            ).Cast<TEntity>();
-        return Enumerable.Empty<TEntity>();
+            return GetEntitiesBy<TEntity, Prescription>(offset, count, orderByProperty ?? nameof(Prescription.Description), descending, whereProperty, andValue, areEqual);
+        else return Enumerable.Empty<TEntity>();
     }
 
     async Task<TService> IRepository.GetService<TService>()
@@ -119,9 +103,7 @@ public class DefaultRepository : DbContext, IRepository
         throw new InvalidOperationException("This repository does not included service " + typeof(TService).FullName);
     }
 
-    Task<TEntity> IRepository.GetEntityBy<TKey, TEntity>(TKey key) => GetEntityBy<TKey, TEntity>(key, null);
-
-    private async Task<TEntity> GetEntityBy<TKey, TEntity>(TKey key, object row = null) where TEntity : class, IBehavioralEntity
+    async Task<TEntity> IRepository.GetEntityBy<TKey, TEntity>(TKey key)
     {
 #if DEMO
         if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
@@ -133,132 +115,85 @@ public class DefaultRepository : DbContext, IRepository
 #else
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
         {
-            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
-            {
-                var role = row as Role ?? await FindAsync<Role>(id);
-                if (role != null) return (TEntity)await
-                    this.Initialize((IRole)new RoleImpl(role));
-            }
-        }
-        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
-        {
-            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
-            {
-                var user = row as User ?? await FindAsync<User>(id);
-                if (user != null)
-                {
-                    var doctor = row as Doctor ?? await FindAsync<Doctor>(id);
-                    if (doctor != null)
-                    {
-                        var irole = await GetEntityBy<uint, IRole>(user.RoleId, null);
-                        irole ??= await RoleImpl.GetDefault(this);
-                        IDoctor idoctor = new DoctorImpl(user, doctor, irole);
-                        return (TEntity)await this.Initialize(idoctor);
-                    }
-                }
-            }
-        }
-        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
-        {
-            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
-            {
-                var user = row as User ?? await FindAsync<User>(id);
-                if (user != null)
-                {
-                    var patient = row as Patient ?? await FindAsync<Patient>(id);
-                    if (patient != null)
-                    {
-                        var irole = await GetEntityBy<uint, IRole>(user.RoleId, null);
-                        irole ??= await RoleImpl.GetDefault(this);
-                        IPatient ipatient = new PatientImpl(user, patient, irole);
-                        return (TEntity)await this.Initialize(ipatient);
-                    }
-                }
-            }
+            if (key is Role role || (key is uint id
+                    || key is string sk && uint.TryParse(sk, out id))
+                && (role = await FindAsync<Role>(id)) != null)
+                return (TEntity)await this.Initialize((IRole)new RoleImpl(role));
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
         {
-            var d = await GetEntityBy<TKey, IDoctor>(key, row);
-            if (d != null) return (TEntity)d;
-            var p = await GetEntityBy<TKey, IPatient>(key, row);
-            if (p != null) return (TEntity)p;
+            User user;
+            if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
+            {
+                Doctor doctor;
+                if (key is User user_ && (doctor = await FindAsync<Doctor>((user = user_).Id)) != null
+                    || key is Doctor doctor_ && (user = await FindAsync<User>((doctor = doctor_).Id)) != null
+                    || (key is uint id || key is string sk && uint.TryParse(sk, out id))
+                    && (user = await FindAsync<User>(id)) != null && (doctor = await FindAsync<Doctor>(id)) != null)
+                    return (TEntity)await this.Initialize((IDoctor)new DoctorImpl(user, doctor,
+                        await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId) ?? await RoleImpl.GetDefault(this)));
+            }
+            else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
+            {
+                Patient patient;
+                if (key is User user_ && (patient = await FindAsync<Patient>((user = user_).Id)) != null
+                    || key is Patient patient_ && (user = await FindAsync<User>((patient = patient_).Id)) != null
+                    || (key is uint id || key is string sk && uint.TryParse(sk, out id))
+                    && (user = await FindAsync<User>(id)) != null && (patient = await FindAsync<Patient>(id)) != null)
+                    return (TEntity)await this.Initialize((IPatient)new PatientImpl(user, patient,
+                        await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId) ?? await RoleImpl.GetDefault(this)));
+            }
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
         {
-            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
-            {
-                var profile = (Profile)row ?? await FindAsync<Profile>(id);
-                if (profile != null)
-                {
-                    var patient = await GetEntityBy<uint, IPatient>(profile.PatientId, null);
-                    IProfile iprofile = new ProfileImpl(profile, patient);
-                    return (TEntity)await this.Initialize(iprofile);
-                }
-            }
+            if (key is Profile profile || (key is uint id
+                    || key is string sk && uint.TryParse(sk, out id))
+                && (profile = await FindAsync<Profile>(id)) != null)
+                return (TEntity)await this.Initialize((IProfile)new ProfileImpl(profile,
+                    await ((IRepository)this).GetEntityBy<uint, IPatient>(profile.PatientId)));
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IAppointment)))
         {
-            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
-            {
-                var appointment = (Appointment)row ?? await FindAsync<Appointment>(id);
-                if (appointment != null)
-                {
-                    var doctor = await GetEntityBy<uint, IDoctor>(appointment.DoctorId, null);
-                    IAppointment iappointment = new AppointmentImpl(appointment, doctor);
-                    return (TEntity)await this.Initialize(iappointment);
-                }
-            }
+            if (key is Appointment appointment || (key is uint id
+                    || key is string sk && uint.TryParse(sk, out id))
+                && (appointment = await FindAsync<Appointment>(id)) != null)
+                return (TEntity)await this.Initialize((IAppointment)new AppointmentImpl(
+                    appointment, await ((IRepository)this).GetEntityBy<uint, IDoctor>(appointment.DoctorId)));
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IExamination)))
         {
-            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
-            {
-                var examination = (Examination)row ?? await FindAsync<Examination>(id);
-                if (examination != null)
-                {
-                    var appointment = await GetEntityBy<uint, IAppointment>(examination.AppointmentId, null);
-                    IExamination iexamination = new ExaminationImpl(examination, appointment);
-                    return (TEntity)await this.Initialize(iexamination);
-                }
-            }
+            if (key is Examination examination || (key is uint id
+                    || key is string sk && uint.TryParse(sk, out id))
+                && (examination = await FindAsync<Examination>(id)) != null)
+                return (TEntity)await this.Initialize((IExamination)new ExaminationImpl(
+                    examination, await ((IRepository)this).GetEntityBy<uint, IAppointment>(examination.AppointmentId)));
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))
         {
+            if (key is DiagnosticService diagsv) goto diagsv;
+            if (key is ExaminationService exdiag) goto exdiag;
             if (key is uint id || key is string sk && uint.TryParse(sk, out id))
             {
-                IDiagnosticService iappointment;
-                var diagsv = row as DiagnosticService ?? await FindAsync<DiagnosticService>(id);
-                if (diagsv != null)
-                {
-                    iappointment = new DiagnosticServiceImpl(diagsv);
-                    return (TEntity)await this.Initialize(iappointment);
-                }
-                var exdiag = row as ExaminationService ?? await FindAsync<ExaminationService>(id);
-                if (exdiag != null)
-                {
-                    diagsv = await FindAsync<DiagnosticService>(exdiag.DiagnosticServiceId);
-                    if (diagsv != null)
-                    {
-                        var doctor = await GetEntityBy<uint, IDoctor>(exdiag.DoctorId, null);
-                        var examination = await GetEntityBy<uint, IExamination>(exdiag.ExaminationId, null);
-                        iappointment = new DiagnosticServiceImpl(diagsv, exdiag, doctor, examination);
-                        return (TEntity)await this.Initialize(iappointment);
-                    }
-                }
+                if ((diagsv = await FindAsync<DiagnosticService>(id)) != null) goto diagsv;
+                if ((exdiag = await FindAsync<ExaminationService>(id)) != null) goto exdiag;
             }
+            else return null;
+            diagsv:
+            return (TEntity)await this.Initialize((IDiagnosticService)new DiagnosticServiceImpl(diagsv));
+        exdiag:
+            if ((diagsv = await FindAsync<DiagnosticService>(exdiag.DiagnosticServiceId)) != null)
+                return (TEntity)await this.Initialize((IDiagnosticService)
+                    new DiagnosticServiceImpl(diagsv, exdiag,
+                        await ((IRepository)this).GetEntityBy<uint, IDoctor>(exdiag.DoctorId),
+                        await ((IRepository)this).GetEntityBy<uint, IExamination>(exdiag.ExaminationId)));
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IPrescription)))
         {
-            if (key is uint id || key is string sk && uint.TryParse(sk, out id))
-            {
-                var prescription = (Prescription)row ?? await FindAsync<Prescription>(id);
-                if (prescription != null)
-                {
-                    var examination = await GetEntityBy<uint, IExamination>(prescription.ExaminationId);
-                    IPrescription iprescription = new PrescriptionImpl(prescription, examination);
-                    return (TEntity)await this.Initialize(iprescription);
-                }
-            }
+            if (key is Prescription prescription || (key is uint id
+                    || key is string sk && uint.TryParse(sk, out id))
+                && (prescription = await FindAsync<Prescription>(id)) != null)
+                return (TEntity)await this.Initialize((IPrescription)new PrescriptionImpl(
+                    prescription, await ((IRepository)this).GetEntityBy<uint, IExamination>(prescription.ExaminationId)));
         }
         // TODO: ...more Impl
         return null;
@@ -331,13 +266,19 @@ public class DefaultRepository : DbContext, IRepository
 #else
         if (entity is RoleImpl role)
         {
-            uint id = role._role.Id;
+            var inner = role._role;
+            if (inner is TKey k)
+            {
+                key = k;
+                return true;
+            }
+            var id = inner.Id;
             if (id is TKey uk)
             {
                 key = uk;
                 return true;
             }
-            else if (id.ToString() is TKey sk)
+            if (id.ToString() is TKey sk)
             {
                 key = sk;
                 return true;
@@ -345,13 +286,29 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (entity is UserImpl user)
         {
-            uint id = user._user.Id;
+            var inner = user._user;
+            if (inner is TKey ik)
+            {
+                key = ik;
+                return true;
+            }
+            if (user is DoctorImpl doctor && doctor._doctor is TKey idk)
+            {
+                key = idk;
+                return true;
+            }
+            if (user is PatientImpl patient && patient._patient is TKey ipk)
+            {
+                key = ipk;
+                return true;
+            }
+            var id = inner.Id;
             if (id is TKey uk)
             {
                 key = uk;
                 return true;
             }
-            else if (id.ToString() is TKey sk)
+            if (id.ToString() is TKey sk)
             {
                 key = sk;
                 return true;
@@ -359,13 +316,19 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (entity is ProfileImpl profile)
         {
-            uint id = profile._profile.Id;
+            var inner = profile._profile;
+            if (inner is TKey k)
+            {
+                key = k;
+                return true;
+            }
+            var id = inner.Id;
             if (id is TKey uk)
             {
                 key = uk;
                 return true;
             }
-            else if (id.ToString() is TKey sk)
+            if (id.ToString() is TKey sk)
             {
                 key = sk;
                 return true;
@@ -373,13 +336,19 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (entity is AppointmentImpl appointment)
         {
-            uint id = appointment._appointment.Id;
+            var inner = appointment._appointment;
+            if (inner is TKey k)
+            {
+                key = k;
+                return true;
+            }
+            var id = inner.Id;
             if (id is TKey uk)
             {
                 key = uk;
                 return true;
             }
-            else if (id.ToString() is TKey sk)
+            if (id.ToString() is TKey sk)
             {
                 key = sk;
                 return true;
@@ -387,13 +356,19 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (entity is ExaminationImpl examination)
         {
-            uint id = examination._examination.Id;
+            var inner = examination._examination;
+            if (inner is TKey k)
+            {
+                key = k;
+                return true;
+            }
+            var id = inner.Id;
             if (id is TKey uk)
             {
                 key = uk;
                 return true;
             }
-            else if (id.ToString() is TKey sk)
+            if (id.ToString() is TKey sk)
             {
                 key = sk;
                 return true;
@@ -401,13 +376,19 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (entity is PrescriptionImpl prescription)
         {
-            uint id = prescription._prescription.Id;
+            var inner = prescription._prescription;
+            if (inner is TKey k)
+            {
+                key = k;
+                return true;
+            }
+            var id = inner.Id;
             if (id is TKey uk)
             {
                 key = uk;
                 return true;
             }
-            else if (id.ToString() is TKey sk)
+            if (id.ToString() is TKey sk)
             {
                 key = sk;
                 return true;
@@ -415,14 +396,25 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (entity is DiagnosticServiceImpl diagnosticService)
         {
-            var e = diagnosticService._exdiag;
-            uint id = e == null ? e.Id : diagnosticService._diagsv.Id;
+            var eInner = diagnosticService._exdiag;
+            if (eInner is TKey ek)
+            {
+                key = ek;
+                return true;
+            }
+            var dInner = diagnosticService._diagsv;
+            if (eInner is TKey dk)
+            {
+                key = dk;
+                return true;
+            }
+            var id = eInner == null ? eInner.Id : dInner.Id;
             if (id is TKey uk)
             {
                 key = uk;
                 return true;
             }
-            else if (id.ToString() is TKey sk)
+            if (id.ToString() is TKey sk)
             {
                 key = sk;
                 return true;

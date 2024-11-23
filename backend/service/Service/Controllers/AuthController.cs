@@ -24,10 +24,9 @@ public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPa
     [HttpPost("token")]
     public async Task<ActionResult<AuthTokenResponse>> SignIn([FromForm] AuthRequest request)
     {
-        var user = (
-            from v in _repository.GetEntities<IUser>()
-            where v.UserName == request.Username
-            select v
+        var user = _repository.GetEntities<IUser>(
+            whereProperty: nameof(Domain.Entities.User.UserName),
+            andValue: request.Username, areEqual: true
         ).FirstOrDefault();
 
         if (user == null)
