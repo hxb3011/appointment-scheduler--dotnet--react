@@ -28,7 +28,11 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     [HttpGet("{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
     public async Task<ActionResult<RoleResponse>> GetRole(uint id)
-        => Ok(MakeResponse(await _repository.GetEntityBy<uint, IRole>(id)));
+    {
+        var role = await _repository.GetEntityBy<uint, IRole>(id);
+        if (role == null) return NotFound();
+        return Ok(MakeResponse(role));
+    }
 
     [HttpPost]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateRole])]
@@ -60,9 +64,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     public async Task<ActionResult> UpdateRole([FromBody] RoleRequest request, uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
-
+        if (role == null) return NotFound();
         string v;
         if ((v = request.Name) != null)
         {
@@ -92,8 +94,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     public async Task<ActionResult> DeleteRole(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
+        if (role == null) return NotFound();
 
         if (!await role.Delete())
             return BadRequest("can not delete");
@@ -110,9 +111,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     public async Task<ActionResult<IEnumerable<string>>> GetPermissions(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
-
+        if (role == null) return NotFound();
         return Ok(role.Permissions.Select(Enum.GetName));
     }
 
@@ -121,8 +120,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     public async Task<ActionResult> ChangePermission(uint id, string permid, bool granted)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
+        if (role == null) return NotFound();
 
         if (!Enum.TryParse(permid, out Permission permission))
             return BadRequest("invalid permission");
