@@ -149,7 +149,7 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok("success");
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet]
 		[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
 		public async Task<ActionResult<PatientResponse>> GetCurrentUser()
 		{
@@ -157,7 +157,7 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok(MakeResponse(patient));
 		}
 
-		[HttpPut("{id}")]
+		[HttpPut]
 		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
 		public async Task<ActionResult> UpdateCurrentUser([FromBody] PatientRequest request)
 		{

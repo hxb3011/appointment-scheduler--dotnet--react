@@ -17,7 +17,7 @@ namespace AppointmentScheduler.Service.Controllers
 		protected readonly ILogger<PatientController> _logger;
 
 		public UserController(IRepository repository,
-			IPasswordHasher<IUser> passwordHasher, ILogger<PatientController> logger)
+			IPasswordHasher<IUser> passwordHasher, ILogger<UserController> logger)
 		{
 			_repository = repository;
 			_passwordHasher = passwordHasher;
