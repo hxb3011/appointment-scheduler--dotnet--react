@@ -32,7 +32,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
 
     [HttpPost]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateRole])]
-    public async Task<ActionResult> CreateRole([FromBody] CreateUpdateRoleRequest request)
+    public async Task<ActionResult> CreateRole([FromBody] RoleRequest request)
     {
         var role = await _repository.ObtainEntity<IRole>();
         if (role == null)
@@ -57,7 +57,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
 
     [HttpPut("{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateRole])]
-    public async Task<ActionResult> UpdateRole([FromBody] CreateUpdateRoleRequest request, uint id)
+    public async Task<ActionResult> UpdateRole([FromBody] RoleRequest request, uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
         if (role == null)

@@ -205,21 +205,13 @@ public class DefaultRepository : DbContext, IRepository
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
         {
             var role = new Role();
-            if (!await this.IdGeneratedWrap(
-                from r in Set<Role>()
-                where r.Id == role.Id
-                select r, role, nameof(Role.Id)
-            )) return null;
+            if (!await this.IdGenerated(role, nameof(Role.Id))) return null;
             return (TEntity)await this.Initialize((IRole)new RoleImpl(role));
         }
         if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
         {
             var user = new User();
-            if (!await this.IdGeneratedWrap(
-                from r in Set<User>()
-                where r.Id == user.Id
-                select r, user, nameof(User.Id)
-            )) return null;
+            if (!await this.IdGenerated(user, nameof(User.Id))) return null;
             var doctor = new Doctor { Id = user.Id };
             var role = await RoleImpl.GetDefault(this);
             return (TEntity)await this.Initialize((IUser)new DoctorImpl(user, doctor, role));
@@ -227,11 +219,7 @@ public class DefaultRepository : DbContext, IRepository
         if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
         {
             var user = new User();
-            if (!await this.IdGeneratedWrap(
-                from r in Set<User>()
-                where r.Id == user.Id
-                select r, user, nameof(User.Id)
-            )) return null;
+            if (!await this.IdGenerated(user, nameof(User.Id))) return null;
             var patient = new Patient { Id = user.Id };
             var role = await RoleImpl.GetDefault(this);
             return (TEntity)await this.Initialize((IUser)new PatientImpl(user, patient, role));
@@ -239,11 +227,7 @@ public class DefaultRepository : DbContext, IRepository
         if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))
         {
             var diagnosticService = new DiagnosticService();
-            if (!await this.IdGeneratedWrap(
-                from ds in Set<DiagnosticService>()
-                where ds.Id == diagnosticService.Id
-                select ds, diagnosticService, nameof(DiagnosticService.Id)
-            )) return null;
+            if (!await this.IdGenerated(diagnosticService, nameof(DiagnosticService.Id))) return null;
             return (TEntity)await this.Initialize((IDiagnosticService)new DiagnosticServiceImpl(diagnosticService));
         }
         return null;

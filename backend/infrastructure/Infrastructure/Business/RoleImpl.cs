@@ -1,7 +1,11 @@
-﻿using AppointmentScheduler.Domain.Business;
+﻿using System.Diagnostics;
+using AppointmentScheduler.Domain;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace AppointmentScheduler.Infrastructure.Business;
 
@@ -24,7 +28,7 @@ internal sealed class RoleImpl : BaseEntity, IRole
     Task<bool> IRole.IsNameExisted()
         => !((IRole)this).IsNameValid ? Task.FromResult(false) : (
             from role in _dbContext.Set<Role>()
-            where role.Id != _role.Id && role.Name.Equals(_role.Name)
+            where role.Id != _role.Id && role.Name == _role.Name
             select role
         ).AnyAsync();
 
@@ -74,33 +78,30 @@ internal sealed class RoleImpl : BaseEntity, IRole
 
     internal static async Task<IRole> GetDefault(IRepository repository)
     {
-        Role role;
+        Role role = default;
         var cp = await repository.GetService<IConfigurationPropertiesService>();
         var dc = await repository.GetService<DbContext>();
-        if (uint.TryParse(cp.GetProperty(DefaultRoleKey, null), out uint id))
-            role = await (
-                from r in dc.Set<Role>()
-                where r.Id == id
-                select r
-            ).FirstOrDefaultAsync();
-        else role = await dc.Set<Role>().FirstOrDefaultAsync();
+
+        if (!uint.TryParse(cp.GetProperty(DefaultRoleKey, null), out uint id))
+        {
+            var roles = dc.Set<Role>();
+            if (await roles.CountAsync() == 1)
+                role = await roles.FirstOrDefaultAsync();
+        }
+        else role = await dc.FindAsync<Role>(id);
+        dc.GetService<ILogger<IRole>>().LogInformation(role?.Description ?? "<>");
         if (role == null)
         {
-            if (!await dc.IdGeneratedWrap(
-                from r in dc.Set<Role>()
-                where r.Id == role.Id
-                select r, role = new Role(), nameof(Role.Id)
-            )) throw new InvalidOperationException("RoleId overflowed.");
-
-            IRole ir = new RoleImpl(role);
-            ir.Name = "System Administrators";
+            if (!await dc.IdGenerated(role = new Role(), nameof(Role.Id)))
+                throw new InvalidOperationException("RoleId overflowed.");
+            var ir = await repository.Initialize((IRole)new RoleImpl(role));
+            ir.Name = "System Administrators #" + role.Id;
             ir.Description = "This role is created by default.";
-            foreach (var item in Enum.GetValues<Permission>())
-                ir.SetPermissionGranted(item);
+            Enum.GetValues<Permission>().GrantTo(ir);
             if (!await ir.Create() || !cp.SetProperty(DefaultRoleKey, role.Id.ToString()))
                 throw new InvalidOperationException("The new default Role was not added.");
             return ir;
         }
-        return new RoleImpl(role);
+        return await repository.Initialize((IRole)new RoleImpl(role));
     }
 }

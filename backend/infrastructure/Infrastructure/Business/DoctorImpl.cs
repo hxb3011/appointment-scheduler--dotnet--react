@@ -44,11 +44,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     async Task<IAppointment> IDoctor.ObtainAppointment(DateTime atTime, uint number)
     {
         var appointment = new Appointment();
-        if (!await _dbContext.IdGeneratedWrap(
-            from ap in _dbContext.Set<Appointment>()
-            where ap.Id == appointment.Id
-            select ap, appointment, nameof(Appointment.Id)
-        )) return null;
+        if (!await _dbContext.IdGenerated(appointment, nameof(Appointment.Id))) return null;
         appointment.AtTime = atTime;
         appointment.Number = number;
         appointment.DoctorId = _doctor.Id;

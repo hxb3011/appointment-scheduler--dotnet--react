@@ -55,11 +55,7 @@ internal sealed class AppointmentImpl : BaseEntity, IAppointment
     async Task<IExamination> IAppointment.ObtainExamination()
     {
         var examination = new Examination();
-        if (!await _dbContext.IdGeneratedWrap(
-            from ex in _dbContext.Set<Examination>()
-            where ex.Id == examination.Id
-            select ex, examination, nameof(Examination.Id)
-        )) return null;
+        if (!await _dbContext.IdGenerated(examination, nameof(Examination.Id))) return null;
         examination.AppointmentId = _appointment.Id;
         return await CreateExamination(examination);
     }

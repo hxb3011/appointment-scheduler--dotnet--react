@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AppointmentScheduler.Domain;
 using AppointmentScheduler.Presentation.Attributes;
-using AppointmentScheduler.Presentation.Services;
 
 namespace AppointmentScheduler.Presentation;
 
@@ -16,7 +15,7 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var services = builder.Services;
-        
+
         services.AddConfigurator<HttpClient>(ConfigureApiHttpClient, ServiceLifetime.Singleton);
 
         services.AddControllersWithViews();
@@ -51,7 +50,7 @@ public static class Program
 
     private static void ConfigureApiHttpClient(IServiceProvider provider, HttpClient client)
     {
-        string? host;
+        string host;
         if (string.IsNullOrWhiteSpace(host = "API_SERVER".Env())) host = "localhost";
         if (!int.TryParse("API_PORT".Env(), out int portNumber)) portNumber = 8080;
         client.BaseAddress = new UriBuilder("https", host, portNumber).Uri;
@@ -76,7 +75,7 @@ public static class Program
 
     public static dynamic GetMetadata<T>(this T value) where T : struct, Enum
     {
-        IDictionary<string, object> metadata = new ExpandoObject();
+        IDictionary<string, object> props = new Dictionary<string, object>();
         var type = typeof(T);
         var attrs =
             (!Enum.IsDefined(value) ? (MemberInfo)type : type.GetField(Enum.GetName(value),
@@ -85,20 +84,23 @@ public static class Program
         string key = "";
         foreach (var v in attrs.Value)
         {
-            if (Regex.IsMatch(v, @"^[A-Za-z_][A-Za-z0-9_]*$"))
+            var isProp = Regex.IsMatch(v, @"^[A-Za-z_][A-Za-z0-9_]*$");
+            if (!props.TryGetValue(key, out var o) || o is not StringBuilder builder)
             {
-                if (!metadata.TryGetValue(key = v, out object o) || o is not StringBuilder)
-                    metadata[key] = new StringBuilder();
+                if (!isProp) continue;
             }
-            else
+            else if (!isProp || builder.Length == 0)
             {
-                if (metadata.TryGetValue(key, out object o) && o is StringBuilder builder)
-                    builder.Append(v);
+                builder.Append(v);
+                continue;
             }
+            if (!props.TryGetValue(key = v, out o) || o is not StringBuilder)
+                props[key] = new StringBuilder();
         }
-        foreach (var v in metadata.Keys)
+        IDictionary<string, object> metadata = new ExpandoObject();
+        foreach (var v in props.Keys)
         {
-            key = metadata[v].ToString();
+            key = props[v].ToString();
             StringBuilder builder = new();
             int start = 0;
             foreach (Match match in Regex.Matches(key, @"\{(name|value(:(2|8|10|16))?|)\}", RegexOptions.IgnoreCase))
@@ -115,6 +117,7 @@ public static class Program
                     ? Convert.ChangeType(value, Enum.GetUnderlyingType(typeof(T))).ToString()
                     : Convert.ToString(Convert.ToInt64(value), "8".Equals(selector) ? 8 : "2".Equals(selector) ? 2 : 16));
             }
+            builder.Append(key, start, key.Length - start);
             metadata[v] = builder.ToString();
         }
         return metadata;
