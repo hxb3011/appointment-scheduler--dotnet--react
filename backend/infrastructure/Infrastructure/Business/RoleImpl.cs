@@ -23,7 +23,7 @@ internal sealed class RoleImpl : BaseEntity, IRole
 
     bool IRole.IsNameValid => _role.Name.IsValidName();
 
-    bool IRole.IsDescriptionValid => _role.Description.IsValidDescription();
+    bool IRole.IsDescriptionValid => _role.Description.IsValidDescription(emptyAllowed: true);
 
     Task<bool> IRole.IsNameExisted()
         => !((IRole)this).IsNameValid ? Task.FromResult(false) : (

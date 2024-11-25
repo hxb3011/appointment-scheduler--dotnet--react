@@ -46,8 +46,8 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
             return BadRequest("name existed");
 
         role.Description = request.Description;
-        if (!role.IsNameValid)
-            return BadRequest("name not valid");
+        if (!role.IsDescriptionValid)
+            return BadRequest("description not valid");
 
         if (!await role.Create())
             return BadRequest("can not create");
@@ -112,9 +112,6 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
         var role = await _repository.GetEntityBy<uint, IRole>(id);
         if (role == null)
             return BadRequest("not found");
-
-        if (!await role.Delete())
-            return BadRequest("can not delete");
 
         return Ok(role.Permissions.Select(Enum.GetName));
     }
