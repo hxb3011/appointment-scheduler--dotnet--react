@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Đặt lịchs";
+﻿@using AppointmentScheduler.Presentation.Models.Enums
+@{
+    ViewData["Title"] = "Đặt lịch";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 
@@ -49,7 +50,7 @@
 						<thead>
 							<tr>
 								<th style="width: 5%">STT</th>
-								<th>Id</th>
+								<th>Number</th>
 								<th>Mã hồ sơ</th>
 								<th>Mã bác sĩ</th>
 								<th>Thời gian đặt</th>
@@ -68,7 +69,7 @@
 									var meta = appointment.State.GetMetadata();
 									<tr>
 										<td>@stt</td>
-										<td>@appointment.Id</td>
+										<td>@appointment.Number</td>
 										<td>@appointment.ProfileId</td>
 										<td>@appointment.DoctorId</td>
 										<td>@appointment.AtTime</td>
@@ -77,6 +78,7 @@
 												@meta.DisplayName
 											</span>
 										</td>
+
 
 										<td class="table-controls d-flex justify-content-center align-items-center pt-2">
 											<li>
@@ -151,7 +153,7 @@
 				},
 				"stripeClasses": [],
 				"lengthMenu": [7, 10, 20, 50],
-				"pageLength": 10,
+				"pageLength": 7,
 				"ordering": false
 			});
 	</script>
@@ -160,36 +162,37 @@
 		$(document).ready(function () {
 			let appointmentIdToDelete;
 
-			$('.delete').on('click', function (e) {
+			// Event delegation for dynamically created `.delete` elements
+			$('#appointment-table').on('click', '.delete', function (e) {
 				e.preventDefault();
-				userIdToDelete = $(this).data('appointment-id');
+				appointmentIdToDelete = $(this).data('appointment-id');
+
+				console.log("id: " + appointmentIdToDelete);
 				$('#deleteModal').modal('show');
 			});
-
 
 			$('#confirmDelete').on('click', function () {
 				$.ajax({
 					url: `/appointment/Delete`,
 					type: 'POST',
 					data: {
-						id: userIdToDelete
+						id: appointmentIdToDelete
 					},
 					success: function (response) {
 						Snackbar.show({
-							text: 'Xóa đặt lịch thành công',
+							text: 'Xóa lịch đặt thành công',
 							textColor: '#ddf5f0',
 							backgroundColor: '#00ab55',
 							actionText: 'Bỏ qua',
 							actionTextColor: '#3b3f5c'
 						});
-
 						setTimeout(function () {
 							location.reload();
 						}, 1000);
 					},
 					error: function (xhr, status, error) {
 						Snackbar.show({
-							text: 'Xóa đặt lịch thất bại',
+							text: 'Xóa lịch đặt thất bại',
 							textColor: '#fbeced',
 							backgroundColor: '#e7515a',
 							actionText: 'Bỏ qua',
@@ -201,5 +204,6 @@
 				$('#deleteModal').modal('hide');
 			});
 		});
+
 	</script>
 }

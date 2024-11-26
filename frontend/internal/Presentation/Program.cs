@@ -1,5 +1,3 @@
-
-
 using System.Dynamic;
 using System.Reflection;
 using System.Text;
@@ -18,7 +16,33 @@ public static class Program
 
         services.AddConfigurator<HttpClient>(ConfigureApiHttpClient, ServiceLifetime.Singleton);
 
-        services.AddControllersWithViews();
+		var httpClientBaseAddress = builder.Configuration.GetSection("HttpClientSettings:BaseAddress").Value;
+
+
+		builder.Services.AddHttpClient<AppointmentService>(client =>
+		{
+			client.BaseAddress = new Uri(httpClientBaseAddress);
+		});
+        builder.Services.AddHttpClient<DoctorService>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
+        builder.Services.AddHttpClient<ProfileService>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
+        builder.Services.AddHttpClient<DiagnosticServiceSer>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
+
+        // Add services to the container
+        builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
+
+
+		
+
+		builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
 
@@ -42,7 +66,7 @@ public static class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
         app.Run();
         return 0;
@@ -72,6 +96,7 @@ public static class Program
         services.Add(new ServiceDescriptor(typeof(TService), configurator.Factory, lifetime));
         return services;
     }
+    
 
     public static dynamic GetMetadata<T>(this T value) where T : struct, Enum
     {

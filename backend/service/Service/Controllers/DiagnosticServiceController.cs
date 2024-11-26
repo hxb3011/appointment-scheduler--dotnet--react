@@ -23,6 +23,7 @@ public class DiagnosticServiceController : ControllerBase
         _logger = logger;
     }
 
+
     private DiagnosticServiceResponse MakeResponse(IDiagnosticService role)
         => !_repository.TryGetKeyOf(role, out DiagnosticService key) ? null
         : new() { Id = key.Id, Name = key.Name, Price = key.Price };
@@ -31,6 +32,7 @@ public class DiagnosticServiceController : ControllerBase
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadDiagnosticService])]
     public ActionResult<IEnumerable<DiagnosticServiceResponse>> GetPagedDiagnosticServices([FromBody] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IDiagnosticService>(request.Offset, request.Count, request.By).Select(MakeResponse));
+
 
     [HttpGet("{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
