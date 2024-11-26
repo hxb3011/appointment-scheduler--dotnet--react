@@ -35,9 +35,9 @@
 		</div>
 
 		<ul class="list-unstyled menu-categories" id="accordionExample">
-			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
 
-				<a href="@Url.Action("Index", "Home")" class="dropdown-toggle">
+				<a href="@Url.Action("Index", "Dashboard")" class="dropdown-toggle">
 					<div>
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
 							 viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -78,6 +78,21 @@
 				</a>
 			</li>
 
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctor" ? "active" : "")">
+				<a href="@Url.Action("Index", "Doctor")" class="dropdown-toggle">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+							 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+							 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+							 class="feather feather-user">
+							<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+							<circle cx="12" cy="7" r="4"></circle>
+						</svg>
+						<span>Bác sĩ</span>
+					</div>
+				</a>
+			</li>
+
 			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patient" ? "active" : "")">
 				<a href="@Url.Action("Index", "Patient")" class="dropdown-toggle">
 					<div>
@@ -93,6 +108,21 @@
 				</a>
 			</li>
 
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "active" : "")">
+				<a href="@Url.Action("Index", "Profile")" class="dropdown-toggle">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+							 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+							 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+							 class="feather feather-user">
+							<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+							<circle cx="12" cy="7" r="4"></circle>
+						</svg>
+						<span>Hồ sơ</span>
+					</div>
+				</a>
+			</li>
+
 			<li class="menu menu-heading">
 				<div class="heading">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -104,36 +134,26 @@
 					<span>DỊCH VỤ</span>
 				</div>
 			</li>
-
-			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appointment" ? "active" : "")">
-				<a href="@Url.Action("Index", "Appointment")" class="dropdown-toggle">
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "DiagnosticService" ? "active" : "")">
+				<a href="@Url.Action("Index", "DiagnosticService")" class="dropdown-toggle">
 					<div>
-						<svg xmlns="http://www.w3.org/2000/svg"
-							 width="24" height="24" viewBox="0 0 24 24"
-							 fill="none" stroke="currentColor" stroke-width="2"
-							 stroke-linecap="round" stroke-linejoin="round"
-							 class="feather feather-tag">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
+							stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+							class="feather feather-watch">
+							<circle cx="12" cy="12" r="7"></circle>
+							<polyline points="12 9 12 12 13.5 13.5"></polyline>
+							<path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path>
+						</svg>
 							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
 							<line x1="7" y1="7" x2="7.01" y2="7"></line>
 						</svg>
-						<span>Đặt lịch</span>
-					</div>
-				</a>
-			</li>
-			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Product" ? "active" : "")">
-				<a href="@Url.Action("Index", "Product")" class="dropdown-toggle">
-					<div>
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-watch"><circle cx="12" cy="12" r="7"></circle><polyline points="12 9 12 12 13.5 13.5"></polyline><path d="M16.51 17.35l-.35 3.83a2 2 0 0 1-2 1.82H9.83a2 2 0 0 1-2-1.82l-.35-3.83m.01-10.7l.35-3.83A2 2 0 0 1 9.83 1h4.35a2 2 0 0 1 2 1.82l.35 3.83"></path></svg>
-							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-							<line x1="7" y1="7" x2="7.01" y2="7"></line>
-						</svg>
-						<span>Sản phẩm</span>
+						<span>Dịch vụ chuẩn đoán</span>
 					</div>
 				</a>
 			</li>
 
-			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Supplier" ? "active" : "")">
-				<a href="@Url.Action("Index", "Supplier")" class="dropdown-toggle">
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Examination" ? "active" : "")">
+				<a href="@Url.Action("Index", "Examination")" class="dropdown-toggle">
 					<div>
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" 
 							height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -142,13 +162,13 @@
 							<polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
 							<circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle>
 						</svg>
-						<span>Nhà cung cấp</span>
+						<span>Khám bệnh</span>
 					</div>
 				</a>
 			</li>
 
-			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "InventoryVoucher" ? "active" : "")">
-				<a href="@Url.Action("Index", "InventoryVoucher")" class="dropdown-toggle">
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "ExaminationService" ? "active" : "")">
+				<a href="@Url.Action("Index", "ExaminationService")" class="dropdown-toggle">
 					<div>
 						<svg xmlns="http://www.w3.org/2000/svg" 
 						width="24" height="24" viewBox="0 0 24 24" fill="none" 
@@ -156,7 +176,7 @@
 						class="feather feather-edit-2">
 						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
 						</svg>
-						<span>Phiếu nhập</span>
+						<span>Dịch vụ khám bệnh</span>
 					</div>
 				</a>
 			</li>
@@ -173,17 +193,35 @@
 				</div>
 			</li>
 
-			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Order" ? "active" : "")">
-				<a href="@Url.Action("Index", "Order")" class="dropdown-toggle">
+
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appointment" ? "active" : "")">
+				<a href="@Url.Action("Index", "Appointment")" class="dropdown-toggle">
 					<div>
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-							viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-							class="feather feather-archive">
-							<polyline points="21 8 21 21 3 21 3 8"></polyline>
-							<rect x="1" y="3" width="22" height="5"></rect>
-							<line x1="10" y1="12" x2="14" y2="12"></line>
+						<svg xmlns="http://www.w3.org/2000/svg"
+							 width="24" height="24" viewBox="0 0 24 24"
+							 fill="none" stroke="currentColor" stroke-width="2"
+							 stroke-linecap="round" stroke-linejoin="round"
+							 class="feather feather-tag">
+							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+							<line x1="7" y1="7" x2="7.01" y2="7"></line>
 						</svg>
-						<span>Đơn hàng</span>
+						<span>Đặt lịch</span>
+					</div>
+				</a>
+			</li>
+
+			<li class="menu @(ViewContext.RouteData.Values["controller"]?.ToString() == "Prescription" ? "active" : "")">
+				<a href="@Url.Action("Index", "Prescription")" class="dropdown-toggle">
+					<div>
+						<svg xmlns="http://www.w3.org/2000/svg"
+							 width="24" height="24" viewBox="0 0 24 24"
+							 fill="none" stroke="currentColor" stroke-width="2"
+							 stroke-linecap="round" stroke-linejoin="round"
+							 class="feather feather-tag">
+							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+							<line x1="7" y1="7" x2="7.01" y2="7"></line>
+						</svg>
+						<span>Đơn thuốc</span>
 					</div>
 				</a>
 			</li>

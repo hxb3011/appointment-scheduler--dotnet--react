@@ -7,6 +7,7 @@ using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -23,6 +24,19 @@ public class AppointmentController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet]
+    public async Task<ActionResult> GetAllAppointment()
+    {
+        var dbContext = await _repository.GetService<DbContext>();
+        var appointments = await dbContext.Set<Appointment>().ToListAsync();
+
+        if(appointments != null)
+        {
+            return Ok(appointments);
+        }
+        return NotFound();
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult> GetAppointmentById(uint id)
     {
@@ -33,7 +47,7 @@ public class AppointmentController : ControllerBase
         {
             return Ok(appointment);
         }
-        return BadRequest("Error occur");
+        return NotFound("Can not find this appointment");
     }
 
     [HttpPost]
@@ -54,13 +68,14 @@ public class AppointmentController : ControllerBase
             return NotFound("Can not find this doctor");
         }
 
+
         var newAppointment = await profile.ObtainAppointment(appointment.AtTime, 0, doctor);
 
         if (!await newAppointment.Create())
         {
             return BadRequest("Can not create appointment");
         }
-        return Ok(newAppointment);
+        return Ok("Add new appointment successfull");
     }
 
     [HttpPut("{id}")]
@@ -105,7 +120,7 @@ public class AppointmentController : ControllerBase
 
     [HttpDelete("{id}")]
     [JSONWebToken(AuthenticationRequired = false)]
-    public async Task<ActionResult> UpdateAppointment(uint id)
+    public async Task<ActionResult> DeleteAppointment(uint id)
     {
         var appointmentExist = await _repository.GetEntityBy<uint, IAppointment>(id);
 

@@ -23,6 +23,19 @@ public class DiagnosticServiceController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet]
+    public async Task<ActionResult> GetAllDiagnosticServices()
+    {
+        var dbContext = await _repository.GetService<DbContext>();
+        var diagnosticServices = await dbContext.Set<DiagnosticService>().ToListAsync();
+
+        if (diagnosticServices.Any())
+        {
+            return Ok(diagnosticServices);
+        }
+        return NotFound("Can not find any diagnostic service");
+    }
+
     [HttpGet("{id}")]
     public async Task<ActionResult> GetDiagnosticServiceById(uint id)
     {

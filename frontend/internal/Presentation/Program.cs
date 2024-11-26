@@ -1,5 +1,3 @@
-
-
 using System.Dynamic;
 using System.Reflection;
 using System.Text;
@@ -19,7 +17,33 @@ public static class Program
         
         services.AddConfigurator<HttpClient>(ConfigureApiHttpClient, ServiceLifetime.Singleton);
 
-        services.AddControllersWithViews();
+		var httpClientBaseAddress = builder.Configuration.GetSection("HttpClientSettings:BaseAddress").Value;
+
+
+		builder.Services.AddHttpClient<AppointmentService>(client =>
+		{
+			client.BaseAddress = new Uri(httpClientBaseAddress);
+		});
+        builder.Services.AddHttpClient<DoctorService>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
+        builder.Services.AddHttpClient<ProfileService>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
+        builder.Services.AddHttpClient<DiagnosticServiceSer>(client =>
+        {
+            client.BaseAddress = new Uri(httpClientBaseAddress);
+        });
+
+        // Add services to the container
+        builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
+
+
+		
+
+		builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
 
@@ -43,7 +67,7 @@ public static class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=Dashboard}/{action=Index}/{id?}");
 
         app.Run();
         return 0;
@@ -73,10 +97,11 @@ public static class Program
         services.Add(new ServiceDescriptor(typeof(TService), configurator.Factory, lifetime));
         return services;
     }
+    
 
     public static dynamic GetMetadata<T>(this T value) where T : struct, Enum
     {
-        IDictionary<string, object> metadata = new ExpandoObject();
+        IDictionary<string, object> props = new Dictionary<string, object>();
         var type = typeof(T);
         var attrs =
             (!Enum.IsDefined(value) ? (MemberInfo)type : type.GetField(Enum.GetName(value),
@@ -87,18 +112,21 @@ public static class Program
         {
             if (Regex.IsMatch(v, @"^[A-Za-z_][A-Za-z0-9_]*$"))
             {
-                if (!metadata.TryGetValue(key = v, out object o) || o is not StringBuilder)
-                    metadata[key] = new StringBuilder();
+                if (props.TryGetValue(key, out var o) && o is StringBuilder builder && builder.Length == 0)
+                    builder.Append(v);
+                else if (!props.TryGetValue(key = v, out o) || o is not StringBuilder)
+                    props[key] = new StringBuilder();
             }
             else
             {
-                if (metadata.TryGetValue(key, out object o) && o is StringBuilder builder)
+                if (props.TryGetValue(key, out var o) && o is StringBuilder builder)
                     builder.Append(v);
             }
         }
-        foreach (var v in metadata.Keys)
+        IDictionary<string, object> metadata = new ExpandoObject();
+        foreach (var v in props.Keys)
         {
-            key = metadata[v].ToString();
+            key = props[v].ToString();
             StringBuilder builder = new();
             int start = 0;
             foreach (Match match in Regex.Matches(key, @"\{(name|value(:(2|8|10|16))?|)\}", RegexOptions.IgnoreCase))
@@ -115,6 +143,7 @@ public static class Program
                     ? Convert.ChangeType(value, Enum.GetUnderlyingType(typeof(T))).ToString()
                     : Convert.ToString(Convert.ToInt64(value), "8".Equals(selector) ? 8 : "2".Equals(selector) ? 2 : 16));
             }
+            builder.Append(key, start, key.Length - start);
             metadata[v] = builder.ToString();
         }
         return metadata;
