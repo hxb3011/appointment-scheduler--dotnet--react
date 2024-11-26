@@ -1,12 +1,12 @@
-﻿using AppointmentScheduler.Domain.Business;
+﻿using System.Linq.Expressions;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
+using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Requests.Create;
+using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -23,92 +23,177 @@ public class DiagnosticServiceController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public async Task<ActionResult> GetAllDiagnosticServices()
-    {
-        var dbContext = await _repository.GetService<DbContext>();
-        var diagnosticServices = await dbContext.Set<DiagnosticService>().ToListAsync();
 
-        if (diagnosticServices.Any())
-        {
-            return Ok(diagnosticServices);
-        }
-        return NotFound("Can not find any diagnostic service");
-    }
+    private DiagnosticServiceResponse MakeResponse(IDiagnosticService role)
+        => !_repository.TryGetKeyOf(role, out DiagnosticService key) ? null
+        : new() { Id = key.Id, Name = key.Name, Price = key.Price };
+
+    [HttpGet]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadDiagnosticService])]
+    public ActionResult<IEnumerable<DiagnosticServiceResponse>> GetPagedDiagnosticServices([FromBody] PagedGetAllRequest request)
+        => Ok(_repository.GetEntities<IDiagnosticService>(request.Offset, request.Count, request.By).Select(MakeResponse));
+
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetDiagnosticServiceById(uint id)
+    [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
+    public async Task<ActionResult<DiagnosticServiceResponse>> GetDiagnosticService(uint id)
     {
         var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
-
-        if (diagnosticService != null)
-        {
-            return Ok(diagnosticService);
-        }
-        return NotFound("Diagnostic service not found.");
+        if (diagnosticService == null) return NotFound();
+        return Ok(MakeResponse(diagnosticService));
     }
 
     [HttpPost]
-    [JSONWebToken(AuthenticationRequired = false)]
-    public async Task<ActionResult> CreateDiagnosticService([FromBody] CreateDiagnosticRequest request)
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateDiagnosticService])]
+    public async Task<ActionResult> CreateDiagnosticService([FromBody] DiagnosticServiceRequest request)
     {
-        if (request.AppointmentId == null)
-            return BadRequest("Appointment ID cannot be null.");
+        var diagnosticService = await _repository.ObtainEntity<IDiagnosticService>();
+        if (diagnosticService == null)
+            return BadRequest("can not create");
 
-        var appointment = await _repository.GetEntityBy<uint, IAppointment>(request.AppointmentId);
-        if (appointment == null)
-        {
-            return NotFound("Appointment not found.");
-        }
+        diagnosticService.Name = request.Name;
+        if (!diagnosticService.IsNameValid)
+            return BadRequest("name not valid");
 
-        var newDiagnosticService = await _repository.ObtainEntity<IDiagnosticService>();
-        newDiagnosticService.Name = request.Name;
-        newDiagnosticService.Price = request.Price;
+        diagnosticService.Price = request.Price;
 
-        if (!await newDiagnosticService.Create())
-        {
-            return BadRequest("Cannot create diagnostic service.");
-        }
-        return Ok(newDiagnosticService);
+        if (!await diagnosticService.Create())
+            return BadRequest("can not create");
+
+        return Ok("success");
     }
 
     [HttpPut("{id}")]
-    [JSONWebToken(AuthenticationRequired = false)]
-    public async Task<ActionResult> UpdateDiagnosticService(uint id, [FromBody] CreateDiagnosticRequest request)
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateDiagnosticService])]
+    public async Task<ActionResult> UpdateDiagnosticService([FromBody] DiagnosticServiceRequest request, uint id)
     {
         var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
-
-        if (diagnosticService == null)
+        if (diagnosticService == null) return NotFound();
+        string v;
+        if ((v = request.Name) != null)
         {
-            return NotFound("Diagnostic service not found.");
+            diagnosticService.Name = v;
+            if (!diagnosticService.IsNameValid)
+                return BadRequest("name not valid");
         }
 
-        diagnosticService.Name = request.Name ?? diagnosticService.Name;
         diagnosticService.Price = request.Price;
 
         if (!await diagnosticService.Update())
-        {
-            return BadRequest("Cannot update diagnostic service.");
-        }
-        return Ok("Diagnostic service updated successfully.");
+            return BadRequest("can not update");
+
+        return Ok("success");
     }
 
     [HttpDelete("{id}")]
-    [JSONWebToken(AuthenticationRequired = false)]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.DeleteDiagnosticService])]
     public async Task<ActionResult> DeleteDiagnosticService(uint id)
     {
         var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
-
-        if (diagnosticService == null)
-        {
-            return NotFound("Diagnostic service not found.");
-        }
+        if (diagnosticService == null) return NotFound();
 
         if (!await diagnosticService.Delete())
-        {
-            return BadRequest("Cannot delete diagnostic service.");
-        }
+            return BadRequest("can not delete");
 
-        return Ok("Diagnostic service deleted successfully.");
+        return Ok("success");
     }
+
+
+
+
+    // private ExaminationDiagnosticResponse MakeExaminationDiagnosticResponse(IDiagnosticService role)
+    //     => !_repository.TryGetKeyOf(role, out ExaminationService key) ? null
+    //     : new() { DoctorId = key.DoctorId, DiagnosticServiceId = key.DiagnosticServiceId, ExaminationId = key.ExaminationId };
+
+
+    // [HttpGet]
+    // [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
+    // public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromBody] PagedGetAllRequest request, uint examination)
+    // {
+    //     var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
+    //     if (ex == null) return NotFound("examination not found");
+    //     var query = ex.DiagnosticServices.AsQueryable();
+    //     var param = Expression.Parameter(typeof(IDiagnosticService));
+    //     return Ok(query.OrderBy(Expression.Lambda<Func<IDiagnosticService, object>>(
+    //         Expression.Property(param, request.By ?? nameof(IDiagnosticService.Name)), param
+    //     )).Skip(request.Offset).Take(request.Count).Select(MakeExaminationDiagnosticResponse));
+    // }
+
+    // [HttpGet("{id}")]
+    // [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
+    // public async Task<ActionResult> GetExaminationDiagnostic(uint id, uint examination)
+    // {
+    //     var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
+    //     if (ex == null) return NotFound("examination not found");
+
+    //     var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+    //     if (diagnosticService == null) return NotFound();
+    //     return Ok(MakeResponse(diagnosticService));
+    // }
+
+    // [HttpGet("{id}/document")]
+    // [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
+    // public async Task<ActionResult> GetExaminationDiagnosticDocument(uint id, uint examination)
+    // {
+    //     var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
+    //     if (ex == null) return NotFound("examination not found");
+
+    //     var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+    //     if (diagnosticService == null) return NotFound();
+    //     return Ok(MakeResponse(diagnosticService));
+    // }
+
+    // [HttpPost("{id}")]
+    // [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateDiagnosticService])]
+    // public async Task<ActionResult> CreateExaminationDiagnostic(uint id, uint examination, uint doctor)
+    // {
+    //     var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
+    //     if (ex == null) return NotFound("examination not found");
+    //     var ds = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+    //     if (ds == null) return NotFound("diagnosticService not found");
+    //     var d = await _repository.GetEntityBy<uint, IDoctor>(doctor);
+    //     if (d == null) return NotFound("doctor not found");
+
+    //     var examinationDiagnostic = await ex.ObtainDiagnostic(d, ds);
+    //     if (examinationDiagnostic == null)
+    //         return BadRequest("can not create");
+
+    //     if (!await examinationDiagnostic.Create())
+    //         return BadRequest("can not create");
+
+    //     return Ok("success");
+    // }
+
+    // [HttpPost]
+    // [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.SealExaminationDiagnostic])]
+    // public async Task<ActionResult> UploadExaminationDiagnosticDocument(IFormFile file, uint examination)
+    // {
+    //     var diagnosticService = await _repository.ObtainEntity<IDiagnosticService>();
+    //     if (diagnosticService == null)
+    //         return BadRequest("can not create");
+
+    //     diagnosticService.Name = request.Name;
+    //     if (!diagnosticService.IsNameValid)
+    //         return BadRequest("name not valid");
+
+    //     diagnosticService.Price = request.Price;
+
+    //     if (!await diagnosticService.Create())
+    //         return BadRequest("can not create");
+
+    //     return Ok("success");
+    // }
+
+    // [HttpDelete("{id}")]
+    // [JSONWebToken(RequiredPermissions = [Permission.DeleteExaminationDiagnostic])]
+    // public async Task<ActionResult> DeleteExaminationDiagnostic(uint id, uint examination)
+    // {
+    //     var diagnosticService = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+    //     if (diagnosticService == null) return NotFound();
+
+    //     if (!await diagnosticService.Delete())
+    //         return BadRequest("can not delete");
+
+    //     return Ok("success");
+    // }
 }

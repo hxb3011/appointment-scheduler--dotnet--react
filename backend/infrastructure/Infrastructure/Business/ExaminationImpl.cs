@@ -42,11 +42,7 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
     async Task<IPrescription> IExamination.ObtainPrescription()
     {
         var prescription = new Prescription();
-        if (!await _dbContext.IdGeneratedWrap(
-            from ap in _dbContext.Set<Prescription>()
-            where ap.Id == prescription.Id
-            select ap, prescription, nameof(Prescription.Id)
-        )) return null;
+        if (!await _dbContext.IdGenerated(prescription, nameof(Prescription.Id))) return null;
         prescription.ExaminationId = _examination.Id;
         return await CreatePrescription(prescription);
     }
@@ -57,11 +53,7 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
         if (!_repository.TryGetKeyOf(doctor, out uint id)) return null;
         var diagsv = impl._diagsv;
         var exdiag = new ExaminationService();
-        if (!await _dbContext.IdGeneratedWrap(
-            from es in _dbContext.Set<ExaminationService>()
-            where es.Id == exdiag.Id
-            select es, exdiag, nameof(ExaminationService.Id)
-        )) return null;
+        if (!await _dbContext.IdGenerated(exdiag, nameof(ExaminationService.Id))) return null;
         exdiag.DoctorId = id;
         return await CreateDiagnosticServices(diagsv, exdiag, doctor);
     }

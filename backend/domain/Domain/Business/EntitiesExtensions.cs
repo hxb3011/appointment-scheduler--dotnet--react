@@ -24,6 +24,6 @@ public static class EntitiesExtensions
         => value.IsValidByRegex(EmailRegex, emptyAllowed);
     public static bool IsValidPhone(this string value, bool emptyAllowed = false)
         => value.IsValidByRegex(PhoneRegex, emptyAllowed);
-    public static bool IsValidDescription(this string value)
-        => !value.IsBlankOrExceed(250);
+    public static bool IsValidDescription(this string value, bool emptyAllowed = false)
+        => !string.IsNullOrWhiteSpace(value) && ((emptyAllowed && value.Length == 0) || value.Length <= 250);
 }

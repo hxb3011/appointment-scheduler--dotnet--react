@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using AppointmentScheduler.Domain;
 using AppointmentScheduler.Presentation.Attributes;
-using AppointmentScheduler.Presentation.Services;
 
 namespace AppointmentScheduler.Presentation;
 
@@ -14,7 +13,7 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         var services = builder.Services;
-        
+
         services.AddConfigurator<HttpClient>(ConfigureApiHttpClient, ServiceLifetime.Singleton);
 
 		var httpClientBaseAddress = builder.Configuration.GetSection("HttpClientSettings:BaseAddress").Value;
@@ -75,7 +74,7 @@ public static class Program
 
     private static void ConfigureApiHttpClient(IServiceProvider provider, HttpClient client)
     {
-        string? host;
+        string host;
         if (string.IsNullOrWhiteSpace(host = "API_SERVER".Env())) host = "localhost";
         if (!int.TryParse("API_PORT".Env(), out int portNumber)) portNumber = 8080;
         client.BaseAddress = new UriBuilder("https", host, portNumber).Uri;
@@ -110,18 +109,18 @@ public static class Program
         string key = "";
         foreach (var v in attrs.Value)
         {
-            if (Regex.IsMatch(v, @"^[A-Za-z_][A-Za-z0-9_]*$"))
+            var isProp = Regex.IsMatch(v, @"^[A-Za-z_][A-Za-z0-9_]*$");
+            if (!props.TryGetValue(key, out var o) || o is not StringBuilder builder)
             {
-                if (props.TryGetValue(key, out var o) && o is StringBuilder builder && builder.Length == 0)
-                    builder.Append(v);
-                else if (!props.TryGetValue(key = v, out o) || o is not StringBuilder)
-                    props[key] = new StringBuilder();
+                if (!isProp) continue;
             }
-            else
+            else if (!isProp || builder.Length == 0)
             {
-                if (props.TryGetValue(key, out var o) && o is StringBuilder builder)
-                    builder.Append(v);
+                builder.Append(v);
+                continue;
             }
+            if (!props.TryGetValue(key = v, out o) || o is not StringBuilder)
+                props[key] = new StringBuilder();
         }
         IDictionary<string, object> metadata = new ExpandoObject();
         foreach (var v in props.Keys)

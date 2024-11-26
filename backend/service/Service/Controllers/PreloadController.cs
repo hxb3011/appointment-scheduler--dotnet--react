@@ -1,5 +1,4 @@
 ﻿using AppointmentScheduler.Domain.Business;
-using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Infrastructure;
 using Microsoft.AspNetCore.Identity;

@@ -1,13 +1,10 @@
 using AppointmentScheduler.Domain.Business;
-using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -22,7 +19,7 @@ public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPa
 
 
     [HttpPost("token")]
-    public async Task<ActionResult<AuthTokenResponse>> SignIn([FromForm] AuthRequest request)
+    public ActionResult<AuthTokenResponse> SignIn([FromForm] AuthRequest request)
     {
         var user = _repository.GetEntities<IUser>(
             whereProperty: nameof(Domain.Entities.User.UserName),
@@ -44,8 +41,38 @@ public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPa
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<IEnumerable<RoleResponse>>> Register([FromForm] RegisterRequest request)
+    public async Task<ActionResult> Register([FromBody] PatientRequest request)
     {
-        throw new NotImplementedException();
+        var patient = await _repository.ObtainEntity<IPatient>();
+        if (patient == null)
+            return BadRequest("can not create");
+
+        patient.UserName = request.Username;
+        if (!patient.IsUserNameValid)
+            return BadRequest("username not valid");
+        if (await patient.IsUserNameExisted())
+            return BadRequest("username existed");
+
+        patient.FullName = request.FullName;
+        if (!patient.IsFullNameValid)
+            return BadRequest("full_name not valid");
+
+        patient.Password = request.Password;
+        if (!patient.IsPasswordValid)
+            return BadRequest("password not valid");
+        patient.Password = _hasher.HashPassword(patient, patient.Password);
+
+        patient.Email = request.Email;
+        if (!patient.IsEmailValid)
+            return BadRequest("email not valid");
+
+        patient.Phone = request.Phone;
+        if (!patient.IsPhoneValid)
+            return BadRequest("phone not valid");
+
+        if (!await patient.Create())
+            return BadRequest("can not create");
+
+        return Ok("success");
     }
 }

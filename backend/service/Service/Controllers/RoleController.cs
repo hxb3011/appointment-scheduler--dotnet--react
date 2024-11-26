@@ -26,13 +26,17 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
         => Ok(_repository.GetEntities<IRole>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
     [HttpGet("{id}")]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadRole])]
     public async Task<ActionResult<RoleResponse>> GetRole(uint id)
-        => Ok(MakeResponse(await _repository.GetEntityBy<uint, IRole>(id)));
+    {
+        var role = await _repository.GetEntityBy<uint, IRole>(id);
+        if (role == null) return NotFound();
+        return Ok(MakeResponse(role));
+    }
 
     [HttpPost]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateRole])]
-    public async Task<ActionResult> CreateRole([FromBody] CreateUpdateRoleRequest request)
+    public async Task<ActionResult> CreateRole([FromBody] RoleRequest request)
     {
         var role = await _repository.ObtainEntity<IRole>();
         if (role == null)
@@ -46,8 +50,8 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
             return BadRequest("name existed");
 
         role.Description = request.Description;
-        if (!role.IsNameValid)
-            return BadRequest("name not valid");
+        if (!role.IsDescriptionValid)
+            return BadRequest("description not valid");
 
         if (!await role.Create())
             return BadRequest("can not create");
@@ -57,12 +61,10 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
 
     [HttpPut("{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateRole])]
-    public async Task<ActionResult> UpdateRole([FromBody] CreateUpdateRoleRequest request, uint id)
+    public async Task<ActionResult> UpdateRole([FromBody] RoleRequest request, uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
-
+        if (role == null) return NotFound();
         string v;
         if ((v = request.Name) != null)
         {
@@ -92,8 +94,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     public async Task<ActionResult> DeleteRole(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
+        if (role == null) return NotFound();
 
         if (!await role.Delete())
             return BadRequest("can not delete");
@@ -102,20 +103,15 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     }
 
     [HttpGet("permissions")]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege])]
+    [JSONWebToken(AuthenticationRequired = true)]
     public ActionResult<IEnumerable<string>> GetPermissions() => Ok(Enum.GetNames<Permission>());
 
     [HttpGet("{id}/permissions")]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadRole])]
     public async Task<ActionResult<IEnumerable<string>>> GetPermissions(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
-
-        if (!await role.Delete())
-            return BadRequest("can not delete");
-
+        if (role == null) return NotFound();
         return Ok(role.Permissions.Select(Enum.GetName));
     }
 
@@ -124,8 +120,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     public async Task<ActionResult> ChangePermission(uint id, string permid, bool granted)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
-        if (role == null)
-            return BadRequest("not found");
+        if (role == null) return NotFound();
 
         if (!Enum.TryParse(permid, out Permission permission))
             return BadRequest("invalid permission");

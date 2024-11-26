@@ -1,7 +1,3 @@
-using AppointmentScheduler.Domain.Business;
-using AppointmentScheduler.Domain.Entities;
-using AppointmentScheduler.Domain.Repositories;
-
 namespace AppointmentScheduler.Domain.Responses;
 
 public class RoleResponse

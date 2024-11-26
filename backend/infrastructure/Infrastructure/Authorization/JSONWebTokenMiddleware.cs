@@ -1,11 +1,11 @@
 #define DEMO
 
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Nodes;
 using AppointmentScheduler.Domain.Business;
-using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -29,62 +29,89 @@ public class JSONWebTokenMiddleware
     }
     private static IEnumerable<string> ValueOfType(IEnumerable<Claim> claims, string type)
     {
-        return claims.AsQueryable().Where(c => c.Type == type).Select(c => c.Value);
+        var param = Expression.Parameter(typeof(Claim));
+        return claims.AsQueryable().Where(Expression.Lambda<Func<Claim, bool>>(
+            Expression.Equal(
+                Expression.Property(param, nameof(Claim.Type)),
+                Expression.Constant(type)
+            ), param
+        )).Select(Expression.Lambda<Func<Claim, string>>(
+            Expression.Property(param, nameof(Claim.Value)), param
+        ));
     }
     public async Task Invoke(HttpContext context)
     {
         var attr = context.GetEndpoint()?.Metadata.GetMetadata<JSONWebTokenAttribute>();
         if (attr != null && attr.AuthenticationRequired)
         {
-            var auth = context.Request.Headers["Authorization"].FirstOrDefault();
-            _logger.LogInformation("(Authorization: {0})", auth);
-            if (auth == null) goto unauthorization;
-            var authInfo = auth.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            string token;
-            if (authInfo.Length != 2
-                || !authInfo.First().Equals("bearer", StringComparison.InvariantCultureIgnoreCase)
-                || (token = authInfo.Last()) == null) goto unauthorization;
-            _logger.LogInformation("(Token: {0})", token);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SymmetricSecurityKey));
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            var token = context.Request.Headers["Authorization"].FirstOrDefault();
+            if (token == null)
             {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                IssuerSigningKey = key
-            }, out SecurityToken validateToken);
-            var jwtToken = (JwtSecurityToken)validateToken;
-            var user = await _repository.GetEntityBy<string, IUser>(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Id).FirstOrDefault());
-            if (user == null) goto unauthorization;
-
-            if (!attr.RequiredPermissions.Select(p => Enum.GetName(p)).ToHashSet().IsSubsetOf(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Permissions)))
-            {
-                Console.WriteLine("Required: {0}", attr.RequiredPermissions.Select(p => Enum.GetName(p)).Aggregate((a, k) => a + ", " + k));
-                Console.WriteLine("Supplied: {0}", ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Permissions).Aggregate((a, k) => a + ", " + k));
-                var response = context.Response;
-                response.StatusCode = StatusCodes.Status403Forbidden;
-                response.ContentType = "application/json";
-                await context.Response.WriteAsJsonAsync(new JsonObject
-                {
-                    ["message"] = "permissions denied"
-                });
+                await ErrorResponse(context.Response);
                 return;
             }
+            _logger.LogInformation("(Authorization: {0})", token);
+
+            var authInfo = token.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            if (authInfo.Length != 2 || !"bearer".Equals(authInfo.First(),
+                    StringComparison.InvariantCultureIgnoreCase)
+                || (token = authInfo.Last()) == null)
+            {
+                await ErrorResponse(context.Response);
+                return;
+            }
+            _logger.LogInformation("(Token: {0})", token);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var parameters = new TokenValidationParameters
+            {
+                ValidateAudience = false, ValidateIssuer = false,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(_options.SymmetricSecurityKey)
+                )
+            };
+
+            JwtSecurityToken jwtToken;
+            try
+            {
+                tokenHandler.ValidateToken(token, parameters, out SecurityToken validateToken);
+                jwtToken = (JwtSecurityToken)validateToken;
+            }
+            catch (SecurityTokenExpiredException)
+            {
+                await ErrorResponse(context.Response, message: "access token expired");
+                return;
+            }
+
+            var user = await _repository.GetEntityBy<string, IUser>(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Id).FirstOrDefault());
+            if (user == null)
+            {
+                await ErrorResponse(context.Response);
+                return;
+            }
+
+            var requiredPermissionNames = attr.RequiredPermissions.Select(Enum.GetName);
+            var suppliedPermissionNames = ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Permissions);
+            if (!requiredPermissionNames.ToHashSet().IsSubsetOf(suppliedPermissionNames))
+            {
+                Console.WriteLine("{{\n\t\"required\": [\n\t\t\"{0}\"\n\t],\n\t\"supplied\": [\n\t\t\"{1}\"\n\t]\n}}",
+                    string.Join("\",\n\t\t\"", requiredPermissionNames), string.Join("\",\n\t\t\"", suppliedPermissionNames));
+                await ErrorResponse(context.Response, StatusCodes.Status403Forbidden, "permissions denied");
+                return;
+            }
+
             context.SetAuthUser(user);
         }
         await _next(context);
         return;
+    }
 
-    unauthorization:
-        {
-            var response = context.Response;
-            response.StatusCode = StatusCodes.Status401Unauthorized;
-            response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new JsonObject
-            {
-                ["message"] = "unauthorization"
-            });
-            return;
-        }
+    private static Task ErrorResponse(HttpResponse response,
+        int statusCode = StatusCodes.Status401Unauthorized,
+        string message = "unauthorization")
+    {
+        response.StatusCode = statusCode;
+        response.ContentType = "application/json";
+        return response.WriteAsJsonAsync(new JsonObject { ["message"] = message });
     }
 }

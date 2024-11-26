@@ -1,4 +1,5 @@
-﻿using AppointmentScheduler.Domain;
+﻿using System.Linq.Expressions;
+using AppointmentScheduler.Domain;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
@@ -47,8 +48,17 @@ public static class Extensions
     public static Action<T> Setter<T>(this object entity, string idPropertyName)
         => entity.Method<Action<T>>($"set_{idPropertyName}");
 
-    internal static async Task<bool> IdGeneratedWrap<TEntity>(this DbContext context, IQueryable<TEntity> query, TEntity entity, string idPropertyName) where TEntity : class
+    public static async Task<bool> IdGenerated<TEntity>(this DbContext context, TEntity entity, string idPropertyName) where TEntity : class
     {
+        var src = Expression.Parameter(typeof(TEntity));
+        var dst = Expression.Constant(entity);
+        var query = context.Set<TEntity>().Where(Expression.Lambda<Func<TEntity, bool>>(
+            Expression.Equal(
+                Expression.Property(src, idPropertyName),
+                Expression.Property(dst, idPropertyName)
+            ), src
+        ));
+
         const long IdLimit = uint.MaxValue + 1L;
         Task<long> countTask = null;
         var setId = entity.Setter<uint>(idPropertyName);
@@ -127,7 +137,6 @@ public static class Extensions
             doctor_role.Description = "Created by Preloader";
             Enum.GetValues<Permission>().Exclude(
                 Permission.SystemPrivilege,
-                Permission.ReadRole,
                 Permission.CreateRole,
                 Permission.UpdateRole,
                 Permission.DeleteRole,
@@ -142,6 +151,7 @@ public static class Extensions
             user_role.Name = "User";
             user_role.Description = "Created by Preloader";
             new Permission[] {
+                    Permission.ReadRole,
                     Permission.ReadUser,
                     Permission.UpdateUser,
                     Permission.ReadProfile,
@@ -157,6 +167,9 @@ public static class Extensions
                 }.GrantTo(user_role);
             await user_role.Create();
 
+            if (repository.TryGetKeyOf(user_role, out string role_id))
+                configs.SetProperty(RoleImpl.DefaultRoleKey, role_id);
+
             var admin_user = await repository.ObtainEntity<IDoctor>();
             admin_user.UserName = "root00";
             admin_user.Password = passwordHasher.HashPassword(admin_user, "HeLlo|12");
@@ -168,9 +181,7 @@ public static class Extensions
             await admin_user.ChangeRole(admin_role);
             await admin_user.Create();
 
-            if (repository.TryGetKeyOf(user_role, out string role_id)
-                && configs.SetProperty(RoleImpl.DefaultRoleKey, role_id)
-                && configs.SetProperty(PreloadKey, PreloadSuccess)) ;
+            configs.SetProperty(PreloadKey, PreloadSuccess);
         }
         transaction.Commit();
     }

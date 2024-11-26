@@ -35,11 +35,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
     async Task<IProfile> IPatient.ObtainProfile()
     {
         var profile = new Profile();
-        if (!await _dbContext.IdGeneratedWrap(
-            from p in _dbContext.Set<Profile>()
-            where p.Id == profile.Id
-            select p, profile, nameof(Profile.Id)
-        )) return null;
+        if (!await _dbContext.IdGenerated(profile, nameof(Profile.Id))) return null;
         profile.Id %= 1000000000;
         profile.PatientId = _patient.Id;
         return await CreateProfile(profile);
