@@ -57,9 +57,11 @@ public class AppointmentController : ControllerBase
         var query = p.Profiles.AsQueryable().SelectMany(pr =>
             pr.Appointments.AsQueryable().Where(ap => ap.AtTime >= now));
         var param = Expression.Parameter(typeof(IAppointment));
-        return Ok(query.OrderBy(Expression.Lambda<Func<IAppointment, object>>(
-            Expression.Property(param, request.By), param
-        )).Skip(request.Offset).Take(request.Count).Select(MakeResponse));
+        if (!string.IsNullOrWhiteSpace(request.By))
+            query = query.OrderBy(Expression.Lambda<Func<IAppointment, object>>(
+                Expression.Property(param, request.By), param
+            ));
+        return Ok(query.Skip(request.Offset).Take(request.Count).Select(MakeResponse));
     }
 
     [HttpGet("{id}")]
@@ -105,7 +107,7 @@ public class AppointmentController : ControllerBase
         var profile = await _repository.GetEntityBy<uint, IProfile>(profileId);
         if (profile == null) return NotFound();
         appointment.Profile = profile;
-        if (!await appointment.Update()) 
+        if (!await appointment.Update())
             return BadRequest("can not update");
         return Ok("success");
     }

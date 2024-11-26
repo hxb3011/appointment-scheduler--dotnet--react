@@ -37,7 +37,7 @@ public static class MySQLEntitiesExtensions
         builder.Property<string>(nameof(Medicine.Unit))
             .HasColumnName("Unit")
             .HasColumnType("varchar(50)");
-        builder.Ignore(nameof(Medicine.Image));
+        // builder.Ignore(nameof(Medicine.Image));
     }
 
     internal static void BuildPrescriptionEntity(EntityTypeBuilder<Prescription> builder)
@@ -177,7 +177,7 @@ public static class MySQLEntitiesExtensions
         builder.Property<string>(nameof(Doctor.Certificate))
             .HasColumnName("Certificate")
             .HasColumnType("varchar(50)");
-        builder.Ignore(nameof(Doctor.Image));
+        // builder.Ignore(nameof(Doctor.Image));
     }
 
     internal static void BuildPatientEntity(EntityTypeBuilder<Patient> builder)
@@ -193,7 +193,7 @@ public static class MySQLEntitiesExtensions
         builder.Property<string>(nameof(Patient.Phone))
             .HasColumnName("PhoneNumber")
             .HasColumnType("varchar(50)");
-        builder.Ignore(nameof(Patient.Image));
+        // builder.Ignore(nameof(Patient.Image));
     }
 
     internal static void BuildUserEntity(EntityTypeBuilder<User> builder)

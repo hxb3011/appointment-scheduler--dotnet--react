@@ -11,9 +11,12 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     private IResourceManagerService _resourceManager;
     private IEnumerable<IAppointment> _appointments;
     private IEnumerable<IExamination> _examinations;
+    private IEnumerable<IDiagnosticService> _diagnosticServices;
+    
     internal DoctorImpl(User user, Doctor doctor, IRole role) : base(user, role)
     {
         _doctor = doctor ?? throw new ArgumentNullException(nameof(doctor));
+        ((IBehavioralEntity)this).Deleted += DeleteImage;
     }
 
     string IDoctor.Email { get => _doctor.Email; set => _doctor.Email = value; }
@@ -41,6 +44,25 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
         );
     }
 
+    IEnumerable<IDiagnosticService> IDoctor.DiagnosticServices
+    {
+        get
+        {
+            var now = DateOnly.FromDateTime(DateTime.UtcNow);
+            return _diagnosticServices ??= (
+            from es in _dbContext.Set<ExaminationService>()
+            from ds in _dbContext.Set<DiagnosticService>()
+            from ex in _dbContext.Set<Examination>()
+            from ap in _dbContext.Set<Appointment>()
+            where es.ExaminationId == ex.Id && ex.AppointmentId == ap.Id
+                && es.DoctorId == _doctor.Id && es.DiagnosticServiceId == ds.Id
+                && DateOnly.FromDateTime(ap.AtTime) == now
+            orderby ap.AtTime ascending
+            select CreateDiagnosticServices(ds, es).WaitForResult(Timeout.Infinite, default)
+        ).Cached();
+        }
+    }
+
     async Task<IAppointment> IDoctor.ObtainAppointment(DateTime atTime, uint number)
     {
         var appointment = new Appointment();
@@ -57,6 +79,9 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     Stream IDoctor.Image(bool readOnly)
         => _resourceManager.Resource<DoctorImpl>(_doctor.Id.ToString(), readOnly);
 
+    private void DeleteImage(object sender, EventArgs e)
+        => _resourceManager.RemoveResource<DoctorImpl>(_doctor.Id.ToString());
+
     private Task<IAppointment> CreateAppointment(Appointment appointment)
     {
         IAppointment impl = new AppointmentImpl(appointment, this);
@@ -66,9 +91,20 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
         return _repository.Initialize(impl);
     }
 
+    private async Task<IDiagnosticService> CreateDiagnosticServices(DiagnosticService diagsv, ExaminationService exdiag)
+    {
+        IDiagnosticService impl = new DiagnosticServiceImpl(diagsv, exdiag, this);
+        impl.Created += InvalidateLoadedEntities;
+        impl.Updated += InvalidateLoadedEntities;
+        impl.Deleted += InvalidateLoadedEntities;
+        return await _repository.Initialize(impl);
+    }
+
     private void InvalidateLoadedEntities(object sender, EventArgs e)
     {
-        _appointments = (IEnumerable<IAppointment>)((ICloneable)((IDoctor)this).Appointments).Clone();
+        _examinations = null;
+        _appointments = null;
+        _diagnosticServices = null;
     }
 
     protected override async Task<bool> Initilize()

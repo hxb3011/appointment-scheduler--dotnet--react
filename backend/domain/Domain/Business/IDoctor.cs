@@ -10,6 +10,7 @@ public interface IDoctor : IUser
     bool IsPhoneValid { get; }
     IEnumerable<IAppointment> Appointments { get; }
     IEnumerable<IExamination> Examinations { get; }
+    IEnumerable<IDiagnosticService> DiagnosticServices { get; }
     Task<IAppointment> ObtainAppointment(DateTime atTime, uint number);
     Task<IExamination> ObtainExamination(IAppointment appointment);
     Stream Image(bool readOnly = true);

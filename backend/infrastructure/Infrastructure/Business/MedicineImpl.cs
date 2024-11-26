@@ -13,7 +13,7 @@ namespace AppointmentScheduler.Infrastructure.Business
             _prdetail = prescriptionDetail;
         }
         string IMedicine.Name { get => _medicine.Name; set => _medicine.Name = value; }
-        string IMedicine.Image { get => _medicine.Image; set => _medicine.Image = value; }
+        // string IMedicine.Image { get => _medicine.Image; set => _medicine.Image = value; }
         string IMedicine.Unit { get => _medicine.Unit; set => _medicine.Unit = value; }
         string IMedicine.Description
         {

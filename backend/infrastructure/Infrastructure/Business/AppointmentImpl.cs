@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ internal sealed class AppointmentImpl : BaseEntity, IAppointment
     private IProfile _profile;
     private Task<IExamination> _examinationTask;
     private IDoctor _doctor;
-    
+
     internal AppointmentImpl(Appointment appointment, IDoctor doctor, IProfile profile = null)
     {
         _appointment = appointment ?? throw new ArgumentNullException(nameof(appointment));
@@ -45,12 +46,8 @@ internal sealed class AppointmentImpl : BaseEntity, IAppointment
     }
 
     IDoctor IAppointment.Doctor => _doctor;
-    IExamination IAppointment.Examination
-        => (_examinationTask ??= (
-            from ex in _dbContext.Set<Examination>()
-            where ex.AppointmentId == _appointment.Id
-            select CreateExamination(ex).WaitForResult(Timeout.Infinite, default)
-        ).FirstOrDefaultAsync()).WaitForResult();
+    IExamination IAppointment.Examination => (_examinationTask
+        ??= GetExaminations().Select(CreateExamination).FirstOrDefault()).WaitForResult();
 
     async Task<IExamination> IAppointment.ObtainExamination()
     {
@@ -80,11 +77,19 @@ internal sealed class AppointmentImpl : BaseEntity, IAppointment
         return Task.FromResult(true);
     }
 
-    public async Task<bool> CheckExamination() => !await (
-        from ex in _dbContext.Set<Examination>()
-        where ex.AppointmentId == _appointment.Id
-        select ex
-    ).AnyAsync();
+    public Task<bool> CheckExamination() => GetExaminations().AnyAsync().InvertTaskResult();
+
+    private IQueryable<Examination> GetExaminations()
+    {
+        var param = Expression.Parameter(typeof(Examination));
+        return _dbContext.Set<Examination>()
+            .Where(Expression.Lambda<Func<Examination, bool>>(
+                Expression.Equal(
+                    Expression.Property(param, nameof(Examination.AppointmentId)),
+                    Expression.Constant(_appointment.Id)
+                ), param
+            ));
+    }
 
     protected override async Task<bool> Delete()
     {

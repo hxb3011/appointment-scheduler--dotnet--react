@@ -7,17 +7,19 @@ namespace AppointmentScheduler.Infrastructure.Business;
 internal class PrescriptionImpl : BaseEntity, IPrescription
 {
     internal Prescription _prescription;
-    private IExamination _examination;
     private IResourceManagerService _resourceManager;
 
-    public PrescriptionImpl(Prescription prescription, IExamination examination)
+    public PrescriptionImpl(Prescription prescription)
     {
         _prescription = prescription;
-        _examination = examination;
+        ((IBehavioralEntity)this).Deleted += DeleteDocument;
     }
 
     Stream IPrescription.Document(bool readOnly)
         => _resourceManager.Resource<PrescriptionImpl>(_prescription.Id.ToString(), readOnly);
+
+    private void DeleteDocument(object sender, EventArgs e)
+        => _resourceManager.RemoveResource<PrescriptionImpl>(_prescription.Id.ToString());
 
     string IPrescription.Description { get => _prescription.Description; set => _prescription.Description = value; }
 
@@ -25,14 +27,12 @@ internal class PrescriptionImpl : BaseEntity, IPrescription
 
     protected override Task<bool> Create()
     {
-        // TODO: Process Document
         _dbContext.Add(_prescription);
         return Task.FromResult(true);
     }
 
     protected override Task<bool> Delete()
     {
-        // TODO: Process Document
         _dbContext.Remove(_prescription);
         return Task.FromResult(true);
     }

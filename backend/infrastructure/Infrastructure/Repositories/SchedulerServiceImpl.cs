@@ -1,7 +1,6 @@
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
-using Org.BouncyCastle.Asn1.Cms;
 
 namespace AppointmentScheduler.Infrastructure.Repositories;
 

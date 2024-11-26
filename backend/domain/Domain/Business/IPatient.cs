@@ -7,6 +7,7 @@ public interface IPatient : IUser
     bool IsEmailValid { get; }
     bool IsPhoneValid { get; }
     IEnumerable<IProfile> Profiles { get; }
+    IEnumerable<IAppointment> Appointments { get; }
     Task<IProfile> ObtainProfile();
     Stream Image(bool readOnly = true);
 }

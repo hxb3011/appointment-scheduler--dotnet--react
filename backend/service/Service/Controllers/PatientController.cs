@@ -149,15 +149,15 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok("success");
 		}
 
-		[HttpGet("current")]
-		[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
-		public async Task<ActionResult<PatientResponse>> GetCurrentUser()
-		{
-			if (HttpContext.GetAuthUser() is not IPatient patient) return NotFound();
-			return Ok(MakeResponse(patient));
-		}
+        [HttpGet("current")]
+        [JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
+        public ActionResult<PatientResponse> GetCurrentUser()
+        {
+            if (HttpContext.GetAuthUser() is not IPatient patient) return NotFound();
+            return Ok(MakeResponse(patient));
+        }
 
-		[HttpPut("current")]
+        [HttpPut("current")]
 		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
 		public async Task<ActionResult> UpdateCurrentUser([FromBody] PatientRequest request)
 		{

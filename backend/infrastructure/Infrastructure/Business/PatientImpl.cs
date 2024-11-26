@@ -10,9 +10,11 @@ internal sealed class PatientImpl : UserImpl, IPatient
     internal readonly Patient _patient;
     private IResourceManagerService _resourceManager;
     private IEnumerable<IProfile> _profiles;
+    private IEnumerable<IAppointment> _appointment;
     internal PatientImpl(User user, Patient patient, IRole role) : base(user, role)
     {
         _patient = patient ?? throw new ArgumentNullException(nameof(patient));
+        ((IBehavioralEntity)this).Deleted += DeleteImage;
     }
 
     string IPatient.Email { get => _patient.Email; set => _patient.Email = value; }
@@ -32,17 +34,35 @@ internal sealed class PatientImpl : UserImpl, IPatient
         ).Cached();
     }
 
+    IEnumerable<IAppointment> IPatient.Appointments
+    {
+        get
+        {
+
+            var now = DateOnly.FromDateTime(DateTime.UtcNow);
+            return _appointment ??= (
+                from ap in _dbContext.Set<Appointment>()
+                from p in _dbContext.Set<Profile>()
+                where p.PatientId == _patient.Id && DateOnly.FromDateTime(ap.AtTime) >= now
+                orderby ap.AtTime ascending
+                select CreateAppointment(ap).WaitForResult(Timeout.Infinite, default)
+            ).Cached();
+        }
+    }
+
     async Task<IProfile> IPatient.ObtainProfile()
     {
         var profile = new Profile();
         if (!await _dbContext.IdGenerated(profile, nameof(Profile.Id))) return null;
-        profile.Id %= 1000000000;
         profile.PatientId = _patient.Id;
         return await CreateProfile(profile);
     }
 
     Stream IPatient.Image(bool readOnly)
         => _resourceManager.Resource<PatientImpl>(_patient.Id.ToString(), readOnly);
+
+    private void DeleteImage(object sender, EventArgs e)
+        => _resourceManager.RemoveResource<PatientImpl>(_patient.Id.ToString());
 
     private Task<IProfile> CreateProfile(Profile profile)
     {
@@ -53,10 +73,22 @@ internal sealed class PatientImpl : UserImpl, IPatient
         return _repository.Initialize(impl);
     }
 
+    private async Task<IAppointment> CreateAppointment(Appointment appointment)
+    {
+        IAppointment impl = await _repository.GetEntityBy<Appointment, IAppointment>(appointment);
+        if (impl != null)
+        {
+            impl.Created += InvalidateLoadedEntities;
+            impl.Updated += InvalidateLoadedEntities;
+            impl.Deleted += InvalidateLoadedEntities;
+        }
+        return impl;
+    }
+
     private void InvalidateLoadedEntities(object sender, EventArgs e)
     {
-        //_profiles = (IEnumerable<IProfile>)((ICloneable)_profiles).Clone();
         _profiles = null;
+        _appointment = null;
     }
 
     protected override Task<bool> CanDelete() => (
