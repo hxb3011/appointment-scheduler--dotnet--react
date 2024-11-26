@@ -1,233 +1,249 @@
-﻿using AppointmentScheduler.Domain.Business;
+﻿using System.Linq.Expressions;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
-using AppointmentScheduler.Infrastructure;
 using AppointmentScheduler.Infrastructure.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace AppointmentScheduler.Service.Controllers
+namespace AppointmentScheduler.Service.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class DoctorController : UserController
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class DoctorController : UserController
+	public DoctorController(IRepository repository,
+		IPasswordHasher<IUser> passwordHasher, ILogger<DoctorController> logger)
+		: base(repository, passwordHasher, logger) { }
+
+	private DoctorResponse MakeResponse(IDoctor doctor)
+		=> !_repository.TryGetKeyOf(doctor, out uint id) ? null
+		: new() { Id = id, UserName = doctor.UserName, FullName = doctor.FullName, Email = doctor.Email, Phone = doctor.Phone, Certificate = doctor.Certificate, Position = doctor.Position };
+
+	[HttpGet]
+	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
+	public ActionResult<IEnumerable<DoctorResponse>> GetPagedDoctors([FromBody] PagedGetAllRequest request)
+		=> Ok(_repository.GetEntities<IDoctor>(request.Offset, request.Count, request.By).Select(MakeResponse));
+
+	[HttpGet("{id}")]
+	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
+	public async Task<ActionResult<DoctorResponse>> GetDoctor(uint id)
 	{
-		public DoctorController(IRepository repository,
-			IPasswordHasher<IUser> passwordHasher, ILogger<DoctorController> logger)
-			: base(repository, passwordHasher, logger) { }
+		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
+		if (doctor == null) return NotFound();
+		return Ok(MakeResponse(doctor));
+	}
 
-		private DoctorResponse MakeResponse(IDoctor doctor)
-			=> !_repository.TryGetKeyOf(doctor, out uint id) ? null
-			: new() { Id = id, UserName = doctor.UserName, FullName = doctor.FullName, Email = doctor.Email, Phone = doctor.Phone, Certificate = doctor.Certificate, Position = doctor.Position };
+	[HttpPost]
+	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateUser])]
+	public async Task<ActionResult> CreateDoctor([FromBody] DoctorRequest request)
+	{
+		var doctor = await _repository.ObtainEntity<IDoctor>();
+		if (doctor == null)
+			return BadRequest("can not create");
 
-		[HttpGet]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
-		public async Task<ActionResult<IEnumerable<DoctorResponse>>> GetPagedDoctors([FromBody] PagedGetAllRequest request)
-			=> Ok(_repository.GetEntities<IDoctor>(request.Offset, request.Count, request.By).Select(MakeResponse));
+		doctor.UserName = request.Username;
+		if (!doctor.IsUserNameValid)
+			return BadRequest("username not valid");
+		if (await doctor.IsUserNameExisted())
+			return BadRequest("username existed");
 
-		[HttpGet("{id}")]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
-		public async Task<ActionResult<DoctorResponse>> GetDoctor(uint id)
+		doctor.FullName = request.FullName;
+		if (!doctor.IsFullNameValid)
+			return BadRequest("full_name not valid");
+
+		doctor.Password = request.Password;
+		if (!doctor.IsPasswordValid)
+			return BadRequest("password not valid");
+		doctor.Password = _passwordHasher.HashPassword(doctor, doctor.Password);
+
+		doctor.Email = request.Email;
+		if (!doctor.IsEmailValid)
+			return BadRequest("email not valid");
+
+		doctor.Phone = request.Phone;
+		if (!doctor.IsPhoneValid)
+			return BadRequest("phone not valid");
+
+		doctor.Certificate = request.Certificate;
+		doctor.Position = request.Position;
+
+		if (!await doctor.Create())
+			return BadRequest("can not create");
+
+		return Ok("success");
+	}
+
+	[HttpPut("{id}")]
+	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateUser])]
+	public async Task<ActionResult> UpdateDoctor([FromBody] DoctorRequest request, uint id)
+	{
+		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
+		if (doctor == null) return NotFound();
+		string v;
+		if ((v = request.Username) != null)
 		{
-			var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
-			if (doctor == null) return NotFound();
-			return Ok(MakeResponse(doctor));
-		}
-
-		[HttpPost]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateUser])]
-		public async Task<ActionResult> CreateDoctor([FromBody] DoctorRequest request)
-		{
-			var doctor = await _repository.ObtainEntity<IDoctor>();
-			if (doctor == null)
-				return BadRequest("can not create");
-
-			doctor.UserName = request.Username;
+			doctor.UserName = v;
 			if (!doctor.IsUserNameValid)
 				return BadRequest("username not valid");
 			if (await doctor.IsUserNameExisted())
 				return BadRequest("username existed");
-
-			doctor.FullName = request.FullName;
+		}
+		if ((v = request.FullName) != null)
+		{
+			doctor.FullName = v;
 			if (!doctor.IsFullNameValid)
 				return BadRequest("full_name not valid");
-
-			doctor.Password = request.Password;
+		}
+		if ((v = request.Password) != null)
+		{
+			doctor.Password = v;
 			if (!doctor.IsPasswordValid)
 				return BadRequest("password not valid");
 			doctor.Password = _passwordHasher.HashPassword(doctor, doctor.Password);
-
-			doctor.Email = request.Email;
+		}
+		if ((v = request.Email) != null)
+		{
+			doctor.Email = v;
 			if (!doctor.IsEmailValid)
 				return BadRequest("email not valid");
-
-			doctor.Phone = request.Phone;
+		}
+		if ((v = request.Phone) != null)
+		{
+			doctor.Phone = v;
 			if (!doctor.IsPhoneValid)
 				return BadRequest("phone not valid");
-
-			doctor.Certificate = request.Certificate;
-			doctor.Position = request.Position;
-
-			if (!await doctor.Create())
-				return BadRequest("can not create");
-
-			return Ok("success");
 		}
+		if ((v = request.Certificate) != null)
+			doctor.Certificate = v;
+		if ((v = request.Position) != null)
+			doctor.Position = v;
+		if (!await doctor.Create())
+			return BadRequest("can not create");
+		return Ok("success");
+	}
 
-		[HttpPut("{id}")]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateUser])]
-		public async Task<ActionResult> UpdateDoctor([FromBody] DoctorRequest request, uint id)
+	[HttpDelete("{id}")]
+	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.DeleteUser])]
+	public async Task<ActionResult> DeleteDoctor(uint id)
+	{
+		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
+		if (doctor == null) return NotFound();
+		if (!await doctor.Delete())
+			return BadRequest("can not delete");
+		return Ok("success");
+	}
+
+    private ExaminationDiagnosticResponse MakeExaminationDiagnosticResponse(IDiagnosticService examinationDiagnostic)
+        => !_repository.TryGetKeyOf(examinationDiagnostic, out ExaminationService key) ? null
+        : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, DoctorId = key.DoctorId, DiagnosticServiceId = key.DiagnosticServiceId, ExaminationId = key.ExaminationId };
+
+	[HttpGet("{id}/examdiag")]
+	[JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
+	public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromBody] PagedGetAllRequest request, uint id)
+	{
+		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
+		if (doctor == null) return NotFound();
+		var query = doctor.DiagnosticServices.AsQueryable();
+		var param = Expression.Parameter(typeof(IDiagnosticService));
+		if (!string.IsNullOrWhiteSpace(request.By))
+			query = query.OrderBy(Expression.Lambda<Func<IDiagnosticService, object>>(
+				Expression.Property(param, request.By), param
+			));
+		return Ok(query.Skip(request.Offset).Take(request.Count).Select(MakeExaminationDiagnosticResponse));
+	}
+
+	[HttpGet("{id}/image")]
+	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateUser])]
+	public async Task<ActionResult> GetImage(uint id)
+	{
+		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
+		if (doctor == null) return NotFound();
+		return File(doctor.Image(readOnly: true), "application/octet-stream");
+	}
+
+	[HttpPost("{id}/image")]
+	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateUser])]
+	public async Task<ActionResult> SetImage(uint id, IFormFile file)
+	{
+		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
+		if (doctor == null) return NotFound();
+		if (file == null || file.Length == 0)
+			return BadRequest("file invalid");
+		await file.CopyToAsync(doctor.Image(readOnly: false));
+		return Ok("success");
+	}
+
+	[HttpGet("current")]
+	[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
+	public ActionResult<DoctorResponse> GetCurrentUser()
+	{
+		if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
+		return Ok(MakeResponse(doctor));
+	}
+
+	[HttpPut("current")]
+	[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
+	public async Task<ActionResult> UpdateCurrentUser([FromBody] DoctorRequest request)
+	{
+		if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
+		string v;
+		if ((v = request.Username) != null)
 		{
-			var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
-			if (doctor == null) return NotFound();
-			string v;
-			if ((v = request.Username) != null)
-			{
-				doctor.UserName = v;
-				if (!doctor.IsUserNameValid)
-					return BadRequest("username not valid");
-				if (await doctor.IsUserNameExisted())
-					return BadRequest("username existed");
-			}
-			if ((v = request.FullName) != null)
-			{
-				doctor.FullName = v;
-				if (!doctor.IsFullNameValid)
-					return BadRequest("full_name not valid");
-			}
-			if ((v = request.Password) != null)
-			{
-				doctor.Password = v;
-				if (!doctor.IsPasswordValid)
-					return BadRequest("password not valid");
-				doctor.Password = _passwordHasher.HashPassword(doctor, doctor.Password);
-			}
-			if ((v = request.Email) != null)
-			{
-				doctor.Email = v;
-				if (!doctor.IsEmailValid)
-					return BadRequest("email not valid");
-			}
-			if ((v = request.Phone) != null)
-			{
-				doctor.Phone = v;
-				if (!doctor.IsPhoneValid)
-					return BadRequest("phone not valid");
-			}
-			if ((v = request.Certificate) != null)
-				doctor.Certificate = v;
-			if ((v = request.Position) != null)
-				doctor.Position = v;
-			if (!await doctor.Create())
-				return BadRequest("can not create");
-			return Ok("success");
+			doctor.UserName = v;
+			if (!doctor.IsUserNameValid)
+				return BadRequest("username not valid");
+			if (await doctor.IsUserNameExisted())
+				return BadRequest("username existed");
 		}
-
-		[HttpDelete("{id}")]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.DeleteUser])]
-		public async Task<ActionResult> DeleteDoctor(uint id)
+		if ((v = request.FullName) != null)
 		{
-			var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
-			if (doctor == null) return NotFound();
-			if (!await doctor.Delete())
-				return BadRequest("can not delete");
-			return Ok("success");
+			doctor.FullName = v;
+			if (!doctor.IsFullNameValid)
+				return BadRequest("full_name not valid");
 		}
-
-		[HttpGet("{id}/image")]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateUser])]
-		public async Task<ActionResult> GetImage(uint id)
+		if ((v = request.Password) != null)
 		{
-			var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
-			if (doctor == null) return NotFound();
-			return File(doctor.Image(readOnly: true), "application/octet-stream");
+			doctor.Password = v;
+			if (!doctor.IsPasswordValid)
+				return BadRequest("password not valid");
+			doctor.Password = _passwordHasher.HashPassword(doctor, doctor.Password);
 		}
-
-		[HttpPost("{id}/image")]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateUser])]
-		public async Task<ActionResult> SetImage(uint id, IFormFile file)
+		if ((v = request.Email) != null)
 		{
-			var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
-			if (doctor == null) return NotFound();
-			if (file == null || file.Length == 0)
-				return BadRequest("file invalid");
-			await file.CopyToAsync(doctor.Image(readOnly: false));
-			return Ok("success");
+			doctor.Email = v;
+			if (!doctor.IsEmailValid)
+				return BadRequest("email not valid");
 		}
-
-		[HttpGet("current")]
-		[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
-		public async Task<ActionResult<DoctorResponse>> GetCurrentUser()
+		if ((v = request.Phone) != null)
 		{
-			if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
-			return Ok(MakeResponse(doctor));
+			doctor.Phone = v;
+			if (!doctor.IsPhoneValid)
+				return BadRequest("phone not valid");
 		}
+		if (!await doctor.Create())
+			return BadRequest("can not create");
+		return Ok("success");
+	}
 
-		[HttpPut("current")]
-		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
-		public async Task<ActionResult> UpdateCurrentUser([FromBody] DoctorRequest request)
-		{
-			if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
-			string v;
-			if ((v = request.Username) != null)
-			{
-				doctor.UserName = v;
-				if (!doctor.IsUserNameValid)
-					return BadRequest("username not valid");
-				if (await doctor.IsUserNameExisted())
-					return BadRequest("username existed");
-			}
-			if ((v = request.FullName) != null)
-			{
-				doctor.FullName = v;
-				if (!doctor.IsFullNameValid)
-					return BadRequest("full_name not valid");
-			}
-			if ((v = request.Password) != null)
-			{
-				doctor.Password = v;
-				if (!doctor.IsPasswordValid)
-					return BadRequest("password not valid");
-				doctor.Password = _passwordHasher.HashPassword(doctor, doctor.Password);
-			}
-			if ((v = request.Email) != null)
-			{
-				doctor.Email = v;
-				if (!doctor.IsEmailValid)
-					return BadRequest("email not valid");
-			}
-			if ((v = request.Phone) != null)
-			{
-				doctor.Phone = v;
-				if (!doctor.IsPhoneValid)
-					return BadRequest("phone not valid");
-			}
-			if (!await doctor.Create())
-				return BadRequest("can not create");
-			return Ok("success");
-		}
+	[HttpGet("current/image")]
+	[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
+	public ActionResult GetImage()
+	{
+		if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
+		return File(doctor.Image(readOnly: true), "application/octet-stream");
+	}
 
-		[HttpGet("current/image")]
-		[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
-		public ActionResult GetImage()
-		{
-			if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
-			return File(doctor.Image(readOnly: true), "application/octet-stream");
-		}
-
-		[HttpPost("current/image")]
-		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
-		public async Task<ActionResult> SetImage(IFormFile file)
-		{
-			if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
-			if (file == null || file.Length == 0)
-				return BadRequest("file invalid");
-			await file.CopyToAsync(doctor.Image(readOnly: false));
-			return Ok("success");
-		}
+	[HttpPost("current/image")]
+	[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
+	public async Task<ActionResult> SetImage(IFormFile file)
+	{
+		if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
+		if (file == null || file.Length == 0)
+			return BadRequest("file invalid");
+		await file.CopyToAsync(doctor.Image(readOnly: false));
+		return Ok("success");
 	}
 }

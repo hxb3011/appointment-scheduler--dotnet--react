@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using AppointmentScheduler.Domain;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
@@ -26,11 +27,22 @@ internal sealed class RoleImpl : BaseEntity, IRole
     bool IRole.IsDescriptionValid => _role.Description.IsValidDescription(emptyAllowed: true);
 
     Task<bool> IRole.IsNameExisted()
-        => !((IRole)this).IsNameValid ? Task.FromResult(false) : (
-            from role in _dbContext.Set<Role>()
-            where role.Id != _role.Id && role.Name == _role.Name
-            select role
-        ).AnyAsync();
+    {
+        if (!((IRole)this).IsNameValid) return Task.FromResult(false);
+        var para = Expression.Parameter(typeof(Role));
+        return _dbContext.Set<Role>().Where(Expression.Lambda<Func<Role, bool>>(
+            Expression.AndAlso(
+                Expression.NotEqual(
+                    Expression.Property(para, nameof(Role.Id)),
+                    Expression.Constant(_role.Id)
+                ),
+                Expression.Equal(
+                    Expression.Property(para, nameof(Role.Name)),
+                    Expression.Constant(_role.Name)
+                )
+            ), para
+        )).AnyAsync().InvertTaskResult();
+    }
 
     bool IRole.IsPermissionGranted(Permission permission)
     {
@@ -49,11 +61,16 @@ internal sealed class RoleImpl : BaseEntity, IRole
         => !((IRole)this).IsDescriptionValid ? Task.FromResult(false)
             : ((IRole)this).IsNameExisted().InvertTaskResult();
 
-    private Task<bool> CanDelete() => (
-        from user in _dbContext.Set<User>()
-        where user.RoleId == _role.Id
-        select user
-    ).AnyAsync().InvertTaskResult();
+    private Task<bool> CanDelete()
+    {
+        var para = Expression.Parameter(typeof(User));
+        return _dbContext.Set<User>().Where(Expression.Lambda<Func<User, bool>>(
+            Expression.Equal(
+                Expression.Property(para, nameof(User.RoleId)),
+                Expression.Constant(_role.Id)
+            ), para
+        )).AnyAsync().InvertTaskResult();
+    }
 
     protected override async Task<bool> Create()
     {

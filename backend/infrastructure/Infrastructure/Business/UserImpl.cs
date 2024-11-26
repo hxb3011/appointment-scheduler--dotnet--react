@@ -1,8 +1,10 @@
-﻿using AppointmentScheduler.Domain.Business;
+﻿using System.Linq.Expressions;
+using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Mysqlx.Expr;
 
 namespace AppointmentScheduler.Infrastructure.Business;
 
@@ -47,11 +49,22 @@ internal abstract class UserImpl : BaseEntity, IUser
     }
 
     Task<bool> IUser.IsUserNameExisted()
-        => !((IUser)this).IsUserNameValid ? Task.FromResult(false) : (
-            from user in _dbContext.Set<User>()
-            where user.Id != _user.Id && user.UserName.Equals(_user.UserName)
-            select user
-        ).AnyAsync();
+    {
+        if (!((IUser)this).IsUserNameValid) return Task.FromResult(false);
+        var para = Expression.Parameter(typeof(User));
+        return _dbContext.Set<User>().Where(Expression.Lambda<Func<User, bool>>(
+            Expression.AndAlso(
+                Expression.NotEqual(
+                    Expression.Property(para, nameof(User.Id)),
+                    Expression.Constant(_user.Id)
+                ),
+                Expression.Equal(
+                    Expression.Property(para, nameof(User.UserName)),
+                    Expression.Constant(_user.UserName)
+                )
+            ), para
+        )).AnyAsync();
+    }
 
     protected abstract Task<bool> CanDelete();
 

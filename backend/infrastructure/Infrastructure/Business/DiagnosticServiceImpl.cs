@@ -9,14 +9,13 @@ internal sealed class DiagnosticServiceImpl : BaseEntity, IDiagnosticService
     internal DiagnosticService _diagsv;
     internal ExaminationService _exdiag;
     private IDoctor _doctor;
-    private IExamination _examination;
     private IResourceManagerService _resourceManager;
-    internal DiagnosticServiceImpl(DiagnosticService diagnosticService, ExaminationService examinationService = null, IDoctor doctor = null, IExamination examination = null)
+    internal DiagnosticServiceImpl(DiagnosticService diagnosticService, ExaminationService examinationService = null, IDoctor doctor = null)
     {
         _diagsv = diagnosticService ?? throw new ArgumentNullException(nameof(diagnosticService));
         _exdiag = examinationService;
         _doctor = doctor;
-        _examination = examination;
+        ((IBehavioralEntity)this).Deleted += DeleteDocument;
     }
     string IDiagnosticService.Name { get => _diagsv.Name; set => _diagsv.Name = value; }
     double IDiagnosticService.Price { get => _diagsv.Price; set => _diagsv.Price = value; }
@@ -33,6 +32,9 @@ internal sealed class DiagnosticServiceImpl : BaseEntity, IDiagnosticService
 
     Stream IDiagnosticService.Document(bool readOnly) => _exdiag == null ? null
         : _resourceManager.Resource<DiagnosticServiceImpl>(_exdiag.Id.ToString(), readOnly);
+
+    private void DeleteDocument(object sender, EventArgs e)
+        => _resourceManager.RemoveResource<DiagnosticServiceImpl>(_exdiag.Id.ToString());
 
     protected override Task<bool> Create()
     {

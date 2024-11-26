@@ -60,7 +60,7 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
 
     private Task<IPrescription> CreatePrescription(Prescription ps)
     {
-        IPrescription impl = new PrescriptionImpl(ps, this);
+        IPrescription impl = new PrescriptionImpl(ps);
         impl.Created += InvalidateLoadedEntities;
         impl.Updated += InvalidateLoadedEntities;
         impl.Deleted += InvalidateLoadedEntities;
@@ -70,7 +70,7 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
 
     private async Task<IDiagnosticService> CreateDiagnosticServices(DiagnosticService diagsv, ExaminationService exdiag, IDoctor doctor = null)
     {
-        IDiagnosticService impl = new DiagnosticServiceImpl(diagsv, exdiag, doctor ?? await _repository.GetEntityBy<uint, IDoctor>(exdiag.DoctorId), this);
+        IDiagnosticService impl = new DiagnosticServiceImpl(diagsv, exdiag, doctor ?? await _repository.GetEntityBy<uint, IDoctor>(exdiag.DoctorId));
         impl.Created += InvalidateLoadedEntities;
         impl.Updated += InvalidateLoadedEntities;
         impl.Deleted += InvalidateLoadedEntities;

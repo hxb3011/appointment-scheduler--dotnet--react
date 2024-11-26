@@ -40,16 +40,19 @@ public class DefaultRepository : DbContext, IRepository
     ) where TEntity : class, IBehavioralEntity where TKey : class
     {
         var para = Expression.Parameter(typeof(TKey));
-        Func<Expression, Expression, BinaryExpression> op
-            = areEqual ? Expression.Equal : Expression.NotEqual;
+        Func<Expression, Expression, BinaryExpression> op = areEqual ? Expression.Equal : Expression.NotEqual;
         IQueryable<TKey> query = Set<TKey>();
-        if (whereProperty != null) query = query.Where(Expression.Lambda<Func<TKey, bool>>(
+        if (!string.IsNullOrWhiteSpace(whereProperty)) query = query.Where(Expression.Lambda<Func<TKey, bool>>(
             op(Expression.Property(para, whereProperty), Expression.Constant(andValue)), para));
-        Func<IQueryable<TKey>, Expression<Func<TKey, object>>, IOrderedQueryable<TKey>> orderBy
-            = descending ? Queryable.OrderByDescending : Queryable.OrderBy;
-        return orderBy(query, Expression.Lambda<Func<TKey, object>>(Expression.Property(para, orderByProperty), para))
-            .Skip(skip).Take(take).ToList().Select(x => ((IRepository)this).GetEntityBy<TKey, TEntity>(x).WaitForResult());
+        Func<Expression<Func<TKey, object>>, IOrderedQueryable<TKey>> query_orderBy
+            = descending ? query.OrderByDescending : query.OrderBy;
+        if (!string.IsNullOrWhiteSpace(orderByProperty))
+            query = query_orderBy(Expression.Lambda<Func<TKey, object>>(Expression.Property(para, orderByProperty), para));
+        return query.Skip(skip).Take(take).Select(GetEntityBySync<TEntity, TKey>);
     }
+
+    private TEntity GetEntityBySync<TEntity, TKey>(TKey x) where TEntity : class, IBehavioralEntity
+        where TKey : class => ((IRepository)this).GetEntityBy<TKey, TEntity>(x).WaitForResult();
 
     IEnumerable<TEntity> IRepository.GetEntities<TEntity>(
         int offset, int count, string orderByProperty, bool descending,
@@ -189,16 +192,14 @@ public class DefaultRepository : DbContext, IRepository
             if ((diagsv = await FindAsync<DiagnosticService>(exdiag.DiagnosticServiceId)) != null)
                 return (TEntity)await this.Initialize((IDiagnosticService)
                     new DiagnosticServiceImpl(diagsv, exdiag,
-                        await ((IRepository)this).GetEntityBy<uint, IDoctor>(exdiag.DoctorId),
-                        await ((IRepository)this).GetEntityBy<uint, IExamination>(exdiag.ExaminationId)));
+                        await ((IRepository)this).GetEntityBy<uint, IDoctor>(exdiag.DoctorId)));
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IPrescription)))
         {
             if (key is Prescription prescription || (key is uint id
                     || key is string sk && uint.TryParse(sk, out id))
                 && (prescription = await FindAsync<Prescription>(id)) != null)
-                return (TEntity)await this.Initialize((IPrescription)new PrescriptionImpl(
-                    prescription, await ((IRepository)this).GetEntityBy<uint, IExamination>(prescription.ExaminationId)));
+                return (TEntity)await this.Initialize((IPrescription)new PrescriptionImpl(prescription));
         }
         // TODO: ...more Impl
         return null;

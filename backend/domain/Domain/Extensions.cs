@@ -29,7 +29,7 @@ public static class Extensions
         foreach (var perm in value) role.SetPermissionGranted(perm, false);
     }
 
-    public static string? Env(this string name)
+    public static string Env(this string name)
          => Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.Process)
             ?? Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.User)
             ?? Environment.GetEnvironmentVariable(name, EnvironmentVariableTarget.Machine);

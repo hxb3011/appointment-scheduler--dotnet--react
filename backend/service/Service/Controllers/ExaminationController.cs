@@ -39,9 +39,11 @@ public class ExaminationController : ControllerBase
         if (d == null) return NotFound("doctor not found");
         var query = d.Examinations.AsQueryable();
         var param = Expression.Parameter(typeof(IExamination));
-        return Ok(query.OrderBy(Expression.Lambda<Func<IExamination, object>>(
-            Expression.Property(param, request.By), param
-        )).Skip(request.Offset).Take(request.Count).Select(MakeResponse));
+        if (!string.IsNullOrWhiteSpace(request.By))
+            query = query.OrderBy(Expression.Lambda<Func<IExamination, object>>(
+                Expression.Property(param, request.By), param
+            ));
+        return Ok(query.Skip(request.Offset).Take(request.Count).Select(MakeResponse));
     }
 
     [HttpGet("{id}")]
