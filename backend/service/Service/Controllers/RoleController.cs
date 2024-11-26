@@ -26,7 +26,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
         => Ok(_repository.GetEntities<IRole>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
     [HttpGet("{id}")]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadRole])]
     public async Task<ActionResult<RoleResponse>> GetRole(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);
@@ -103,11 +103,11 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
     }
 
     [HttpGet("permissions")]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege])]
+    [JSONWebToken(AuthenticationRequired = true)]
     public ActionResult<IEnumerable<string>> GetPermissions() => Ok(Enum.GetNames<Permission>());
 
     [HttpGet("{id}/permissions")]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadRole])]
     public async Task<ActionResult<IEnumerable<string>>> GetPermissions(uint id)
     {
         var role = await _repository.GetEntityBy<uint, IRole>(id);

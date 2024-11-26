@@ -137,7 +137,6 @@ public static class Extensions
             doctor_role.Description = "Created by Preloader";
             Enum.GetValues<Permission>().Exclude(
                 Permission.SystemPrivilege,
-                Permission.ReadRole,
                 Permission.CreateRole,
                 Permission.UpdateRole,
                 Permission.DeleteRole,
@@ -152,6 +151,7 @@ public static class Extensions
             user_role.Name = "User";
             user_role.Description = "Created by Preloader";
             new Permission[] {
+                    Permission.ReadRole,
                     Permission.ReadUser,
                     Permission.UpdateUser,
                     Permission.ReadProfile,

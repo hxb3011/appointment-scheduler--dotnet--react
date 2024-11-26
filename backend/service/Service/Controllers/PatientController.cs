@@ -21,12 +21,12 @@ namespace AppointmentScheduler.Service.Controllers
 			=> !_repository.TryGetKeyOf(patient, out uint id) ? null
 			: new() { Id = id, UserName = patient.UserName, FullName = patient.FullName, Email = patient.Email, Phone = patient.Phone };
 
-		[HttpGet]
-		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
-		public async Task<ActionResult<IEnumerable<PatientResponse>>> GetPagedPatients([FromBody] PagedGetAllRequest request)
-			=> Ok(_repository.GetEntities<IPatient>(request.Offset, request.Count, request.By).Select(MakeResponse));
+        [HttpGet]
+        [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
+        public ActionResult<IEnumerable<PatientResponse>> GetPagedPatients([FromBody] PagedGetAllRequest request)
+            => Ok(_repository.GetEntities<IPatient>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
-		[HttpGet("{id}")]
+        [HttpGet("{id}")]
 		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
 		public async Task<ActionResult<PatientResponse>> GetPatient(uint id)
 		{
@@ -36,7 +36,7 @@ namespace AppointmentScheduler.Service.Controllers
 		}
 
 		[HttpPost]
-		[JSONWebToken(RequiredPermissions = [Permission.CreateUser])]
+		[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateUser])]
 		public async Task<ActionResult> CreatePatient([FromBody] PatientRequest request)
 		{
 			var patient = await _repository.ObtainEntity<IPatient>();
@@ -149,7 +149,7 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok("success");
 		}
 
-		[HttpGet]
+		[HttpGet("current")]
 		[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
 		public async Task<ActionResult<PatientResponse>> GetCurrentUser()
 		{
@@ -157,7 +157,7 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok(MakeResponse(patient));
 		}
 
-		[HttpPut]
+		[HttpPut("current")]
 		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
 		public async Task<ActionResult> UpdateCurrentUser([FromBody] PatientRequest request)
 		{
@@ -201,15 +201,15 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok("success");
 		}
 
-        [HttpGet("image")]
-        [JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
+        [HttpGet("current/image")]
+        [JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
         public ActionResult GetImage()
         {
             if (HttpContext.GetAuthUser() is not IPatient patient) return NotFound();
             return File(patient.Image(readOnly: true), "application/octet-stream");
         }
 
-        [HttpPost("image")]
+        [HttpPost("current/image")]
 		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
 		public async Task<ActionResult> SetImage(IFormFile file)
 		{

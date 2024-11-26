@@ -122,27 +122,32 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
         {
-            User user;
             if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
-            {
-                Doctor doctor;
-                if (key is User user_ && (doctor = await FindAsync<Doctor>((user = user_).Id)) != null
-                    || key is Doctor doctor_ && (user = await FindAsync<User>((doctor = doctor_).Id)) != null
-                    || (key is uint id || key is string sk && uint.TryParse(sk, out id))
-                    && (user = await FindAsync<User>(id)) != null && (doctor = await FindAsync<Doctor>(id)) != null)
-                    return (TEntity)await this.Initialize((IDoctor)new DoctorImpl(user, doctor,
-                        await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId) ?? await RoleImpl.GetDefault(this)));
-            }
+                return (TEntity)await ((IRepository)this).GetEntityBy<TKey, IDoctor>(key);
             else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
-            {
-                Patient patient;
-                if (key is User user_ && (patient = await FindAsync<Patient>((user = user_).Id)) != null
-                    || key is Patient patient_ && (user = await FindAsync<User>((patient = patient_).Id)) != null
-                    || (key is uint id || key is string sk && uint.TryParse(sk, out id))
-                    && (user = await FindAsync<User>(id)) != null && (patient = await FindAsync<Patient>(id)) != null)
-                    return (TEntity)await this.Initialize((IPatient)new PatientImpl(user, patient,
-                        await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId) ?? await RoleImpl.GetDefault(this)));
-            }
+                return (TEntity)await ((IRepository)this).GetEntityBy<TKey, IPatient>(key);
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
+        {
+            User user;
+            Doctor doctor;
+            if (key is User user_ && (doctor = await FindAsync<Doctor>((user = user_).Id)) != null
+                || key is Doctor doctor_ && (user = await FindAsync<User>((doctor = doctor_).Id)) != null
+                || (key is uint id || key is string sk && uint.TryParse(sk, out id))
+                && (user = await FindAsync<User>(id)) != null && (doctor = await FindAsync<Doctor>(id)) != null)
+                return (TEntity)await this.Initialize((IDoctor)new DoctorImpl(user, doctor,
+                    await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId) ?? await RoleImpl.GetDefault(this)));
+        }
+        else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
+        {
+            User user;
+            Patient patient;
+            if (key is User user_ && (patient = await FindAsync<Patient>((user = user_).Id)) != null
+                || key is Patient patient_ && (user = await FindAsync<User>((patient = patient_).Id)) != null
+                || (key is uint id || key is string sk && uint.TryParse(sk, out id))
+                && (user = await FindAsync<User>(id)) != null && (patient = await FindAsync<Patient>(id)) != null)
+                return (TEntity)await this.Initialize((IPatient)new PatientImpl(user, patient,
+                    await ((IRepository)this).GetEntityBy<uint, IRole>(user.RoleId) ?? await RoleImpl.GetDefault(this)));
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
         {

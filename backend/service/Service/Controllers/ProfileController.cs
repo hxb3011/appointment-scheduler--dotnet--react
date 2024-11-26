@@ -1,11 +1,10 @@
 ﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
-using AppointmentScheduler.Domain.Requests.Create;
-using AppointmentScheduler.Domain.Requests.Update;
+using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -22,143 +21,162 @@ public class ProfileController : ControllerBase
         _logger = logger;
     }
 
+    private ProfileResponse MakeResponse(IProfile role)
+        => !_repository.TryGetKeyOf(role, out Profile key) ? null
+        : new() { Id = key.Id, Patient = key.PatientId, FullName = key.FullName, DateOfBirth = key.DateOfBirth, Gender = key.Gender };
+
     [HttpGet]
-    public async Task<ActionResult> GetAllProfiles()
-    {
-        try
-        {
-            var dbContext = await _repository.GetService<DbContext>();
-            var profiles = await dbContext.Set<Profile>().ToListAsync();
-
-            if (profiles == null || profiles.Count == 0)
-            {
-                return NotFound("No profiles found.");
-            }
-
-            return Ok(profiles);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while retrieving all profiles.");
-            return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error.");
-        }
-    }
-
+    [JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    public ActionResult<IEnumerable<ProfileResponse>> GetPagedProfiles([FromBody] PagedGetAllRequest request)
+        => Ok(_repository.GetEntities<IProfile>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
     [HttpGet("{id}")]
-    public async Task<ActionResult> GetProfileById(uint id)
+    [JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    public async Task<ActionResult<ProfileResponse>> GetProfile(uint id)
     {
-        try
-        {
-            var dbContext = await _repository.GetService<DbContext>();
-            var profile = await dbContext.FindAsync<Profile>(id);
-
-            if (profile != null)
-            {
-                return Ok(profile);
-            }
-            return NotFound($"Profile with ID {id} not found.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"Error occurred while getting profile with ID {id}.");
-            return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error.");
-        }
+        var profile = await _repository.GetEntityBy<uint, IProfile>(id);
+        if (profile == null) return NotFound();
+        return Ok(MakeResponse(profile));
     }
 
     [HttpPost]
-    [JSONWebToken(AuthenticationRequired = false)]
-    public async Task<ActionResult> CreateProfile([FromBody] CreateProfileRequest profile)
+    [JSONWebToken(RequiredPermissions = [Permission.CreateProfile])]
+    public async Task<ActionResult> CreateProfile([FromBody] ProfileRequest request)
     {
+        var patient = await _repository.GetEntityBy<uint, IPatient>(request.Patient);
+        if (patient == null) return NotFound("patient not found");
+        var profile = await patient.ObtainProfile();
+        if (profile == null) return BadRequest("can not create");
 
-        if (profile.PatientId == null)
-            return BadRequest("Patient ID cannot be null.");
-        var patient = await _repository.GetEntityBy<uint, IPatient>((uint)profile.PatientId.Value);
-        if (patient == null)
-        {
-            return NotFound("Can not find this patient");
-        }
+        profile.FullName = request.FullName;
+        if (!profile.IsFullNameValid)
+            return BadRequest("full_name not valid");
 
-        // Kiểm tra FullName
-        if (string.IsNullOrWhiteSpace(profile.Fullname))
-            return BadRequest("FullName cannot be null or empty.");
-        if (profile.Fullname.Length < 5 || profile.Fullname.Length > 36)
-            return BadRequest("FullName must be between 10 and 36 characters.");
+        profile.DateOfBirth = request.DateOfBirth;
+        if (profile.DateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+            return BadRequest("date_of_birth not valid");
 
-        // Kiểm tra ngày sinh (BirthDate)
-        if (profile.BirthDate == null)
-            return BadRequest("BirthDate cannot be null.");
+        profile.Gender = request.Gender;
 
-        // Kiểm tra xem ngày sinh có trong tương lai không
-        if (profile.BirthDate > DateOnly.FromDateTime(DateTime.Today))
-            return BadRequest("BirthDate cannot be in the future.");
+        if (!await profile.Create())
+            return BadRequest("can not create");
 
-        // Tạo hồ sơ mới nếu các kiểm tra đã hợp lệ
-        var newProfile = await patient.ObtainProfile();
-        newProfile.FullName = profile.Fullname;
-        newProfile.DateOfBirth = profile.BirthDate.Value;
-        newProfile.Gender = profile.Gender;
-
-        if (!await newProfile.Create())
-            return BadRequest("Cannot create profile.");
-
-        return Ok(newProfile);
-
+        return Ok("success");
     }
 
     [HttpPut("{id}")]
-    [JSONWebToken(AuthenticationRequired = false)]
-    public async Task<ActionResult> UpdateAppointment([FromBody] UpdateProfileRequest profile, uint id)
+    [JSONWebToken(RequiredPermissions = [Permission.UpdateProfile])]
+    public async Task<ActionResult> UpdateProfile([FromBody] ProfileRequest request, uint id)
     {
-        var profileExist = await _repository.GetEntityBy<uint, IProfile>(id);
+        var profile = await _repository.GetEntityBy<uint, IProfile>(id);
+        if (profile == null) return NotFound("profile not found");
 
-        if (profileExist == null)
+        string v;
+        if ((v = request.FullName) != null)
         {
-            return NotFound("Can not find this Profile");
+            profile.FullName = v;
+            if (!profile.IsFullNameValid)
+                return BadRequest("full_name not valid");
         }
 
-        // Kiểm tra FullName
-        if (string.IsNullOrWhiteSpace(profile.Fullname))
-            return BadRequest("FullName cannot be null or empty.");
-        if (profile.Fullname.Length < 5 || profile.Fullname.Length > 36)
-            return BadRequest("FullName must be between 10 and 36 characters.");
+        profile.DateOfBirth = request.DateOfBirth;
+        if (profile.DateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+            return BadRequest("date_of_birth not valid");
 
-        // Kiểm tra ngày sinh (BirthDate)
-        if (profile.BirthDate == null)
-            return BadRequest("BirthDate cannot be null.");
+        profile.Gender = request.Gender;
 
-        // Kiểm tra xem ngày sinh có trong tương lai không
-        if (profile.BirthDate > DateOnly.FromDateTime(DateTime.Today))
-            return BadRequest("BirthDate cannot be in the future.");
+        if (!await profile.Update())
+            return BadRequest("can not update");
 
-        profileExist.FullName = profile.Fullname;
-        profileExist.DateOfBirth = profile.BirthDate.Value;
-        profileExist.Gender = profile.Gender;
-
-        if (!await profileExist.Update())
-        {
-            return BadRequest("Can not update Profile");
-        }
-        return Ok("Changed");
+        return Ok("success");
     }
-
 
     [HttpDelete("{id}")]
-    [JSONWebToken(AuthenticationRequired = false)]
-    public async Task<ActionResult> UpdateProfile(uint id)
+    [JSONWebToken(RequiredPermissions = [Permission.DeleteProfile])]
+    public async Task<ActionResult> DeleteProfile(uint id)
     {
-        var profileExit = await _repository.GetEntityBy<uint, IProfile>(id);
+        var profile = await _repository.GetEntityBy<uint, IProfile>(id);
+        if (profile == null) return NotFound();
 
-        if (profileExit == null)
-        {
-            return NotFound("Can not to find this profile");
-        }
+        if (!await profile.Delete())
+            return BadRequest("can not delete");
 
-        if (!await profileExit.Delete())
-        {
-            return BadRequest("Can not delete this profile");
-        }
-
-        return Ok("This profile has been delete");
+        return Ok("success");
     }
+
+    // [HttpPost]
+    // [JSONWebToken(AuthenticationRequired = false)]
+    // public async Task<ActionResult> CreateProfile([FromBody] CreateProfileRequest profile)
+    // {
+
+    //     if (profile.PatientId == null)
+    //         return BadRequest("Patient ID cannot be null.");
+    //     var patient = await _repository.GetEntityBy<uint, IPatient>((uint)profile.PatientId.Value);
+    //     if (patient == null)
+    //     {
+    //         return NotFound("Can not find this patient");
+    //     }
+
+    //     // Kiểm tra FullName
+    //     if (string.IsNullOrWhiteSpace(profile.Fullname))
+    //         return BadRequest("FullName cannot be null or empty.");
+    //     if (profile.Fullname.Length < 5 || profile.Fullname.Length > 36)
+    //         return BadRequest("FullName must be between 10 and 36 characters.");
+
+    //     // Kiểm tra ngày sinh (BirthDate)
+    //     if (profile.BirthDate == null)
+    //         return BadRequest("BirthDate cannot be null.");
+
+    //     // Kiểm tra xem ngày sinh có trong tương lai không
+    //     if (profile.BirthDate > DateOnly.FromDateTime(DateTime.Today))
+    //         return BadRequest("BirthDate cannot be in the future.");
+
+    //     // Tạo hồ sơ mới nếu các kiểm tra đã hợp lệ
+    //     var newProfile = await patient.ObtainProfile();
+    //     newProfile.FullName = profile.Fullname;
+    //     newProfile.DateOfBirth = profile.BirthDate.Value;
+    //     newProfile.Gender = profile.Gender;
+
+    //     if (!await newProfile.Create())
+    //         return BadRequest("Cannot create profile.");
+
+    //     return Ok(newProfile);
+
+    // }
+
+    // [HttpPut("{id}")]
+    // [JSONWebToken(AuthenticationRequired = false)]
+    // public async Task<ActionResult> UpdateAppointment([FromBody] UpdateProfileRequest profile, uint id)
+    // {
+    //     var profileExist = await _repository.GetEntityBy<uint, IProfile>(id);
+
+    //     if (profileExist == null)
+    //     {
+    //         return NotFound("Can not find this Profile");
+    //     }
+
+    //     // Kiểm tra FullName
+    //     if (string.IsNullOrWhiteSpace(profile.Fullname))
+    //         return BadRequest("FullName cannot be null or empty.");
+    //     if (profile.Fullname.Length < 5 || profile.Fullname.Length > 36)
+    //         return BadRequest("FullName must be between 10 and 36 characters.");
+
+    //     // Kiểm tra ngày sinh (BirthDate)
+    //     if (profile.BirthDate == null)
+    //         return BadRequest("BirthDate cannot be null.");
+
+    //     // Kiểm tra xem ngày sinh có trong tương lai không
+    //     if (profile.BirthDate > DateOnly.FromDateTime(DateTime.Today))
+    //         return BadRequest("BirthDate cannot be in the future.");
+
+    //     profileExist.FullName = profile.Fullname;
+    //     profileExist.DateOfBirth = profile.BirthDate.Value;
+    //     profileExist.Gender = profile.Gender;
+
+    //     if (!await profileExist.Update())
+    //     {
+    //         return BadRequest("Can not update Profile");
+    //     }
+    //     return Ok("Changed");
+    // }
 }

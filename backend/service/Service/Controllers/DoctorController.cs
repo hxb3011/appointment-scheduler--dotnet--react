@@ -159,7 +159,7 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok("success");
 		}
 
-		[HttpGet]
+		[HttpGet("current")]
 		[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
 		public async Task<ActionResult<DoctorResponse>> GetCurrentUser()
 		{
@@ -167,7 +167,7 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok(MakeResponse(doctor));
 		}
 
-		[HttpPut]
+		[HttpPut("current")]
 		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
 		public async Task<ActionResult> UpdateCurrentUser([FromBody] DoctorRequest request)
 		{
@@ -211,15 +211,15 @@ namespace AppointmentScheduler.Service.Controllers
 			return Ok("success");
 		}
 
-		[HttpGet("image")]
-		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
+		[HttpGet("current/image")]
+		[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
 		public ActionResult GetImage()
 		{
 			if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
 			return File(doctor.Image(readOnly: true), "application/octet-stream");
 		}
 
-		[HttpPost("image")]
+		[HttpPost("current/image")]
 		[JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
 		public async Task<ActionResult> SetImage(IFormFile file)
 		{
