@@ -1,4 +1,15 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
+using System.Text.Json;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
 using AppointmentScheduler.Domain;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
@@ -6,12 +17,6 @@ using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Infrastructure.Authorization;
 using AppointmentScheduler.Infrastructure.Business;
 using AppointmentScheduler.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace AppointmentScheduler.Infrastructure;
 
@@ -87,27 +92,94 @@ public static class Extensions
         return options;
     }
 
-    private static void ConfigureFormOptions(IServiceProvider provider, FormOptions options)
-        => options.MultipartBodyLengthLimit = 1L << 30;
+    private static IServiceCollection AddServiceDescriptor(
+        this IServiceCollection services, Type serviceType,
+        Func<IServiceProvider, object> factory,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+    {
+        services.Add(new ServiceDescriptor(serviceType, factory, lifetime));
+        return services;
+    }
+
+    private static IServiceCollection AddServiceDescriptor<TService>(
+        this IServiceCollection services, Func<IServiceProvider, TService> factory,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped) where TService : class, new()
+        => services.AddServiceDescriptor(typeof(TService), factory, lifetime);
 
     private static IServiceCollection AddConfigurator<TService>(
         this IServiceCollection services, Action<IServiceProvider, TService> configurator,
         ServiceLifetime lifetime = ServiceLifetime.Scoped) where TService : class, new()
+        => services.AddServiceDescriptor(configurator.Factory, lifetime);
+
+    private static void ConfigureJSONSerializerOptions(IServiceProvider provider,
+        JsonSerializerOptions options) => options.LoadDeafult();
+
+    private static void ConfigureFormOptions(IServiceProvider provider, FormOptions options)
+        => options.MultipartBodyLengthLimit = 1L << 30;
+
+    private static void LoadNonDefaultsOf(
+        this JsonSerializerOptions srcOptns, JsonSerializerOptions dstOptns)
     {
-        services.Add(new ServiceDescriptor(typeof(TService), configurator.Factory, lifetime));
-        return services;
+        var optnsFields = typeof(JsonSerializerOptions)
+            .GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (var field in optnsFields)
+        {
+            if (field.IsInitOnly) continue;
+            var dst = field.GetValue(dstOptns);
+            if (dst == null) continue;
+            var src = field.GetValue(srcOptns);
+            if (src is ICollection<object>)
+            {
+                var srcC = (ICollection<object>)src;
+                var dstC = (ICollection<object>)dst;
+                foreach (var item in dstC)
+                    srcC.Add(item);
+            }
+            else field.SetValue(srcOptns, dst);
+        }
     }
+
+    private static Microsoft.AspNetCore.Mvc.JsonOptions CreateMvcJsonOptions(IServiceProvider provider)
+    {
+        var jsonOptions = new Microsoft.AspNetCore.Mvc.JsonOptions();
+        var dstOptns = provider.GetService<JsonSerializerOptions>();
+        if (dstOptns != null) jsonOptions.JsonSerializerOptions.LoadNonDefaultsOf(dstOptns);
+        return jsonOptions;
+    }
+
+    private static Microsoft.AspNetCore.Http.Json.JsonOptions CreateHttpJsonOptions(IServiceProvider provider)
+    {
+        var jsonOptions = new Microsoft.AspNetCore.Http.Json.JsonOptions();
+        var dstOptns = provider.GetService<JsonSerializerOptions>();
+        if (dstOptns != null) jsonOptions.SerializerOptions.LoadNonDefaultsOf(dstOptns);
+        return jsonOptions;
+    }
+
+    private static IServiceCollection AddJSONConfigurator(
+        this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        => services.AddServiceDescriptor(CreateMvcJsonOptions, lifetime)
+            .AddServiceDescriptor(CreateHttpJsonOptions, lifetime);
+
+    private static IPasswordHasher<TUser> CreatePasswordHasher<TUser>(IServiceProvider provider)
+        where TUser : class => new PasswordHasher<TUser>(provider.GetService<IOptions<PasswordHasherOptions>>());
+
+    private static IServiceCollection AddPasswordHasherConfigurator(
+        this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        => services.AddServiceDescriptor(typeof(IPasswordHasher<>), CreatePasswordHasher<object>, lifetime);
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services,
         Action<IServiceProvider, DbContextOptionsBuilder> dbConfigure = null,
+        Action<IServiceProvider, JsonSerializerOptions> jsonSerializerConfigure = null,
         Action<IServiceProvider, JSONWebTokenOptions> jwtConfigure = null,
         Action<IServiceProvider, FormOptions> formConfigure = null,
         Action<IServiceProvider, PasswordHasherOptions> passwordHasherConfigure = null
     ) => services.AddDbContext<IRepository, DefaultRepository>(dbConfigure, ServiceLifetime.Singleton)
         .AddConfigurator(jwtConfigure, ServiceLifetime.Singleton)
+        .AddConfigurator(ConfigureJSONSerializerOptions + jsonSerializerConfigure, ServiceLifetime.Singleton)
         .AddConfigurator(ConfigureFormOptions + formConfigure, ServiceLifetime.Singleton)
         .AddConfigurator(passwordHasherConfigure, ServiceLifetime.Singleton)
-        .AddSingleton<IPasswordHasher<IUser>, PasswordHasher<IUser>>();
+        .AddJSONConfigurator(ServiceLifetime.Singleton)
+        .AddPasswordHasherConfigurator(ServiceLifetime.Singleton);
 
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         => app.UseMiddleware<JSONWebTokenMiddleware>();

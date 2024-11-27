@@ -1,9 +1,11 @@
 using System.Dynamic;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using AppointmentScheduler.Domain;
 using AppointmentScheduler.Presentation.Attributes;
+using AppointmentScheduler.Presentation.Services;
 
 namespace AppointmentScheduler.Presentation;
 
@@ -14,35 +16,12 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
         var services = builder.Services;
 
+        services.AddHttpClient();
         services.AddConfigurator<HttpClient>(ConfigureApiHttpClient, ServiceLifetime.Singleton);
-
-		var httpClientBaseAddress = builder.Configuration.GetSection("HttpClientSettings:BaseAddress").Value;
-
-
-		builder.Services.AddHttpClient<AppointmentService>(client =>
-		{
-			client.BaseAddress = new Uri(httpClientBaseAddress);
-		});
-        builder.Services.AddHttpClient<DoctorService>(client =>
-        {
-            client.BaseAddress = new Uri(httpClientBaseAddress);
-        });
-        builder.Services.AddHttpClient<ProfileService>(client =>
-        {
-            client.BaseAddress = new Uri(httpClientBaseAddress);
-        });
-        builder.Services.AddHttpClient<DiagnosticServiceSer>(client =>
-        {
-            client.BaseAddress = new Uri(httpClientBaseAddress);
-        });
-
-        // Add services to the container
-        builder.Services.AddHttpClient("api", ConfigureApiHttpClient);
-
-
-		
-
-		builder.Services.AddControllersWithViews();
+        services.AddConfigurator<JsonSerializerOptions>(ConfigureJSONSerializerOptions, ServiceLifetime.Singleton);
+        // services.AddApiHttpClientServices(builder.Configuration);
+        services.AddApiHttpClientServices();
+        services.AddControllersWithViews();
 
         var app = builder.Build();
 
@@ -72,12 +51,32 @@ public static class Program
         return 0;
     }
 
-    private static void ConfigureApiHttpClient(IServiceProvider provider, HttpClient client)
+    [Obsolete]
+    private static void ConfigureApiHttpClient(
+        this IConfiguration configuration, IServiceProvider provider, HttpClient client)
+        => client.BaseAddress = new Uri(configuration["BaseAddress"]);
+
+    [Obsolete]
+    private static IServiceCollection AddApiHttpClientServices(
+        this IServiceCollection services, IConfiguration configuration)
     {
-        string host;
-        if (string.IsNullOrWhiteSpace(host = "API_SERVER".Env())) host = "localhost";
-        if (!int.TryParse("API_PORT".Env(), out int portNumber)) portNumber = 8080;
-        client.BaseAddress = new UriBuilder("https", host, portNumber).Uri;
+        Action<IServiceProvider, HttpClient> configureClient
+            = configuration.GetSection("HttpClientSettings").ConfigureApiHttpClient;
+        services.AddHttpClient<AppointmentService>("api", configureClient);
+        services.AddHttpClient<DoctorService>("api", configureClient);
+        services.AddHttpClient<ProfileService>("api", configureClient);
+        services.AddHttpClient<DiagnosticService>("api", configureClient);
+        return services;
+    }
+
+    private static IServiceCollection AddApiHttpClientServices(this IServiceCollection services)
+    {
+        services.AddScoped<HttpApiService>();
+        services.AddScoped<AppointmentService>();
+        services.AddScoped<DoctorService>();
+        services.AddScoped<ProfileService>();
+        services.AddScoped<DiagnosticService>();
+        return services;
     }
 
     private static TOptions Factory<TOptions>(
@@ -89,14 +88,35 @@ public static class Program
         return options;
     }
 
+    private static IServiceCollection AddServiceDescriptor(
+        this IServiceCollection services, Type serviceType,
+        Func<IServiceProvider, object> factory,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+    {
+        services.Add(new ServiceDescriptor(serviceType, factory, lifetime));
+        return services;
+    }
+
+    private static IServiceCollection AddServiceDescriptor<TService>(
+        this IServiceCollection services, Func<IServiceProvider, TService> factory,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped) where TService : class, new()
+        => services.AddServiceDescriptor(typeof(TService), factory, lifetime);
+
     private static IServiceCollection AddConfigurator<TService>(
         this IServiceCollection services, Action<IServiceProvider, TService> configurator,
         ServiceLifetime lifetime = ServiceLifetime.Scoped) where TService : class, new()
+        => services.AddServiceDescriptor(configurator.Factory, lifetime);
+
+    private static void ConfigureApiHttpClient(IServiceProvider provider, HttpClient client)
     {
-        services.Add(new ServiceDescriptor(typeof(TService), configurator.Factory, lifetime));
-        return services;
+        string host;
+        if (string.IsNullOrWhiteSpace(host = "API_SERVER".Env())) host = "localhost";
+        if (!int.TryParse("API_PORT".Env(), out int portNumber)) portNumber = 8080;
+        client.BaseAddress = new UriBuilder("https", host, portNumber).Uri;
     }
-    
+
+    private static void ConfigureJSONSerializerOptions(IServiceProvider provider,
+        JsonSerializerOptions options) => options.LoadDeafult();
 
     public static dynamic GetMetadata<T>(this T value) where T : struct, Enum
     {

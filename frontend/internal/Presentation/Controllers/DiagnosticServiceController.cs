@@ -5,9 +5,9 @@ namespace AppointmentScheduler.Presentation.Controllers
 {
 	public class DiagnosticServiceController : Controller
 	{
-		private readonly DiagnosticServiceSer _diagnosticService;
+		private readonly DiagnosticService _diagnosticService;
 
-        public DiagnosticServiceController(DiagnosticServiceSer diagnosticService)
+        public DiagnosticServiceController(DiagnosticService diagnosticService)
         {
             _diagnosticService = diagnosticService;
         }
