@@ -161,11 +161,11 @@ public static class Extensions
             .AddServiceDescriptor(CreateHttpJsonOptions, lifetime);
 
     private static IPasswordHasher<TUser> CreatePasswordHasher<TUser>(IServiceProvider provider)
-        where TUser : class => new PasswordHasher<TUser>(provider.GetService<IOptions<PasswordHasherOptions>>());
+        where TUser : class => new PasswordHasher<TUser>(Options.Create(provider.GetService<PasswordHasherOptions>()));
 
     private static IServiceCollection AddPasswordHasherConfigurator(
         this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        => services.AddServiceDescriptor(typeof(IPasswordHasher<>), CreatePasswordHasher<object>, lifetime);
+        => services.AddServiceDescriptor(typeof(IPasswordHasher<IUser>), CreatePasswordHasher<IUser>, lifetime);
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services,
         Action<IServiceProvider, DbContextOptionsBuilder> dbConfigure = null,
