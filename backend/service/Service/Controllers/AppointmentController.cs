@@ -6,8 +6,6 @@ using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -94,17 +92,8 @@ public class AppointmentController : ControllerBase
             appointment.Profile = profile;
         }
 
-
-        var newAppointment = await profile.ObtainAppointment(appointment.AtTime, 0, doctor);
-
-        if (!await newAppointment.Create())
-        {
-            return BadRequest("Can not create appointment");
-        }
-        return Ok("Add new appointment successfull");
         if (!await appointment.Create())
             return BadRequest("can not create");
-
         return Ok("success");
     }
 

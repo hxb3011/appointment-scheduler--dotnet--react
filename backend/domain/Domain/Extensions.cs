@@ -1,4 +1,8 @@
 ﻿using System.Linq.Expressions;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 
@@ -27,6 +31,17 @@ public static class Extensions
     public static void DenyFrom(this IEnumerable<Permission> value, IRole role)
     {
         foreach (var perm in value) role.SetPermissionGranted(perm, false);
+    }
+
+    public static void LoadDeafult(this JsonSerializerOptions options)
+    {
+        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.NumberHandling = JsonNumberHandling.AllowReadingFromString
+            | JsonNumberHandling.AllowNamedFloatingPointLiterals;
+        options.PropertyNameCaseInsensitive = false;
+        options.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+        options.TypeInfoResolver = JsonSerializer.IsReflectionEnabledByDefault
+            ? new DefaultJsonTypeInfoResolver() : JsonTypeInfoResolver.Combine();
     }
 
     public static string Env(this string name)
