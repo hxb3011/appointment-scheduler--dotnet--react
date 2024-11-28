@@ -4,6 +4,7 @@ using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
+using AppointmentScheduler.Infrastructure;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -146,13 +147,8 @@ public class DoctorController : UserController
 	{
 		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
 		if (doctor == null) return NotFound();
-		var query = doctor.DiagnosticServices.AsQueryable();
-		var param = Expression.Parameter(typeof(IDiagnosticService));
-		if (!string.IsNullOrWhiteSpace(request.By))
-			query = query.OrderBy(Expression.Lambda<Func<IDiagnosticService, object>>(
-				Expression.Property(param, request.By), param
-			));
-		return Ok(query.Skip(request.Offset).Take(request.Count).Select(MakeExaminationDiagnosticResponse));
+		return Ok(doctor.DiagnosticServices.AsQueryable().OrderByPropertyName(request.By)
+			.Skip(request.Offset).Take(request.Count).Select(MakeExaminationDiagnosticResponse));
 	}
 
 	[HttpGet("{id}/image")]

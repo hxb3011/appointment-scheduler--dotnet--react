@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
 
@@ -36,11 +36,33 @@ public static class Extensions
         return task.Result;
     }
 
-    private static unsafe uint NewId()
+    private static bool InvertTaskResultContinuation(Task<bool> task) => !task.Result;
+    public static Task<bool> InvertTaskResult(this Task<bool> task) => task.ContinueWith(InvertTaskResultContinuation);
+
+    public static IQueryable<TSource> OrderByPropertyName<TSource>(this IQueryable<TSource> source, string propertyName, bool descending = false)
     {
-        var guid = Guid.NewGuid();
-        uint* p = (uint*)&guid;
-        return p[0] ^ p[1] ^ p[2] ^ p[3];
+        if (string.IsNullOrWhiteSpace(propertyName)) return source;
+        
+        var getter = typeof(TSource).GetMethod($"get_{propertyName}",
+            0, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+            null, Array.Empty<Type>(), Array.Empty<ParameterModifier>());
+        if (getter == null) return source;
+
+        var sourceType = typeof(TSource);
+        var OrderByMethod = (descending ? new Func<IQueryable<TSource>, Expression<Func<TSource, object>>,
+            IOrderedQueryable<TSource>>(Queryable.OrderByDescending) : Queryable.OrderBy)
+                .Method.GetGenericMethodDefinition().MakeGenericMethod(sourceType, getter.ReturnType);
+
+        var para = Expression.Parameter(sourceType);
+        var prop = Expression.Property(para, getter);
+
+        return (IQueryable<TSource>)OrderByMethod.Invoke(null, new object[] {
+            source, new Func<Expression, IEnumerable<ParameterExpression>,
+                Expression<Delegate>>(Expression.Lambda<Delegate>).Method
+                    .GetGenericMethodDefinition().MakeGenericMethod(
+                        typeof(Func<,>).MakeGenericType(sourceType, getter.ReturnType))
+                    .Invoke(null, new object[] { prop, new ParameterExpression[] { para } })
+        });
     }
 
     public static TDelegate Method<TDelegate>(this object entity, string methodName)
@@ -52,6 +74,13 @@ public static class Extensions
 
     public static Action<T> Setter<T>(this object entity, string idPropertyName)
         => entity.Method<Action<T>>($"set_{idPropertyName}");
+
+    private static unsafe uint NewId()
+    {
+        var guid = Guid.NewGuid();
+        uint* p = (uint*)&guid;
+        return p[0] ^ p[1] ^ p[2] ^ p[3];
+    }
 
     public static async Task<bool> IdGenerated<TEntity>(this DbContext context, TEntity entity, string idPropertyName) where TEntity : class
     {
@@ -79,9 +108,6 @@ public static class Extensions
         where TEntity : class, IBehavioralEntity
         => entity is not IRepositoryEntityInitializer initializer
             || await initializer.Initialize(repository) ? entity : null;
-
-    private static bool InvertTaskResultContinuation(Task<bool> task) => !task.Result;
-    public static Task<bool> InvertTaskResult(this Task<bool> task) => task.ContinueWith(InvertTaskResultContinuation);
 
     private static TOptions Factory<TOptions>(
         this Action<IServiceProvider, TOptions> configure,
@@ -199,7 +225,7 @@ public static class Extensions
         if (!PreloadSuccess.Equals(preload))
         {
             var admin_role = await repository.ObtainEntity<IRole>();
-            admin_role.Name = "Doctor Administrator Role";
+            admin_role.Name = "Doctor Administrator";
             admin_role.Description = "Created by Preloader";
             Enum.GetValues<Permission>().GrantTo(admin_role);
             await admin_role.Create();

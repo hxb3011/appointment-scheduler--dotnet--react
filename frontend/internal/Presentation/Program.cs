@@ -71,6 +71,7 @@ public static class Program
 
     private static IServiceCollection AddApiHttpClientServices(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
         services.AddScoped<HttpApiService>();
         services.AddScoped<AppointmentService>();
         services.AddScoped<DoctorService>();

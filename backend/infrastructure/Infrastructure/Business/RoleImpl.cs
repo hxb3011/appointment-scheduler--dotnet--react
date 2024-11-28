@@ -41,7 +41,7 @@ internal sealed class RoleImpl : BaseEntity, IRole
                     Expression.Constant(_role.Name)
                 )
             ), para
-        )).AnyAsync().InvertTaskResult();
+        )).AnyAsync();
     }
 
     bool IRole.IsPermissionGranted(Permission permission)

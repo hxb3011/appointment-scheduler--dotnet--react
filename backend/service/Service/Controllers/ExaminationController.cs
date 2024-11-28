@@ -4,6 +4,7 @@ using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
+using AppointmentScheduler.Infrastructure;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,13 +38,8 @@ public class ExaminationController : ControllerBase
     {
         var d = await _repository.GetEntityBy<uint, IDoctor>(doctor);
         if (d == null) return NotFound("doctor not found");
-        var query = d.Examinations.AsQueryable();
-        var param = Expression.Parameter(typeof(IExamination));
-        if (!string.IsNullOrWhiteSpace(request.By))
-            query = query.OrderBy(Expression.Lambda<Func<IExamination, object>>(
-                Expression.Property(param, request.By), param
-            ));
-        return Ok(query.Skip(request.Offset).Take(request.Count).Select(MakeResponse));
+        return Ok(d.Examinations.AsQueryable().OrderByPropertyName(request.By)
+            .Skip(request.Offset).Take(request.Count).Select(MakeResponse));
     }
 
     [HttpGet("{id}")]

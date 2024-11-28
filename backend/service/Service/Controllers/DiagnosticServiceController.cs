@@ -6,6 +6,7 @@ using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Requests.Create;
 using AppointmentScheduler.Domain.Responses;
+using AppointmentScheduler.Infrastructure;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -109,13 +110,8 @@ public class DiagnosticServiceController : ControllerBase
     {
         var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
         if (ex == null) return NotFound("examination not found");
-        var query = ex.DiagnosticServices.AsQueryable();
-        var param = Expression.Parameter(typeof(IDiagnosticService));
-		if (!string.IsNullOrWhiteSpace(request.By))
-            query = query.OrderBy(Expression.Lambda<Func<IDiagnosticService, object>>(
-                Expression.Property(param, request.By), param
-            ));
-        return Ok(query.Skip(request.Offset).Take(request.Count).Select(MakeExaminationDiagnosticResponse));
+        return Ok(ex.DiagnosticServices.AsQueryable().OrderByPropertyName(request.By)
+            .Skip(request.Offset).Take(request.Count).Select(MakeExaminationDiagnosticResponse));
     }
 
     private static bool ExaminationDiagnosticFilter((IRepository repository, uint id) src, IDiagnosticService x)

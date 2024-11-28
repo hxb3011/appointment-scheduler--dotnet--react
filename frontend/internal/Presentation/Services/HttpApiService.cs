@@ -2,7 +2,7 @@
 
 namespace AppointmentScheduler.Presentation.Services;
 
-public abstract class HttpApiService(
+public class HttpApiService(
     HttpClient client, IHttpContextAccessor contextAccessor,
     ILogger<HttpApiService> logger, JsonSerializerOptions options)
 {

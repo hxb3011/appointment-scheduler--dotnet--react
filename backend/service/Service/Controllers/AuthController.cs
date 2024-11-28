@@ -10,12 +10,12 @@ namespace AppointmentScheduler.Service.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPasswordHasher<IUser> hasher, ILogger<RoleController> logger) : ControllerBase
+public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPasswordHasher<IUser> hasher, ILogger<AuthController> logger) : ControllerBase
 {
     private readonly IRepository _repository = repository;
     private readonly JSONWebTokenOptions _jwt = jwt;
     private readonly IPasswordHasher<IUser> _hasher = hasher;
-    private readonly ILogger<RoleController> _logger = logger;
+    private readonly ILogger<AuthController> _logger = logger;
 
 
     [HttpPost("token")]

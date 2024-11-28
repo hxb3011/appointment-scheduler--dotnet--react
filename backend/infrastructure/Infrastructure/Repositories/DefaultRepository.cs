@@ -44,11 +44,8 @@ public class DefaultRepository : DbContext, IRepository
         IQueryable<TKey> query = Set<TKey>();
         if (!string.IsNullOrWhiteSpace(whereProperty)) query = query.Where(Expression.Lambda<Func<TKey, bool>>(
             op(Expression.Property(para, whereProperty), Expression.Constant(andValue)), para));
-        Func<Expression<Func<TKey, object>>, IOrderedQueryable<TKey>> query_orderBy
-            = descending ? query.OrderByDescending : query.OrderBy;
-        if (!string.IsNullOrWhiteSpace(orderByProperty))
-            query = query_orderBy(Expression.Lambda<Func<TKey, object>>(Expression.Property(para, orderByProperty), para));
-        return query.Skip(skip).Take(take).Select(GetEntityBySync<TEntity, TKey>);
+        return query.OrderByPropertyName(orderByProperty, descending)
+            .Skip(skip).Take(take).ToList().Select(GetEntityBySync<TEntity, TKey>);
     }
 
     private TEntity GetEntityBySync<TEntity, TKey>(TKey x) where TEntity : class, IBehavioralEntity
@@ -67,7 +64,7 @@ public class DefaultRepository : DbContext, IRepository
         else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
             return GetEntitiesBy<TEntity, Patient>(offset, count, orderByProperty ?? nameof(Patient.Phone), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
-            return GetEntitiesBy<TEntity, Doctor>(offset, count, orderByProperty ?? nameof(Profile.FullName), descending, whereProperty, andValue, areEqual);
+            return GetEntitiesBy<TEntity, Profile>(offset, count, orderByProperty ?? nameof(Profile.FullName), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IAppointment)))
             return GetEntitiesBy<TEntity, Appointment>(offset, count, orderByProperty ?? nameof(Appointment.Number), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IExamination)))
