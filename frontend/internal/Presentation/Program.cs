@@ -23,10 +23,21 @@ public static class Program
         services.AddApiHttpClientServices();
         services.AddControllersWithViews();
 
-        var app = builder.Build();
+        
+		services.AddDistributedMemoryCache();
+		services.AddSession(options =>
+		{
+			options.IdleTimeout = TimeSpan.FromMinutes(30); 
+			options.Cookie.HttpOnly = true;
+			options.Cookie.IsEssential = true;
+		});
 
-        // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
+		var app = builder.Build();
+
+		app.UseSession();
+
+		// Configure the HTTP request pipeline.
+		if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -73,6 +84,7 @@ public static class Program
     {
         services.AddHttpContextAccessor();
         services.AddScoped<HttpApiService>();
+        services.AddScoped<AuthService>();
         services.AddScoped<AppointmentService>();
         services.AddScoped<DoctorService>();
         services.AddScoped<ProfileService>();

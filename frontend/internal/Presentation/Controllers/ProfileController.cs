@@ -17,10 +17,10 @@ namespace AppointmentScheduler.Presentation.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ProfileInfo(uint id)
-        {
-            var profile = await _profileService.GetProfileById(id);
-            return Ok(profile);
-        }
+        //public async Task<IActionResult> ProfileInfo(uint id)
+        //{
+        //    var profile = await _profileService.GetProfileById(id);
+        //    return Ok(profile);
+        //}
     }
 }

@@ -31,7 +31,7 @@ public class AppointmentController : ControllerBase
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointments([FromQuery] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
-    [HttpGet]
+    [HttpGet("byDoctor")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointmentsByDoctor([FromQuery] PagedGetAllRequest request, uint doctor)
         => Ok(_repository.GetEntities<IAppointment>(
@@ -39,7 +39,7 @@ public class AppointmentController : ControllerBase
             whereProperty: nameof(Appointment.DoctorId), andValue: doctor
         ).Select(MakeResponse));
 
-    [HttpGet]
+    [HttpGet("byProfile")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointmentsByProfile([FromQuery] PagedGetAllRequest request, uint profile)
         => Ok(_repository.GetEntities<IAppointment>(
@@ -47,7 +47,7 @@ public class AppointmentController : ControllerBase
             whereProperty: nameof(Appointment.ProfileId), andValue: profile
         ).Select(MakeResponse));
 
-    [HttpGet]
+    [HttpGet("byPatient")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public async Task<ActionResult<IEnumerable<AppointmentResponse>>> GetPagedAppointmentsByPatient([FromQuery] PagedGetAllRequest request, uint patient)
     {

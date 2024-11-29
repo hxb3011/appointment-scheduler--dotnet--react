@@ -63,7 +63,7 @@ public class DefaultRepository : DbContext, IRepository
         else if (typeof(TEntity).IsAssignableFrom(typeof(IProfile)))
             return GetEntitiesBy<TEntity, Profile>(offset, count, orderByProperty ?? nameof(Profile.FullName), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IAppointment)))
-            return GetEntitiesBy<TEntity, Appointment>(offset, count, orderByProperty ?? nameof(Appointment.Number), descending, whereProperty, andValue, areEqual);
+            return GetEntitiesBy<TEntity, Appointment>(offset, count, orderByProperty, descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IExamination)))
             return GetEntitiesBy<TEntity, Examination>(offset, count, orderByProperty ?? nameof(Examination.Diagnostic), descending, whereProperty, andValue, areEqual);
         else if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))

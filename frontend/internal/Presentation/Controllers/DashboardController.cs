@@ -1,20 +1,32 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using AppointmentScheduler.Presentation.Models;
+using AppointmentScheduler.Presentation.Services;
+using AppointmentScheduler.Domain.Requests;
 
 namespace AppointmentScheduler.Presentation.Controllers;
 
 public class DashboardController : Controller
 {
     private readonly ILogger<DashboardController> _logger;
+    private readonly AuthService _authService;
 
-    public DashboardController(ILogger<DashboardController> logger)
+    public DashboardController(ILogger<DashboardController> logger, AuthService authService)
     {
+        _authService = authService;
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        AuthRequest request = new AuthRequest();
+        request.Username = "root00";
+        request.Password = "HeLlo|12";
+        var token = await _authService.Token(request);
+
+        HttpContext.Session.SetString("AuthToken", token);
+
+        Console.WriteLine("Token: {0}", token);
         return View();
     }
 

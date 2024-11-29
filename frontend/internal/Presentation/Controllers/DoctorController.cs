@@ -12,17 +12,17 @@ namespace AppointmentScheduler.Presentation.Controllers
             _doctorService = doctorService;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var doctors = await _doctorService.GetAllDoctors();
+        //public async Task<IActionResult> Index()
+        //{
+        //    var doctors = await _doctorService.GetAllDoctors();
 
-            return View(doctors);
-        }
+        //    return View(doctors);
+        //}
 
-        public async Task<IActionResult> DoctorInfo(uint id)
-        {
-            var doctor = await _doctorService.GetDoctorById(id);
-            return Ok(doctor);
-        }
+        //public async Task<IActionResult> DoctorInfo(uint id)
+        //{
+        //    var doctor = await _doctorService.GetDoctorById(id);
+        //    return Ok(doctor);
+        //}
     }
 }
