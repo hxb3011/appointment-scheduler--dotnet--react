@@ -1,5 +1,7 @@
 ﻿using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Domain.Responses;
+using AppointmentScheduler.Presentation.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
@@ -17,10 +19,11 @@ namespace AppointmentScheduler.Presentation.Services
 
         }
 
-        public async Task<IEnumerable<Doctor>> GetPagedDoctors(PagedGetAllRequest request, string token)
+        public async Task<IEnumerable<DoctorModel>> GetPagedDoctors(PagedGetAllRequest request)
         {
             try
             {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
                 var jsonBody = _httpApiService.SerializeJson(request);
 
                 var httpRequest = new HttpRequestMessage{
@@ -38,7 +41,7 @@ namespace AppointmentScheduler.Presentation.Services
                 response.EnsureSuccessStatusCode();
 
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var doctors = _httpApiService.DeserializeJson<IEnumerable<Doctor>>(jsonString);
+                var doctors = _httpApiService.DeserializeJson<IEnumerable<DoctorModel>>(jsonString);
 
                 return doctors;
             }
@@ -49,24 +52,36 @@ namespace AppointmentScheduler.Presentation.Services
             }
         }
 
-        //public async Task<Doctor> GetDoctorById(uint id)
-        //{
-        //    try
-        //    {
-        //        var response = await _httpClient.GetAsync("api/doctor/" + id);
-        //        response.EnsureSuccessStatusCode();
+        public async Task<DoctorModel> GetDoctorById(uint id)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"api/doctor/{id}", UriKind.Relative)
+                };
 
-        //        var jsonString = await response.Content.ReadAsStringAsync();
-        //        var doctor = JsonConvert.DeserializeObject<Doctor>(jsonString);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
 
-        //        return doctor;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.Message);
-        //        return null;
-        //    }
-        //}
+                var response = await _httpApiService.SendAsync(httpRequest);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var doctor = _httpApiService.DeserializeJson<DoctorModel>(jsonString);
+
+                return doctor;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+        }
     }
 
 }

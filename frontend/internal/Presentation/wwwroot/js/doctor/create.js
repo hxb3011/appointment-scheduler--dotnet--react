@@ -24,7 +24,7 @@
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Tên: </p>
-                                <p class="text-dark">${data.certificate}</p>
+                                <p class="text-dark">${data.fullName}</p>
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Email: </p>
@@ -65,6 +65,7 @@ function loadProfileInfo(profileId) {
             return response.json();
         })
         .then(data => {
+            console.log(data); // Kiểm tra các trường trả v
             // Hiển thị thông tin bác sĩ
             const genderText = data.gender === 'M' ? 'Nam' : data.gender === 'F' ? 'Nữ' : 'Không xác định';
 
@@ -75,7 +76,7 @@ function loadProfileInfo(profileId) {
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Mã bệnh nhân: </p>
-                                <p class="text-dark">${data.patientId}</p>
+                                <p class="text-dark">${data.patient}</p>
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Họ tên: </p>

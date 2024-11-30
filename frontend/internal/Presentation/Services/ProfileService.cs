@@ -1,5 +1,6 @@
 ﻿using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Presentation.Models;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -17,10 +18,11 @@ namespace AppointmentScheduler.Presentation.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Profile>> GetPagedProfiles(PagedGetAllRequest request, string token)
+        public async Task<IEnumerable<ProfileResponse>> GetPagedProfiles(PagedGetAllRequest request)
         {
             try
             {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
                 var jsonBody = _httpApiService.SerializeJson(request);
                 var httpRequest = new HttpRequestMessage
                 {
@@ -38,7 +40,7 @@ namespace AppointmentScheduler.Presentation.Services
                 response.EnsureSuccessStatusCode();
 
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var profiles = JsonConvert.DeserializeObject<IEnumerable<Profile>>(jsonString);
+                var profiles = _httpApiService.DeserializeJson<IEnumerable<ProfileResponse>>(jsonString);
 
                 return profiles;
             }
@@ -49,25 +51,38 @@ namespace AppointmentScheduler.Presentation.Services
                 return null;
             }
         }
+
+        public async Task<ProfileModel> GetProfileById(uint id)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method= HttpMethod.Get,
+                    RequestUri = new Uri($"api/profile/{id}", UriKind.Relative)
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var profile = _httpApiService.DeserializeJson<ProfileModel>(jsonString);
+
+                return profile;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+        }
     }
-
-    //    public async Task<Profile> GetProfileById(uint id)
-    //    {
-    //        try
-    //        {
-    //            var response = await _httpClient.GetAsync("api/profile/" + id);
-    //            response.EnsureSuccessStatusCode();
-
-    //            var jsonString = await response.Content.ReadAsStringAsync();
-    //            var profile = JsonConvert.DeserializeObject<Profile>(jsonString);
-
-    //            return profile;
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            _logger.LogError(ex.Message);
-    //            return null;
-    //        }
-    //    }
-    //}
 }

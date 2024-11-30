@@ -22,9 +22,7 @@ public class DashboardController : Controller
         AuthRequest request = new AuthRequest();
         request.Username = "root00";
         request.Password = "HeLlo|12";
-        var token = await _authService.Token(request);
-
-        HttpContext.Session.SetString("AuthToken", token);
+        var token = await _authService.SaveTokenToService(request);
 
         Console.WriteLine("Token: {0}", token);
         return View();

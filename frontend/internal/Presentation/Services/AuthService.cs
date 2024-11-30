@@ -49,5 +49,12 @@ namespace AppointmentScheduler.Presentation.Services
 				throw new Exception($"An error occurred while retrieving the token: {ex.Message}");
 			}
 		}
+
+		public async Task<string> SaveTokenToService(AuthRequest request)
+		{
+			var token = await Token(request);
+			_httpApiService.Context.Session.SetString("AuthToken", token);
+			return token;
+		}
 	}
 }
