@@ -3,7 +3,7 @@ import React from "react";
 import "./Page.css";
 import "./HomePage.css";
 
-export function Home() {
+export function Profile() {
     return (
         <div className="Home Page">
             <h2>Home</h2>

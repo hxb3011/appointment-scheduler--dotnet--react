@@ -1,4 +1,5 @@
 .App {
+    align-items: end;
     background-color: var(--mdc-surface);
     box-sizing: border-box;
     color: var(--mdc-on-surface);

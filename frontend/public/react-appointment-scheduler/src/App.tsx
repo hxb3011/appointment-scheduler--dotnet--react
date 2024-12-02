@@ -1,15 +1,20 @@
 import React from "react";
 import { Link, BrowserRouter, Route, Routes } from "react-router-dom";
 
+import { Icon } from "./assets/icons/mdi";
+
 import { AccountCard, Card, NavCard } from "./components/Card";
-import Home from "./pages/HomePage";
+
+import { Home } from "./pages/HomePage";
+import { Profile } from "./pages/ProfilePage";
+import { Appointment } from "./pages/AppointmentPage";
+import { Scheduler } from "./pages/SchedulerPage";
 
 import logo from "./logo.svg";
 
 import { FontFamily } from "./assets/fonts/noto"
 
 import "./App.css";
-import { Icon } from "./assets/icons/mdi";
 
 function App() {
   return (
@@ -27,8 +32,9 @@ function App() {
         ]} />
         <Routes>
           <Route index path="/" element={<Home />} />
-          <Route path="/about" element={<Home />} />
-          <Route path="/contact" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/appointment" element={<Appointment />} />
+          <Route path="/schedule" element={<Scheduler />} />
         </Routes>
       </div>
     </BrowserRouter>

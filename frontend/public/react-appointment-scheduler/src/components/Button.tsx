@@ -15,6 +15,13 @@ export function FilledButton(props: ButtonProps) {
     );
 }
 
+export function SubmitButton(props: ButtonProps) {
+    const attributes = props.attributes || {};
+    return (
+        <input {...attributes} className="Filled Button" type="submit" value={props.content} />
+    );
+}
+
 export function OutlinedButton(props: ButtonProps) {
     const attributes = props.attributes || {};
     return (
