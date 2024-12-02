@@ -1,13 +1,13 @@
 import React from "react";
 
 import "./Page.css";
-import "./HomePage.css";
+import "./ProfilePage.css";
 
 export function Profile() {
     return (
-        <div className="Home Page">
-            <h2>Home</h2>
-            <p>Welcome to the Home page!</p>
+        <div className="Profile Page">
+            <h2 className="title">Hồ sơ</h2>
+            
         </div>
     );
 }

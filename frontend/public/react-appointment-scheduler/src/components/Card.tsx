@@ -35,16 +35,20 @@ export function AccountCard(props: AccountCardProps) {
     return (
         <div {...attributes} className="Account Card">
             <div className="avatar">
-                {props.imageURL ? (
+                {props.name && props.username && props.imageURL ? (
                     <img className="img" src={props.imageURL} alt="Ảnh đại diện" />
                 ) : (
                     <span className="img mdi">{Icon.account_circle_outline}</span>
                 )}
-                <FilledButton content="Đăng nhập" />
+                <FilledButton content={props.name && props.username ? "Đăng xuất" : "Đăng nhập"} />
             </div>
             <div className="info">
-                <h1 className="name">{props.name}</h1>
-                <div className="username">@{props.username || "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas expedita voluptatibus molestiae nihil? Sapiente ab, hic accusamus dolor fuga laborum voluptates omnis, maiores aliquid explicabo adipisci iusto dolore corrupti facilis!"}</div>
+                {props.name && props.username ? (<>
+                    <h1 className="name">{props.name}</h1>
+                    <div className="username">@{props.username}</div>
+                </>) : (
+                    <div className="username">{props.username || "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas expedita voluptatibus molestiae nihil? Sapiente ab, hic accusamus dolor fuga laborum voluptates omnis, maiores aliquid explicabo adipisci iusto dolore corrupti facilis!"}</div>
+                )}
             </div>
         </div>
     );

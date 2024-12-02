@@ -6,8 +6,8 @@ import "./HomePage.css";
 export function Home() {
     return (
         <div className="Home Page">
-            <h2>Home</h2>
-            <p>Welcome to the Home page!</p>
+            <h2 className="title">Giới thiệu về chúng tôi</h2>
+            
         </div>
     );
 }
