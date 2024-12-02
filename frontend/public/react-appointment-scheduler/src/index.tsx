@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import "./assets/colors/dynamicThemeCSSLoader";
+import "./assets/colors/themeLoader";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";

@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace AppointmentScheduler.Infrastructure.Business;
+namespace AppointmentScheduler.Infrastructure.Repositories;
 
 internal class CachedEnumerable<T> : IEnumerable<T>, IEnumerable, ICloneable
 {

@@ -20,8 +20,8 @@ public class DoctorController : UserController
 		: base(repository, passwordHasher, logger) { }
 
 	private DoctorResponse MakeResponse(IDoctor doctor)
-		=> !_repository.TryGetKeyOf(doctor, out uint id) ? null
-		: new() { Id = id, UserName = doctor.UserName, FullName = doctor.FullName, Email = doctor.Email, Phone = doctor.Phone, Certificate = doctor.Certificate, Position = doctor.Position };
+		=> !_repository.TryGetKeyOf(doctor, out Doctor d) || !_repository.TryGetKeyOf(doctor, out User u) ? null
+		: new() { Id = u.Id, UserName = u.UserName, FullName = u.FullName, Email = d.Email, Phone = d.Phone, Certificate = d.Certificate, Position = d.Position, Role = u.RoleId };
 
 	[HttpGet]
 	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]

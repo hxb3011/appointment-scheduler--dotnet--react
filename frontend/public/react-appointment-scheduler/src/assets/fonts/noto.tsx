@@ -1,5 +1,3 @@
-import "./noto.css"
-
 export const FontFamily = {
     NotoSans: "NotoSans",
     NotoSansMono: "NotoSansMono",

@@ -11,8 +11,30 @@ const LogMethods: { [priority in LogPriority]: LogMethod } = {
 };
 
 function _log(method: LogMethod, tag: string, ...data: any[]): void {
-    method(`[${tag}]#${arguments.callee.caller.caller.name
-        }${data.length === 0 ? `` : `: ${data[0]}`}`, ...data.slice(1));
+    const error = new Error();
+    let stack = error.stack;
+    let methodName: string | undefined = undefined;
+    if (stack) {
+        if (!methodName) {
+            let count = 3;
+            for (const match of stack.matchAll(/^\s*at\s+(.*)\s*\(/gm)) {
+                if (--count === 0) {
+                    methodName = match[1];
+                    break;
+                }
+            }
+        }
+        if (!methodName) {
+            let count = 3;
+            for (const match of stack.matchAll(/^\s*(.*)\s*@/gm)) {
+                if (--count === 0) {
+                    methodName = match[1];
+                    break;
+                }
+            }
+        }
+    }
+    method(`[${tag}]${methodName ? `#${methodName}` : ``}${data.length ? `: ${data[0]}` : ``}`, ...data.slice(1));
 }
 
 type BindedLog = (...args: any[]) => void;
@@ -36,30 +58,30 @@ type LogPriorityConstants = {
 }
 
 type Log = {
-    (priority: LogPriority, tag: string, ...data: any[]): void;
-    bindTag(tag: string): BindedTagLog;
-    bindPriority(priority: LogPriority): BindedPriorityLog;
+    (this: any, priority: LogPriority, tag: string, ...data: any[]): void;
+    bindTag(this: any, tag: string): BindedTagLog;
+    bindPriority(this: any, priority: LogPriority): BindedPriorityLog;
 } & LogPriorityConstants
 
-const log: Log = function (priority: LogPriority, tag: string, ...data: any[]): void {
-    _log.call(LogMethods[priority], tag, data);
+const log: Log = function (this: any, priority: LogPriority, tag: string, ...data: any[]): void {
+    _log.call(this, LogMethods[priority], tag, data);
 }
 
-log.bindTag = function (tag: string): BindedTagLog {
-    const log: BindedTagLog = function (priority: LogPriority, ...data: any[]): void {
-        _log.call(LogMethods[priority], tag, data);
+log.bindTag = function (this: any, tag: string): BindedTagLog {
+    const log: BindedTagLog = function (this: any, priority: LogPriority, ...data: any[]): void {
+        _log.call(this, LogMethods[priority], tag, data);
     };
-    log.bindPriority = function (priority: LogPriority): BindedLog {
+    log.bindPriority = function (this: any, priority: LogPriority): BindedLog {
         return log.bind(this, priority);
     }
     return log;
 };
 
-log.bindPriority = function (priority: LogPriority): BindedPriorityLog {
-    const log: BindedPriorityLog = function (tag: string, ...data: any[]): void {
-        _log.call(LogMethods[priority], tag, data);
+log.bindPriority = function (this: any, priority: LogPriority): BindedPriorityLog {
+    const log: BindedPriorityLog = function (this: any, tag: string, ...data: any[]): void {
+        _log.call(this, LogMethods[priority], tag, data);
     }
-    log.bindTag = function (tag: string): BindedLog {
+    log.bindTag = function (this: any, tag: string): BindedLog {
         return log.bind(this, tag);
     }
     return log;

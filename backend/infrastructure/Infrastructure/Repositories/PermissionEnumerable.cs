@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using AppointmentScheduler.Domain.Entities;
 
-namespace AppointmentScheduler.Infrastructure.Business;
+namespace AppointmentScheduler.Infrastructure.Repositories;
 
 internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEnumerator<Permission>, IEnumerator, IDisposable
 {
     private byte[] _permissions;
     private long _byteIndex, _bitIndex;
 
-    public PermissionEnumerable(byte[] permissions)
+    internal PermissionEnumerable(byte[] permissions)
     {
         _permissions = permissions;
         _byteIndex = -1;
     }
 
-    public readonly Permission Current
+    readonly Permission IEnumerator<Permission>.Current
     {
         get
         {
@@ -26,9 +26,7 @@ internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEn
         }
     }
 
-    readonly object IEnumerator.Current => Current;
-
-    public readonly IEnumerator<Permission> GetEnumerator() => new PermissionEnumerable(_permissions);
+    readonly object IEnumerator.Current => ((IEnumerator<Permission>)this).Current;
 
     void IDisposable.Dispose()
     {
@@ -37,7 +35,11 @@ internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEn
         _bitIndex = 0;
     }
 
-    readonly IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    readonly IEnumerator<Permission> IEnumerable<Permission>.GetEnumerator()
+        => new PermissionEnumerable(_permissions);
+
+    readonly IEnumerator IEnumerable.GetEnumerator()
+        => new PermissionEnumerable(_permissions);
 
     bool IEnumerator.MoveNext()
     {
@@ -79,7 +81,7 @@ internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEn
     }
 
     /*
-    private static IEnumerable<Permission> GetPermissions(byte[] permissions)
+    static IEnumerable<Permission> GetPermissions(byte[] permissions)
     {
         for (long _byteIndex = 0, _length = permissions.LongLength; _byteIndex < _length; ++_byteIndex)
         {

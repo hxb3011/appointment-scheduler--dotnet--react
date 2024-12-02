@@ -83,58 +83,10 @@ internal class SchedulerServiceImpl : ISchedulerService
     }
 
     IEnumerable<SchedulerPart> ISchedulerService.Parts
-    {
-        get
-        {
-            var parts = _parts;
-            if (parts != null) return parts;
-            lock (this)
-            {
-                if ((parts = _parts) != null) return parts;
-                TimeOnly b, e, m;
-                ISchedulerService s = this;
-                List<SchedulerPart> list = new();
-                uint id = 1;
-                b = s.FirstStart;
-                e = s.FirstEnd;
-                while ((m = b.Add(s.BigStepGap)) <= e)
-                    list.Add(new() { Id = id, Start = b, End = b = m });
-                b = s.LastStart;
-                e = s.LastEnd;
-                while ((m = b.Add(s.BigStepGap)) <= e)
-                    list.Add(new() { Id = id, Start = b, End = b = m });
-                _parts = parts = list;
-            }
-            return parts;
-        }
-    }
+        => _parts ??= new CachedEnumerable<SchedulerPart>(new SchedulerPartEnumerable(this));
 
     IEnumerable<SchedulerAllocation> ISchedulerService.Allocations
-    {
-        get
-        {
-            var allocations = _allocations;
-            if (allocations != null) return allocations;
-            lock (this)
-            {
-                if ((allocations = _allocations) != null) return allocations;
-                TimeOnly b, e;
-                ISchedulerService s = this;
-                List<SchedulerAllocation> list = new();
-                uint id = 1;
-                b = s.FirstStart;
-                e = ScaledEndOf(s.FirstEnd, b);
-                for (; b < e; b = b.Add(s.StepGap))
-                    list.Add(new() { Id = id, AtTime = b });
-                b = s.LastStart;
-                e = ScaledEndOf(s.LastEnd, b);
-                for (; b < e; b = b.Add(s.StepGap))
-                    list.Add(new() { Id = id, AtTime = b });
-                _allocations = allocations = list;
-            }
-            return allocations;
-        }
-    }
+        => _allocations ??= new CachedEnumerable<SchedulerAllocation>(new SchedulerAllocationEnumerable(this));
 
     async Task<SchedulerAllocation> ISchedulerService.Allocate(IDoctor doctor, DateOnly date, TimeOnly start, TimeOnly end)
     {
@@ -204,16 +156,6 @@ internal class SchedulerServiceImpl : ISchedulerService
             var b = bit.Current;
             if (b.AtTime < ait.Current) return b;
         }
-    }
-
-    private TimeOnly ScaledEndOf(TimeOnly end, TimeOnly start)
-    {
-        ISchedulerService s = this;
-        TimeOnly b = start, e = end;
-        e = e.Add(TimeSpan.FromMinutes(
-            (b - e).TotalMinutes % s.BigStepGap.TotalMinutes
-        ));
-        return e;
     }
 
     private TimeSpan GetField(ref TimeSpan field, int initFlag, string identifier, TimeSpan defaultValue)
