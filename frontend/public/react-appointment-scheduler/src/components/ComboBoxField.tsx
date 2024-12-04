@@ -3,7 +3,7 @@ import * as React from "react";
 import "./ComboBoxField.css"
 
 type ComboBoxProps = React.Attributes & {
-    attributes?: React.HTMLAttributes<HTMLSelectElement>
+    attributes?: React.SelectHTMLAttributes<HTMLSelectElement>
     label?: string;
     children?: Iterable<React.ReactNode>;
 }

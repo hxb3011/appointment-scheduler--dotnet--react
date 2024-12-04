@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 
 import $ from 'jquery';
 import 'jquery-validation';
@@ -8,8 +8,17 @@ import "./Page.css";
 import "./LoginPage.css";
 import { FormField } from "../components/FormField";
 import { SubmitButton } from "../components/Button";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { login, setAccessToken } from '../services/auth'
 
-export function Login() {
+type LoginPageProps = {
+}
+
+export function Login(props: LoginPageProps) {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const redirect = queryParams.get('redirect');
+    const navigate = useNavigate();
     const formRef = useRef<HTMLFormElement>(null);
 
     useEffect(() => {
@@ -35,19 +44,15 @@ export function Login() {
             ) return true;
 
             let l = false, u = false, d = false;
-            console.error(this, value, element);
             for (const c of value) {
                 const v = c.toString();
                 if (/^[0-9]$/.test(v)) {
-                    console.error(v, "Digit");
                     if (l && u) return true;
                     d = true;
                 } else if (v === v.toLowerCase()) {
-                    console.error(v, "LowerCase");
                     if (u && d) return true;
                     l = true;
                 } else if (v === v.toUpperCase()) {
-                    console.error(v, "UpperCase");
                     if (l && d) return true;
                     u = true;
                 }
@@ -82,15 +87,23 @@ export function Login() {
                     maxlength: "Mật khẩu phải không dài quá 50 ký tự."
                 }
             },
-            submitHandler: function (form: HTMLFormElement) {
-                alert('Form validated and submitted!');
-                form.submit();
+            submitHandler: async function (form: HTMLFormElement, e: FormEvent) {
+                e.preventDefault();
+                const response = await login(new FormData(form));
+                if (response.type == "ok") {
+                    setAccessToken(response.access_token);
+                    await navigate(redirect && redirect.length ? redirect : '/profile');
+                } else if (response.message == "user not found.") {
+                    alert("Người dùng không tồn tại.")
+                } else {
+                    alert("Thông tin đăng nhập không đúng.");
+                }
             }
         });
     }, []);
 
     return (
-        <form ref={formRef} className="Login Page" action="" method="post">
+        <form ref={formRef} className="Login Page">
             <h2 className="title">Đăng nhập</h2>
             <FormField label="Tên đăng nhập" attributes={{ name: "username", type: "text" }} />
             <FormField label="Mật khẩu" attributes={{ name: "password", type: "password" }} />
@@ -103,7 +116,7 @@ export function Login() {
                     padding: "16px"
                 }
             }}>Đăng nhập</SubmitButton>
-            <span className="note">Bạn chưa có tài khoản? <a href="/register">Đăng ký</a> ngay</span>
+            <span className="note">Bạn chưa có tài khoản? <a href={"/register" + location.search}>Đăng ký</a> ngay</span>
         </form>
     );
 }

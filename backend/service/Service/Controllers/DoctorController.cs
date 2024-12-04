@@ -139,7 +139,7 @@ public class DoctorController : UserController
 
     private ExaminationDiagnosticResponse MakeExaminationDiagnosticResponse(IDiagnosticService examinationDiagnostic)
         => !_repository.TryGetKeyOf(examinationDiagnostic, out ExaminationService key) ? null
-        : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, DoctorId = key.DoctorId, DiagnosticServiceId = key.DiagnosticServiceId, ExaminationId = key.ExaminationId };
+        : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, Doctor = key.DoctorId, DiagnosticService = key.DiagnosticServiceId, Examination = key.ExaminationId };
 
 	[HttpGet("{id}/examdiag")]
 	[JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]

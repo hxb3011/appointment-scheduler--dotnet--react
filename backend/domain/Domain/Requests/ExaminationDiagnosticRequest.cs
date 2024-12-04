@@ -2,7 +2,7 @@ namespace AppointmentScheduler.Domain.Requests;
 
 public class ExaminationDiagnosticRequest
 {
-    public uint DoctorId { get; set; }
-    public uint DiagnosticServiceId { get; set; }
-    public uint ExaminationId { get; set; }
+    public uint Doctor { get; set; }
+    public uint DiagnosticService { get; set; }
+    public uint Examination { get; set; }
 }

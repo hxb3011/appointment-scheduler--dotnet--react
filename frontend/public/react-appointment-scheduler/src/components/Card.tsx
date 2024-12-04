@@ -6,6 +6,7 @@ import { FilledButton, OutlinedButton } from "./Button";
 
 import "./Card.css"
 import { Link, NavLink } from "react-router-dom";
+import { Patient } from "../services/patient";
 
 type CardProps = React.Attributes & {
     heading?: string;
@@ -24,10 +25,12 @@ export function Card(props: CardProps) {
 }
 
 type AccountCardProps = React.Attributes & {
+    actionAttributes?: React.HTMLAttributes<HTMLElement>;
     attributes?: React.HTMLAttributes<HTMLElement>
     imageURL?: string;
     name?: string;
     username?: string;
+    user?: Patient;
 }
 
 export function AccountCard(props: AccountCardProps) {
@@ -40,7 +43,7 @@ export function AccountCard(props: AccountCardProps) {
                 ) : (
                     <span className="img mdi">{Icon.account_circle_outline}</span>
                 )}
-                <FilledButton>{props.name && props.username ? "Đăng xuất" : "Đăng nhập"}</FilledButton>
+                <FilledButton attributes={props.actionAttributes}>{props.name && props.username ? "Đăng xuất" : "Đăng nhập"}</FilledButton>
             </div>
             <div className="info">
                 {props.name && props.username ? (<>
@@ -63,6 +66,7 @@ type NavCardProps = React.Attributes & {
         name?: string;
         url?: string
     }[];
+    user?: Patient;
 }
 
 export function NavCard(props: NavCardProps) {

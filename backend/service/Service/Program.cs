@@ -20,7 +20,13 @@ public static class Program
             dbConfigure: ConfigureDbContext,
             jwtConfigure: builder.Configuration.GetSection("JWTSettings").ConfigureJSONWebToken
         );
-
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigins", builder =>
+            {
+                builder.WithOrigins("*").WithMethods("*").WithHeaders("*");
+            });
+        });
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddProblemDetails();
@@ -30,6 +36,7 @@ public static class Program
 
         app.UseInfrastructure();
 
+        app.UseCors("AllowSpecificOrigins");
         app.UseHttpsRedirection();
         app.UseStatusCodePages();
 

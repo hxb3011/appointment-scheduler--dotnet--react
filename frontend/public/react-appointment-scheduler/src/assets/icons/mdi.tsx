@@ -7448,4 +7448,3 @@ export const Icon = {
     zodiac_virgo: String.fromCodePoint(0xF0A88),
     x_blank: String.fromCodePoint(0xF68C)
 }
-export type IconName = keyof(typeof Icon);

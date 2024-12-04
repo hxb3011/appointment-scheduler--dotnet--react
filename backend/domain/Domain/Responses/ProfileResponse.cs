@@ -8,7 +8,7 @@ public class ProfileResponse
     public uint Patient { get; set; }
     [JsonPropertyName("full_name")]
     public string FullName { get; set; }
-    [JsonPropertyName("date_of_birth")]
+    [JsonPropertyName("birthdate")]
     public DateOnly DateOfBirth { get; set; }
     public char Gender { get; set; }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { FormEvent, useEffect, useRef } from "react";
 
 import $ from "jquery";
 import "jquery-validation";
@@ -7,13 +7,19 @@ import "./Page.css";
 import "./RegisterPage.css";
 import { FormField } from "../components/FormField";
 import { SubmitButton } from "../components/Button";
+import { useLocation, useNavigate } from "react-router-dom";
+import { register } from "../services/auth";
 
 export function Register() {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const redirect = queryParams.get('redirect');
     const formRef = useRef<HTMLFormElement>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         ($ as any).validator.addMethod("phoneValidation", function (this: any, value: string, element: any) {
-            const phonePattern = /^[0-9]{10,15}$/;
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             const methods = ($ as any).validator.methods;
             if (!methods.required.call(this, value, element)) return true;
 
@@ -21,12 +27,12 @@ export function Register() {
                 && !methods.maxlength.call(this, value, element)
             ) return true;
 
-            return phonePattern.test(value);
+            return emailPattern.test(value);
         }, "Số điện thoại không hợp lệ.");
 
         ($ as any).validator.addMethod("usernameValidation", function (this: any, value: string, element: any) {
             const usernamePattern = /^[a-zA-Z][0-9a-zA-Z_-]{5,49}$/;
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+            const phonePattern = /^[0-9]{10,15}$/;
 
             const methods = ($ as any).validator.methods;
             if (!methods.required.call(this, value, element)
@@ -34,8 +40,8 @@ export function Register() {
                 && !methods.maxlength.call(this, value, element)
             ) return true;
 
-            return usernamePattern.test(value) || emailPattern.test(value);
-        }, "Tên đăng nhập hoặc Email không hợp lệ.");
+            return usernamePattern.test(value) || phonePattern.test(value);
+        }, "Tên đăng nhập hoặc số điện thoại không hợp lệ.");
 
         ($ as any).validator.addMethod("passwordValidation", function (this: any, value: string, element: any) {
             const methods = ($ as any).validator.methods;
@@ -71,11 +77,11 @@ export function Register() {
                     required: true,
                     maxlength: 50
                 },
-                phone: {
+                email: {
                     required: false,
-                    minlength: 10,
-                    maxlength: 15,
-                    phoneValidation: true
+                    minlength: 6,
+                    maxlength: 50,
+                    emailValidation: true
                 },
                 username: {
                     required: true,
@@ -95,15 +101,15 @@ export function Register() {
                     required: "Vui lòng nhập họ và tên.",
                     maxlength: "Họ và tên không dài quá 50 ký tự."
                 },
-                phone: {
-                    required: "Vui lòng nhập số điện thoại.",
-                    minlength: "Số điện thoại phải có tối thiểu 10 ký tự.",
-                    maxlength: "Số điện thoại không dài quá 15 ký tự."
+                email: {
+                    required: "Vui lòng nhập email.",
+                    minlength: "Email phải có tối thiểu 10 ký tự.",
+                    maxlength: "Email không dài quá 15 ký tự."
                 },
                 username: {
-                    required: "Vui lòng nhập tên đăng nhập hoặc email.",
+                    required: "Vui lòng nhập tên đăng nhập hoặc số điện thoại.",
                     minlength: "Tên đăng nhập phải có tối thiểu 6 ký tự.",
-                    maxlength: "Tên đăng nhập hoặc email không dài quá 50 ký tự."
+                    maxlength: "Tên đăng nhập không dài quá 50 ký tự."
                 },
                 password: {
                     required: "Vui lòng nhập mật khẩu",
@@ -111,9 +117,14 @@ export function Register() {
                     maxlength: "Mật khẩu phải không dài quá 50 ký tự."
                 }
             },
-            submitHandler: function (form: HTMLFormElement) {
-                alert('Form validated and submitted!');
-                form.submit();
+            submitHandler: async function (form: HTMLFormElement, e: FormEvent) {
+                e.preventDefault();
+                const response = await register(new FormData(form));
+                if (response.type == "ok") {
+                    await navigate(redirect && redirect.length ? '/login' + location.search : '/login');
+                } else {
+                    alert("Thông tin đăng ký không hợp lệ.");
+                }
             }
         });
     }, []);
@@ -122,7 +133,7 @@ export function Register() {
         <form ref={formRef} className="Register Page">
             <h2 className="title">Đăng ký</h2>
             <FormField label="Họ và tên *" attributes={{ name: "full_name", type: "text" }} />
-            <FormField label="Số điện thoại" attributes={{ name: "phone", type: "text" }} />
+            <FormField label="Email" attributes={{ name: "email", type: "text" }} />
             <FormField label="Tên đăng nhập *" attributes={{ name: "username", type: "text" }} />
             <FormField label="Mật khẩu *" attributes={{ name: "password", type: "password" }} />
             <SubmitButton attributes={{
@@ -133,7 +144,7 @@ export function Register() {
                     padding: "16px"
                 }
             }}>Đăng ký</SubmitButton>
-            <span className="note">Bạn đã có tài khoản? <a href="/login">Đăng nhập</a></span>
+            <span className="note">Bạn đã có tài khoản? <a href={"/login" + location.search}>Đăng nhập</a></span>
         </form>
     );
 }

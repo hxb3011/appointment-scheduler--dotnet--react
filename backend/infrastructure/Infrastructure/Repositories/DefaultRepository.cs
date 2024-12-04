@@ -122,10 +122,13 @@ public class DefaultRepository : DbContext, IRepository
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
         {
-            if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
-                return (TEntity)await ((IRepository)this).GetEntityBy<TKey, IDoctor>(key);
-            else if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
-                return (TEntity)await ((IRepository)this).GetEntityBy<TKey, IPatient>(key);
+            IUser user;
+            if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor))
+                && (user = await ((IRepository)this).GetEntityBy<TKey, IDoctor>(key)) != null)
+                return (TEntity)user;
+            if (typeof(TEntity).IsAssignableFrom(typeof(IPatient))
+                && (user = await ((IRepository)this).GetEntityBy<TKey, IPatient>(key)) != null)
+                return (TEntity)user;
         }
         else if (typeof(TEntity).IsAssignableFrom(typeof(IDoctor)))
         {
