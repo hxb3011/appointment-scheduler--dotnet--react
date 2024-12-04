@@ -95,13 +95,10 @@ public class AppointmentService
     {
         try
         {
-            // Lấy token từ session
             var token = _httpApiService.Context.Session.GetString("AuthToken");
 
-            // Serialize model sang JSON
             var jsonBody = _httpApiService.SerializeJson(appointment);
 
-            // Tạo HTTP request
             var httpRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -109,16 +106,13 @@ public class AppointmentService
                 Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
             };
 
-            // Thêm token vào header nếu có
             if (!string.IsNullOrEmpty(token))
             {
                 httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
 
-            // Gửi request
             var response = await _httpApiService.SendAsync(httpRequest);
 
-            // Kiểm tra trạng thái phản hồi
             if (response.IsSuccessStatusCode)
             {
                 _logger.LogInformation("Appointment added successfully.");

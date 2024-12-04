@@ -154,14 +154,14 @@
 
 	<script>
 		$(document).ready(function () {
-			let appointmentIdToDelete;
+			let doctorIdToDelete;
 
 			// Event delegation for dynamically created `.delete` elements
 			$('#doctor-table').on('click', '.delete', function (e) {
 				e.preventDefault();
-				appointmentIdToDelete = $(this).data('doctor-id');
+				doctorIdToDelete = $(this).data('doctor-id');
 
-				console.log("id: " + appointmentIdToDelete);
+				console.log("id: " + doctorIdToDelete);
 				$('#deleteModal').modal('show');
 			});
 
@@ -170,7 +170,7 @@
 					url: `/doctor/Delete`,
 					type: 'POST',
 					data: {
-						id: appointmentIdToDelete
+						id: doctorIdToDelete
 					},
 					success: function (response) {
 						Snackbar.show({

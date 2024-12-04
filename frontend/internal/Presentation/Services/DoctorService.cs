@@ -82,6 +82,134 @@ namespace AppointmentScheduler.Presentation.Services
                 return null;
             }
         }
+
+        public async Task<string> AddDoctor(DoctorModel doctor)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var jsonBody = _httpApiService.SerializeJson(doctor);
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri("api/doctor", UriKind.Relative),
+                    Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Doctor added successfully");
+                    return "Doctor added successfully";
+                }
+                else
+                {
+                    var errorMessage = "";
+
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(errorContent))
+                    {
+                        errorMessage += $"Error: {errorContent}";
+                    }
+
+                    _logger.LogWarning(errorMessage);
+                    return errorMessage; 
+                }
+            }
+            catch (Exception e)
+            {
+                var errorMessage = $"Error occurred while adding doctor";
+                _logger.LogError(e, errorMessage);
+                return errorMessage; 
+            }
+        }
+
+
+
+        public async Task<bool> UpdateDoctor(DoctorModel doctor)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var jsonBody = _httpApiService.SerializeJson(doctor);
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri($"api/doctor/{doctor.Id}", UriKind.Relative),
+                    Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Doctor updated successfully");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogWarning($"Failed to update doctor. Status code: {response.StatusCode}");
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error occured while update doctor");
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteDoctor(uint id)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = new Uri($"api/doctor/{id}", UriKind.Relative),
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Doctor deleted successfully");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogWarning($"Failed to delete doctor. Status code: {response.StatusCode}");
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error occured while deletes doctor");
+                return false;
+            }
+        }
     }
 
 }

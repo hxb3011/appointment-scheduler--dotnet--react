@@ -121,8 +121,8 @@ public class DoctorController : UserController
 			doctor.Certificate = v;
 		if ((v = request.Position) != null)
 			doctor.Position = v;
-		if (!await doctor.Create())
-			return BadRequest("can not create");
+		if (!await doctor.Update())
+			return BadRequest("can not update");
 		return Ok("success");
 	}
 

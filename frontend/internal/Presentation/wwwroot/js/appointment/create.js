@@ -24,7 +24,7 @@
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Tên: </p>
-                                <p class="text-dark">${data.fullName}</p>
+                                <p class="text-dark">${data.full_name}</p>
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Email: </p>

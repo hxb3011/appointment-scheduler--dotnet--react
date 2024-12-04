@@ -1,34 +1,36 @@
-﻿@using AppointmentScheduler.Domain.Responses
+﻿@using AppointmentScheduler.Domain.Entities
+@using AppointmentScheduler.Domain.Responses
 @{
-    ViewData["Title"] = "Bệnh nhân";
-    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+	ViewData["Title"] = "Hồ sơ";
+	Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 
+@model IEnumerable<ProfileResponse>
+
+<!-- CSS riêng cho lớp con -->
 @section Styles {
-    <link href="~/plugins/table/datatable/datatables.css" rel="stylesheet" />
-    <link href="~/plugins/table/datatable/extensions/col-reorder/col-reorder.datatables.min.css" rel="stylesheet" />
-    <link href="~/plugins/table/datatable/extensions/fixed-columns/fixed-columns.datatables.min.css" rel="stylesheet" />
-    <link href="~/css/customs/plugins/light/table/datatable/dt-global_style.css" rel="stylesheet" />
-    <link href="~/css/customs/plugins/light/table/datatable/custom_dt_custom.css" rel="stylesheet" />
+	<link href="~/plugins/table/datatable/datatables.css" rel="stylesheet" />
+	<link href="~/plugins/table/datatable/extensions/col-reorder/col-reorder.datatables.min.css" rel="stylesheet" />
+	<link href="~/plugins/table/datatable/extensions/fixed-columns/fixed-columns.datatables.min.css" rel="stylesheet" />
+	<link href="~/css/customs/plugins/light/table/datatable/dt-global_style.css" rel="stylesheet" />
+	<link href="~/css/customs/plugins/light/table/datatable/custom_dt_custom.css" rel="stylesheet" />
+
+
 }
-
-@model IEnumerable<PatientResponse>
-
 
 <div>
-    <!-- BREADCRUMB -->
-    <div class="page-meta">
-        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Bệnh nhân</a></li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    Quản lý bệnh nhân
-                </li>
-            </ol>
-        </nav>
-    </div>
-    <!-- /BREADCRUMB -->
-
+	<!-- BREADCRUMB -->
+	<div class="page-meta">
+		<nav class="breadcrumb-style-one" aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Hệ thống</a></li>
+				<li class="breadcrumb-item active" aria-current="page">
+					Quản lý hồ sơ
+				</li>
+			</ol>
+		</nav>
+	</div>
+	<!-- /BREADCRUMB -->
 	<!-- DATATABLE -->
 	<div class="row layout-top-spacing">
 		<div class="col-xl-12 col-lg-12 col-sm-12">
@@ -36,43 +38,53 @@
 				<div class="widget-header">
 					<div class="row">
 						<div class="col-xl-12 col-md-12 col-sm-12 col-12">
-							<h4>Quản lý người dùng</h4>
+							<h4>Quản lý hồ sơ</h4>
 						</div>
 					</div>
 				</div>
 				<div class="widget-content widget-content-area">
 					<div class="layout-top-spacing ps-3 pe-3 col-12 mb-3">
-						<a href="@Url.Action("Create", "Patient")" class="btn btn-primary">Thêm mới</a>
+						<a href="@Url.Action("Create", "Profile")" class="btn btn-primary">Thêm mới</a>
 					</div>
-					<table id="patient-table" class="table style-3 dt-table-hover" style="width: 100%">
+					<table id="profile-table" class="table style-3 dt-table-hover" style="width: 100%">
 						<thead>
 							<tr>
 								<th style="width: 5%">STT</th>
-								<th>Id</th>
-								<th>Full name</th>
-								<th>Email</th>
-								<th>Số điện thoại</th>
+								<th>Mã hồ sơ</th>
+								<th>Mã bệnh nhân</th>
+								<th>Họ và tên</th>
+								<th>Ngày sinh</th>
+								<th>Giới tính</th>
 								<th class="no-content" style="width: 5%">Thao tác</th>
 							</tr>
 						</thead>
 						<tbody>
-
 							@{
 								int stt = 1;
 							}
-							@if(Model != null){
-								@foreach (var patient in Model)
+							@if (Model != null)
+							{
+								@foreach (var profile in Model)
 								{
 									<tr>
 										<td>@stt</td>
-										<td>@patient.Id</td>
-										<td>@patient.FullName</td>
-										<td>@patient.Email</td>
-										<td>@patient.Phone</td>
+										<td>@profile.Id</td>
+										<td>@profile.Patient</td>
+										<td>@profile.FullName</td>
+										<td>@profile.DateOfBirth</td>
+										<td>
+											@(profile.Gender == 'M' ? "Nam" :
+											profile.Gender == 'F' ? "Nữ" :
+											profile.Gender == 'D' ? "Khác" :
+											"Không xác định")
+										</td>
+
+
+
 
 										<td class="table-controls d-flex justify-content-center align-items-center pt-2">
 											<li>
-												<a href="@Url.Action("Edit", "Patient", new { id = patient.Id })"
+												<a href="@Url.Action("Edit", "Profile", new { id = profile.Id })"
 												   class="bs-tooltip edit" data-bs-toggle="tooltip"
 												   data-bs-placement="top">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -86,7 +98,7 @@
 												</a>
 											</li>
 											<li>
-												<a href="#" data-patient-id="@patient.Id"
+												<a href="#" data-profile-id="@profile.Id"
 												   class="bs-tooltip delete" data-bs-toggle="tooltip"
 												   data-bs-placement="top">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -105,7 +117,7 @@
 									stt++;
 								}
 							}
-							
+
 						</tbody>
 					</table>
 				</div>
@@ -116,6 +128,7 @@
 	<!-- /DATATABLE -->
 </div>
 
+<!-- Scripts riêng cho lớp con -->
 @section Scripts {
 
 
@@ -123,7 +136,7 @@
 	<script src="~/plugins/table/datatable/extensions/col-reorder/col-reorder.datatables.min.js"></script>
 	<script src="~/plugins/table/datatable/extensions/fixed-columns/fixed-columns.datatables.min.js"></script>
 	<script>
-		$('#patient-table').DataTable(
+		$('#profile-table').DataTable(
 			{
 				"dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>"
 					+ "<'table-responsive'tr>"
@@ -149,27 +162,27 @@
 
 	<script>
 		$(document).ready(function () {
-			let patientIdToDelete;
+			let profileIdToDelete;
 
 			// Event delegation for dynamically created `.delete` elements
-			$('#patient-table').on('click', '.delete', function (e) {
+			$('#profile-table').on('click', '.delete', function (e) {
 				e.preventDefault();
-				patientIdToDelete = $(this).data('patient-id');
+				profileIdToDelete = $(this).data('profile-id');
 
-				console.log("id: " + patientIdToDelete);
+				console.log("id: " + profileIdToDelete);
 				$('#deleteModal').modal('show');
 			});
 
 			$('#confirmDelete').on('click', function () {
 				$.ajax({
-					url: `/patient/Delete`,
+					url: `/profile/Delete`,
 					type: 'POST',
 					data: {
-						id: patientIdToDelete
+						id: profileIdToDelete
 					},
 					success: function (response) {
 						Snackbar.show({
-							text: 'Xóa bệnh nhân thành công',
+							text: 'Xóa hồ sơ thành công',
 							textColor: '#ddf5f0',
 							backgroundColor: '#00ab55',
 							actionText: 'Bỏ qua',
@@ -181,7 +194,7 @@
 					},
 					error: function (xhr, status, error) {
 						Snackbar.show({
-							text: 'Xóa bệnh nhân thất bại',
+							text: 'Xóa hồ sơ thất bại',
 							textColor: '#fbeced',
 							backgroundColor: '#e7515a',
 							actionText: 'Bỏ qua',

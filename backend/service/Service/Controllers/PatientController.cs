@@ -110,7 +110,7 @@ public class PatientController : UserController
 			if (!patient.IsPhoneValid)
 				return BadRequest("phone not valid");
 		}
-		if (!await patient.Create())
+		if (!await patient.Update())
 			return BadRequest("can not create");
 		return Ok("success");
 	}
