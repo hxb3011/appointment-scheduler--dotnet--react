@@ -54,7 +54,7 @@ public class AppointmentController : ControllerBase
     {
         var p = await _repository.GetEntityBy<uint, IPatient>(patient);
         if (p == null) return NotFound();
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var query = p.Profiles.AsQueryable().SelectMany(pr =>
             pr.Appointments.AsQueryable().Where(ap => ap.AtTime >= now));
         return Ok(query.OrderByPropertyName(request.By)

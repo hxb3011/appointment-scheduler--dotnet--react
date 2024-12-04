@@ -53,7 +53,7 @@ public class ProfileController : ControllerBase
             return BadRequest("full_name not valid");
 
         profile.DateOfBirth = request.DateOfBirth;
-        if (profile.DateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+        if (profile.DateOfBirth >= DateOnly.FromDateTime(DateTime.Now))
             return BadRequest("date_of_birth not valid");
 
         profile.Gender = request.Gender;
@@ -80,7 +80,7 @@ public class ProfileController : ControllerBase
         }
 
         profile.DateOfBirth = request.DateOfBirth;
-        if (profile.DateOfBirth >= DateOnly.FromDateTime(DateTime.UtcNow))
+        if (profile.DateOfBirth >= DateOnly.FromDateTime(DateTime.Now))
             return BadRequest("date_of_birth not valid");
 
         profile.Gender = request.Gender;

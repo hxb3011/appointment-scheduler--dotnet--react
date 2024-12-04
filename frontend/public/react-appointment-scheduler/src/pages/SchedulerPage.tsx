@@ -11,9 +11,9 @@ export function Scheduler() {
         <form className="Scheduler Page">
             <h2 className="title">Đặt lịch</h2>
             <ComboBox label="Chuyên khoa">
-                <span key="none">(Chọn chuyên khoa)</span>
-                <span key="rhm">Răng hàm mặt</span>
-                <span key="tmh">Tai mũi họng</span>
+                <option key="none">(Chọn chuyên khoa)</option>
+                <option key="rhm">Răng hàm mặt</option>
+                <option key="tmh">Tai mũi họng</option>
             </ComboBox>
             <Calendar label="Ngày khám" formName="date" children={
                 Array.from({ length: 28 }, function (value, index) {
@@ -26,13 +26,13 @@ export function Scheduler() {
                 })
             } />
             <ComboBox label="Hồ sơ">
-                <span key="hxb">Huynh Xuan Bach</span>
-                <span key="new">&lt;Thêm hồ sơ&gt;</span>
+                <option value="hxb">Huynh Xuan Bach</option>
+                <option value="new">&lt;Thêm hồ sơ&gt;</option>
             </ComboBox>
             <ComboBox label="Khung giờ">
-                <span key="none">7:30 - 8:00</span>
-                <span key="rhm">8:00 - 8:30</span>
-                <span key="tmh">9:30 - 9:00</span>
+                <option value="none">7:30 - 8:00</option>
+                <option value="rhm">8:00 - 8:30</option>
+                <option value="tmh">9:30 - 9:00</option>
             </ComboBox>
             <SubmitButton attributes={{
                 style: {
@@ -41,7 +41,7 @@ export function Scheduler() {
                     lineHeight: "24px",
                     padding: "16px"
                 }
-            }} content="Đặt lịch" />
+            }}>Đặt lịch</SubmitButton>
         </form>
     );
 }

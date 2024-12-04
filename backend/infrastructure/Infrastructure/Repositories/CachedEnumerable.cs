@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace AppointmentScheduler.Infrastructure.Repositories;
 
@@ -8,17 +9,19 @@ internal class CachedEnumerable<T> : IEnumerable<T>, IEnumerable, ICloneable
     internal readonly IEnumerable<T> _q;
     internal IReadOnlyList<T> _l;
 
-    internal CachedEnumerable(IEnumerable<T> query, IReadOnlyList<T> list = null)
+    internal CachedEnumerable(IEnumerable<T> query)
     {
         _k = new();
         _q = query ?? throw new ArgumentNullException(nameof(query));
-        _l = list is IList<T> ? list : [];
+        _l = new List<T>();
     }
 
     object ICloneable.Clone() => new CachedEnumerable<T>(_q);
 
-    IEnumerator IEnumerable.GetEnumerator() => new Enumerator(this);
-    IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(this);
+    IEnumerator IEnumerable.GetEnumerator()
+        => _l is List<T> ? new Enumerator(this) : _l.GetEnumerator();
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        => _l is List<T> ? new Enumerator(this) : _l.GetEnumerator();
 
     internal class Enumerator : IEnumerator<T>, IEnumerator, IDisposable
     {
@@ -60,9 +63,9 @@ internal class CachedEnumerable<T> : IEnumerable<T>, IEnumerable, ICloneable
             lock (_e._k)
             {
                 ++_c;
-                if (_e._l is IList<T> list && !list.IsReadOnly)
+                if (_e._l is List<T> list)
                 {
-                    if (!result) _e._l = list.AsReadOnly();
+                    if (!result) _e._l = new ReadOnlyCollection<T>(list);
                     else if (_c >= list.Count) list.Add(_r.Current);
                 }
             }

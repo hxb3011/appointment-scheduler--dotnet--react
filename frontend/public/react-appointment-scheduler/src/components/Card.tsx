@@ -40,7 +40,7 @@ export function AccountCard(props: AccountCardProps) {
                 ) : (
                     <span className="img mdi">{Icon.account_circle_outline}</span>
                 )}
-                <FilledButton content={props.name && props.username ? "Đăng xuất" : "Đăng nhập"} />
+                <FilledButton>{props.name && props.username ? "Đăng xuất" : "Đăng nhập"}</FilledButton>
             </div>
             <div className="info">
                 {props.name && props.username ? (<>

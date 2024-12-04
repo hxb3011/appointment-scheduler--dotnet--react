@@ -1,4 +1,4 @@
-.Container:has(>.ComboBox) {
+.Container:has(>.Combo.Box) {
     box-sizing: border-box;
     border-radius: 24px;
     font-size: 22px;
@@ -12,7 +12,7 @@
     width: 100%;
 }
 
-.Container>.ComboBox {
+.Container>.Combo.Box {
     background-color: var(--mdc-surface);
     border: 2px solid var(--mdc-outline-variant);
     border-radius: 8px;
@@ -28,11 +28,11 @@
     -webkit-appearance: none;
 }
 
-.Container>.ComboBox:is(:hover, :focus) {
+.Container>.Combo.Box:is(:hover, :focus) {
     border: 2px solid var(--mdc-surface-tint);
 }
 
-.Container:has(>.ComboBox).error {
+.Container:has(>.Combo.Box).error {
     display: none;
     font-family: "Roboto Medium";
     font-size: 12px;
@@ -43,13 +43,13 @@
     width: 100%;
 }
 
-.Container>.ComboBox[invalid] {
+.Container>.Combo.Box[invalid] {
     border-color: var(--mdc-on-error-container);
     background-color: var(--mdc-error-container);
     margin-bottom: 4px;
 }
 
-.Container>.ComboBox[invalid]+.error {
+.Container>.Combo.Box[invalid]+.error {
     color: var(--mdc-on-error-container);
     display: block;
     margin-bottom: 4px;

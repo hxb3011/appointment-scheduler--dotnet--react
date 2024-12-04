@@ -38,8 +38,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
     {
         get
         {
-
-            var now = DateOnly.FromDateTime(DateTime.UtcNow);
+            var now = DateOnly.FromDateTime(DateTime.Now);
             return _appointment ??= (
                 from ap in _dbContext.Set<Appointment>()
                 from p in _dbContext.Set<Profile>()

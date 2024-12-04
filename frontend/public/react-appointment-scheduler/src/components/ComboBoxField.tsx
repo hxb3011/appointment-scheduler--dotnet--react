@@ -13,12 +13,8 @@ export function ComboBox(props: ComboBoxProps) {
     return (
         <label className="Container">
             {props.label}
-            <select className="ComboBox" {...attributes}>
-                {props.children && Array.from(props.children, function(node, k) {
-                    return (<option value={(node as React.ReactElement).key || k}>
-                        {node}
-                    </option>);
-                })}
+            <select className="Combo Box Field" {...attributes}>
+                {props.children || (<option value="none">Không có {props.label?.toLowerCase()}</option>)}
             </select>
         </label>
     );

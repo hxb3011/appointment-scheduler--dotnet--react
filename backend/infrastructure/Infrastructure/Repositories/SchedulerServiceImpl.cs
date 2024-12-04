@@ -90,7 +90,7 @@ internal class SchedulerServiceImpl : ISchedulerService
 
     async Task<SchedulerAllocation> ISchedulerService.Allocate(IDoctor doctor, DateOnly date, TimeOnly start, TimeOnly end)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         if (date <= DateOnly.FromDateTime(now)) return null;
         ISchedulerService s = this;
         if (start >= end) return null;
@@ -125,7 +125,7 @@ internal class SchedulerServiceImpl : ISchedulerService
 
     async Task<SchedulerAllocation> ISchedulerService.Allocate(IDoctor doctor)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
         var dnow = DateOnly.FromDateTime(now);
         var tnow = TimeOnly.FromDateTime(now);
 

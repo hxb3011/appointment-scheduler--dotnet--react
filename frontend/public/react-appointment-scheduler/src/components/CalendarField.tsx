@@ -20,7 +20,7 @@ export function Calendar(props: CalendarProps) {
     return (
         <div className="Container">
             {props.label}
-            <div {...attributes} className="Calendar">
+            <div {...attributes} className="Calendar Field">
                 {["T2", "T3", "T4", "T5", "T6", "T7", "CN"]
                     .map(function (value) {
                         return (<label className="Header Item">{value}</label>);
