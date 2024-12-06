@@ -29,7 +29,6 @@ namespace AppointmentScheduler.Presentation.Models
         [Required(ErrorMessage = "Chứng chỉ không được bỏ trống")]
         public string Certificate { get; set; }
 
-        [Required(ErrorMessage = "Mật khẩu không được bỏ trống")]
         [PaswordValidation]
         public string Password { get; set; }
 

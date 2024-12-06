@@ -1,4 +1,5 @@
-﻿using AppointmentScheduler.Domain.Requests;
+﻿using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Presentation.Models;
 using AppointmentScheduler.Presentation.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,17 @@ namespace AppointmentScheduler.Presentation.Controllers
         {
             _doctorService = doctorService;
             _roleService = roleService;
+        }
+
+        public PagedGetAllRequest GetPage()
+        {
+            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest
+            {
+                Offset = 0,
+                Count = 1000
+            };
+
+            return pagedGetAllRequest;
         }
 
         public async Task<IActionResult> DoctorInfo(uint id)
@@ -48,10 +60,8 @@ namespace AppointmentScheduler.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(DoctorModel doctor)
         {
-            var results = new List<ValidationResult>();
-            bool isValid = Validator.TryValidateObject(doctor, new ValidationContext(doctor), results, true);
             string resultMessage = "Lỗi không thể thêm mới bác sĩ này";
-            if (isValid)
+            if (ModelState.IsValid)
             {
                 resultMessage = await _doctorService.AddDoctor(doctor);
 
@@ -64,11 +74,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 
             TempData["Error"] = resultMessage;
 
-            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest
-            {
-                Offset = 0,
-                Count = 20
-            };
+            PagedGetAllRequest pagedGetAllRequest = GetPage();
 
             var roles = await _roleService.GetPagedRoles(pagedGetAllRequest);
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
@@ -86,9 +92,7 @@ namespace AppointmentScheduler.Presentation.Controllers
                 return View("Error");
             }
 
-            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
-            pagedGetAllRequest.Offset = 0;
-            pagedGetAllRequest.Count = 20;
+            PagedGetAllRequest pagedGetAllRequest = GetPage();
 
             var roles = await _roleService.GetPagedRoles(pagedGetAllRequest);
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
@@ -99,15 +103,18 @@ namespace AppointmentScheduler.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(DoctorModel doctor)
         {
-            if(await _doctorService.UpdateDoctor(doctor))
+            string resultMessage = "Lỗi không thể sửa bác sĩ này";
+            if (ModelState.IsValid)
             {
-                TempData["Success"] = "Chỉnh sửa bác sĩ thành công";
-                return RedirectToAction("Index");
+                resultMessage = await _doctorService.UpdateDoctor(doctor);
+                if (resultMessage == "Doctor updated successfully")
+                {
+                    TempData["Success"] = "Chỉnh sửa bác sĩ thành công";
+                    return RedirectToAction("Index");
+                }
             }
 
-            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
-            pagedGetAllRequest.Offset = 0;
-            pagedGetAllRequest.Count = 20;
+            PagedGetAllRequest pagedGetAllRequest = GetPage();
 
             var roles = await _roleService.GetPagedRoles(pagedGetAllRequest);
             ViewBag.Roles = new SelectList(roles, "Id", "Name");

@@ -134,7 +134,7 @@ namespace AppointmentScheduler.Presentation.Services
 
 
 
-        public async Task<bool> UpdateDoctor(DoctorModel doctor)
+        public async Task<string> UpdateDoctor(DoctorModel doctor)
         {
             try
             {
@@ -159,18 +159,27 @@ namespace AppointmentScheduler.Presentation.Services
                 if (response.IsSuccessStatusCode)
                 {
                     _logger.LogInformation("Doctor updated successfully");
-                    return true;
+                    return "Doctor updated successfully";
                 }
                 else
                 {
-                    _logger.LogWarning($"Failed to update doctor. Status code: {response.StatusCode}");
-                    return false;
+                    var errorMessage = "";
+
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(errorContent))
+                    {
+                        errorMessage += $"Error: {errorContent}";
+                    }
+
+                    _logger.LogWarning(errorMessage);
+                    return errorMessage;
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error occured while update doctor");
-                return false;
+                var errorMessage = $"Error occurred while update Doctor";
+                _logger.LogError(e, errorMessage);
+                return errorMessage;
             }
         }
 

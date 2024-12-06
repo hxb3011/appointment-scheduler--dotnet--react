@@ -90,7 +90,7 @@
                                             <div class="form-group mb-4">
                                                 <label for="profile">Hồ sơ<strong class="text-danger">*</strong></label>
                                                 <select asp-for="Profile" id="profile"
-                                                        class="form-control @(ViewData.ModelState["ProfileId"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                        class="form-control @(ViewData.ModelState["Profile"]?.Errors?.Count > 0 ? "is-invalid" : "")"
                                                         asp-items="ViewBag.Profiles"
                                                         onchange="loadProfileInfo(this.value)">
                                                     <option value="">Chọn</option>
@@ -103,7 +103,7 @@
                                             <div class="form-group mb-4">
                                                 <label for="doctor">Bác sĩ<strong class="text-danger">*</strong></label>
                                                 <select asp-for="Doctor" id="doctor"
-                                                        class="form-control @(ViewData.ModelState["DoctorId"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                        class="form-control @(ViewData.ModelState["Doctor"]?.Errors?.Count > 0 ? "is-invalid" : "")"
                                                         asp-items="ViewBag.Doctors"
                                                         onchange="loadDoctorInfo(this.value)">
                                                     <option value="">Chọn</option>
@@ -115,7 +115,7 @@
                                             <div class="form-group mb-4">
                                                 <label for="state">Trạng thái<strong class="text-danger">*</strong></label>
                                                 <select asp-for="State" id="state"
-                                                        class="form-control @(ViewData.ModelState["State"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                        class="form-control @(ViewData.ModelState["State"]?.Errors?.Count > 0 ? "không hợp lệ" : "")"
                                                         asp-items="Html.GetEnumSelectList<EAppointmentState>()">
                                                     <option value="">Chọn</option>
                                                 </select>

@@ -18,7 +18,7 @@ namespace AppointmentScheduler.Presentation.Controllers
             _patientService = patientService;
         }
 
-		public PagedGetAllRequest getPage()
+		public PagedGetAllRequest GetPage()
 		{
             PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest
             {
@@ -47,7 +47,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 
 		public async Task<IActionResult> Create()
 		{
-			var page = getPage();
+			var page = GetPage();
 
             var patients = await _patientService.GetPagedPatients(page);
 			ViewBag.Patients = new SelectList(patients, "Id", "FullName");
@@ -75,7 +75,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 
 			}
 
-			var page = getPage();
+			var page = GetPage();
 
             var patients = await _patientService.GetPagedPatients(page);
             ViewBag.Patients = new SelectList(patients, "Id", "FullName");
@@ -93,7 +93,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 				return View("Error");
 			}
 
-            var page = getPage();
+            var page = GetPage();
 
             var patients = await _patientService.GetPagedPatients(page);
             ViewBag.Patients = new SelectList(patients, "Id", "FullName");
@@ -119,7 +119,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 
 
 			TempData["Error"] = resultMessage;
-            var page = getPage();
+            var page = GetPage();
 
             var patients = await _patientService.GetPagedPatients(page);
             ViewBag.Patients = new SelectList(patients, "Id", "FullName");

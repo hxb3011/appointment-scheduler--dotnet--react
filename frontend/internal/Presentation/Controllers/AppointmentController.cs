@@ -21,6 +21,17 @@ namespace AppointmentScheduler.Presentation.Controllers
             _profileService = profileService;
         }
 
+        public PagedGetAllRequest getPage()
+        {
+            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest
+            {
+                Offset = 0,
+                Count = 1000
+            };
+
+            return pagedGetAllRequest;
+        }
+
         public async Task<IActionResult> AppointmentInfo(uint id)
         {
             var appointment = await _appointmentService.GetAppointmentById(id);
@@ -40,9 +51,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 
         public async Task<IActionResult> Create()
         {
-            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
-            pagedGetAllRequest.Offset = 0;
-            pagedGetAllRequest.Count = 20;
+            PagedGetAllRequest pagedGetAllRequest = getPage();
 
             var doctors = await _doctorService.GetPagedDoctors(pagedGetAllRequest);
             ViewBag.Doctors = new SelectList(doctors, "Id", "FullName");

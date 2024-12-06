@@ -105,7 +105,7 @@ public class DoctorController : UserController
 				return BadRequest("password not valid");
 			doctor.Password = _passwordHasher.HashPassword(doctor, doctor.Password);
 		}
-		if ((v = request.Email) != null)
+        if ((v = request.Email) != null)
 		{
 			doctor.Email = v;
 			if (!doctor.IsEmailValid)

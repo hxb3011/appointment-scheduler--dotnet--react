@@ -17,6 +17,17 @@ public class PatientController : Controller
 		_patientService = patientService;
 	}
 
+    public PagedGetAllRequest GetPage()
+    {
+        PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest
+        {
+            Offset = 0,
+            Count = 1000
+        };
+
+        return pagedGetAllRequest;
+    }
+
     public async Task<IActionResult> PatientInfo(uint id)
     {
         var patient = await _patientService.GetPatientById(id);
@@ -25,9 +36,7 @@ public class PatientController : Controller
 
 	public async Task<IActionResult> Index(int offset = 0, int count = 1000)
 	{
-        PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
-        pagedGetAllRequest.Offset = offset;
-        pagedGetAllRequest.Count = count;
+        PagedGetAllRequest pagedGetAllRequest = GetPage();
         var patients = await _patientService.GetPagedPatients(pagedGetAllRequest);
 
 		return View(patients);
@@ -41,10 +50,8 @@ public class PatientController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(PatientModel patient)
     {
-        var results = new List<ValidationResult>();
-        bool isValid = Validator.TryValidateObject(patient, new ValidationContext(patient), results, true);
         string resultMessage = "Lỗi không thể thêm bệnh nhân này";
-        if (isValid)
+        if (ModelState.IsValid)
         {
             resultMessage = await _patientService.AddPatient(patient);
 
@@ -64,7 +71,7 @@ public class PatientController : Controller
         var patient = await _patientService.GetPatientById(id);
         if(patient == null)
         {
-            TempData["Error"] = "Đã xảy ra lỗi khi truy cập bệnh nhan này";
+            TempData["Error"] = "Đã xảy ra lỗi khi truy cập bệnh nhân này";
             return View("Error");
         }
 
@@ -74,10 +81,8 @@ public class PatientController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(PatientModel patient)
     {
-        var results = new List<ValidationResult>();
-        bool isValid = Validator.TryValidateObject(patient, new ValidationContext(patient), results, true);
         string resultMessage = "Lỗi không thể sửa bệnh nhân này";
-        if (isValid)
+        if (ModelState.IsValid)
         {
             resultMessage = await _patientService.UpdatePatient(patient);
             if (resultMessage == "Patient updated successfully")

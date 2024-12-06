@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace AppointmentScheduler.Presentation.Models;
 
-public class AppointmentModel : AppointmentResponse
+public class AppointmentModel
 {
     
     [JsonPropertyName("id")]
@@ -18,11 +18,11 @@ public class AppointmentModel : AppointmentResponse
 
     [Required(ErrorMessage = "Chọn hồ sơ")]
     [JsonPropertyName("profile")]
-    public uint? Profile { get; set; }
+    public uint? Profile { get; set; } = null;
 
     [Required(ErrorMessage = "Chọn bác sĩ")]
     [JsonPropertyName("doctor")]
-    public uint Doctor { get; set; }
+    public uint? Doctor { get; set; } = null;
 
     [Required(ErrorMessage = "Chọn trạng thái")]
     [JsonPropertyName("state")]
