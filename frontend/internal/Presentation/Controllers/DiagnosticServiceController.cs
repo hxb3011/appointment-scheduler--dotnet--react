@@ -1,22 +1,37 @@
-﻿using AppointmentScheduler.Presentation.Services;
+﻿using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Presentation.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppointmentScheduler.Presentation.Controllers
 {
 	public class DiagnosticServiceController : Controller
 	{
-		private readonly DiagnosticService _diagnosticService;
+		private readonly DiagnosticSerService _diagnosticServiceSer;
 
-        public DiagnosticServiceController(DiagnosticService diagnosticService)
+        public DiagnosticServiceController(DiagnosticSerService diagnosticService)
         {
-            _diagnosticService = diagnosticService;
+            _diagnosticServiceSer = diagnosticService;
         }
 
-        public async Task<IActionResult> Index()
-		{
-			var diagnosticServices = await _diagnosticService.GetAllDiagnosticService();
+        public PagedGetAllRequest getPage()
+        {
+            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest
+            {
+                Offset = 0,
+                Count = 1000
+            };
 
-			return View(diagnosticServices);
-		}
-	}
+            return pagedGetAllRequest;
+        }
+
+        public async Task<IActionResult> Index(int offset = 0, int count = 1000)
+        {
+            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
+            pagedGetAllRequest.Offset = offset;
+            pagedGetAllRequest.Count = count;
+            var diagnosticSers = await _diagnosticServiceSer.GetPagedDiagnosticSers(pagedGetAllRequest);
+
+            return View(diagnosticSers);
+        }
+    }
 }

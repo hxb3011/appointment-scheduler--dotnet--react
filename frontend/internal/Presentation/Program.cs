@@ -76,7 +76,7 @@ public static class Program
         services.AddHttpClient<AppointmentService>("api", configureClient);
         services.AddHttpClient<DoctorService>("api", configureClient);
         services.AddHttpClient<ProfileService>("api", configureClient);
-        services.AddHttpClient<DiagnosticService>("api", configureClient);
+        services.AddHttpClient<DiagnosticSerService>("api", configureClient);
         return services;
     }
 
@@ -88,9 +88,10 @@ public static class Program
         services.AddScoped<AppointmentService>();
         services.AddScoped<DoctorService>();
         services.AddScoped<ProfileService>();
-        services.AddScoped<DiagnosticService>();
+        services.AddScoped<DiagnosticSerService>();
         services.AddScoped<RoleService>();
         services.AddScoped<PatientService>();
+        services.AddScoped<ExaminationService>();
         return services;
     }
 

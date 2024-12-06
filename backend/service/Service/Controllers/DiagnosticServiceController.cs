@@ -104,7 +104,7 @@ public class DiagnosticServiceController : ControllerBase
         => !_repository.TryGetKeyOf(examinationDiagnostic, out ExaminationService key) ? null
         : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, Doctor = key.DoctorId, DiagnosticService = key.DiagnosticServiceId, Examination = key.ExaminationId };
 
-    [HttpGet]
+    [HttpGet("Examination")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
     public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromQuery] PagedGetAllRequest request, uint examination)
     {
@@ -123,7 +123,7 @@ public class DiagnosticServiceController : ControllerBase
                 .Method.CreateDelegate<Func<IDiagnosticService, bool>>((_repository, diagnosticServiceId))).FirstOrDefault();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("Examination/{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
     public async Task<ActionResult<ExaminationDiagnosticResponse>> GetExaminationDiagnostic(uint id, uint examination)
     {

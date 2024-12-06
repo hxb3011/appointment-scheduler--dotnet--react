@@ -32,7 +32,7 @@ public class ExaminationController : ControllerBase
     public ActionResult<IEnumerable<ExaminationResponse>> GetPagedExaminations([FromQuery] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IExamination>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
-    [HttpGet]
+    [HttpGet("byDoctor")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadExamination])]
     public async Task<ActionResult<IEnumerable<ExaminationResponse>>> GetPagedExaminationsByDoctor([FromQuery] PagedGetAllRequest request, uint doctor)
     {
@@ -51,7 +51,7 @@ public class ExaminationController : ControllerBase
         return Ok(MakeResponse(examination));
     }
 
-    [HttpPost]
+    [HttpPost("{appointment}")]
     [JSONWebToken(RequiredPermissions = [Permission.CreateExamination])]
     public async Task<ActionResult> CreateExamination(uint appointment)
     {

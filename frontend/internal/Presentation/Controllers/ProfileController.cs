@@ -34,9 +34,9 @@ namespace AppointmentScheduler.Presentation.Controllers
             PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
             pagedGetAllRequest.Offset = offset;
             pagedGetAllRequest.Count = count;
-            var doctors = await _profileService.GetPagedProfiles(pagedGetAllRequest);
+            var profiles = await _profileService.GetPagedProfiles(pagedGetAllRequest);
 
-            return View(doctors);
+            return View(profiles);
         }
 
         public async Task<IActionResult> ProfileInfo(uint id)

@@ -1,10 +1,11 @@
 ﻿@using AppointmentScheduler.Domain.Entities
+@using AppointmentScheduler.Domain.Responses
 @{
     ViewData["Title"] = "Người dùng";
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 
-@model IEnumerable<DiagnosticService>
+@model IEnumerable<DiagnosticServiceResponse>
 
 <!-- CSS riêng cho lớp con -->
 @section Styles {
@@ -45,10 +46,11 @@
                     <div class="layout-top-spacing ps-3 pe-3 col-12 mb-3">
                         <a href="@Url.Action("Create", "DiagnosticService")" class="btn btn-primary">Thêm mới</a>
                     </div>
-                    <table id="user-table" class="table style-3 dt-table-hover" style="width: 100%">
+                    <table id="diagService-table" class="table style-3 dt-table-hover" style="width: 100%">
                         <thead>
                             <tr>
                                 <th style="width: 5%">STT</th>
+                                <th>Mã dịch vụ</th>
                                 <th>Tên</th>
                                 <th>Giá dịch vụ</th>
                                 <th class="no-content" style="width: 5%">Thao tác</th>
@@ -65,6 +67,7 @@
                                 {
                                     <tr>
                                         <td>@stt</td>
+                                        <td>@diagService.Id</td>
                                         <td>@diagService.Name</td>
                                         <td>@diagService.Price</td>
 
@@ -84,7 +87,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" data-user-id="@diagService.Id"
+                                                <a href="#" data-diagService-id="@diagService.Id"
                                                    class="bs-tooltip delete" data-bs-toggle="tooltip"
                                                    data-bs-placement="top">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -116,13 +119,11 @@
 
 <!-- Scripts riêng cho lớp con -->
 @section Scripts {
-
-
     <script src="~/plugins/table/datatable/datatables.js"></script>
     <script src="~/plugins/table/datatable/extensions/col-reorder/col-reorder.datatables.min.js"></script>
     <script src="~/plugins/table/datatable/extensions/fixed-columns/fixed-columns.datatables.min.js"></script>
     <script>
-        $('#user-table').DataTable(
+        $('#diagService-table').DataTable(
             {
                 "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>"
                     + "<'table-responsive'tr>"
@@ -148,25 +149,25 @@
 
     <script>
         $(document).ready(function () {
-            let userIdToDelete;
+            let diagnosticSerIdToDelete;
 
             $('.delete').on('click', function (e) {
                 e.preventDefault();
-                userIdToDelete = $(this).data('user-id');
+                diagnosticSerIdToDelete = $(this).data('diagService-id');
                 $('#deleteModal').modal('show');
             });
 
 
             $('#confirmDelete').on('click', function () {
                 $.ajax({
-                    url: `/User/Delete`,
+                    url: `/DiagnosticService/Delete`,
                     type: 'POST',
                     data: {
-                        id: userIdToDelete
+                        id: diagnosticSerIdToDelete
                     },
                     success: function (response) {
                         Snackbar.show({
-                            text: 'Xóa người dùng thành công',
+                            text: 'Xóa dịch vụ chuẩn đoán thành công',
                             textColor: '#ddf5f0',
                             backgroundColor: '#00ab55',
                             actionText: 'Bỏ qua',
@@ -179,7 +180,7 @@
                     },
                     error: function (xhr, status, error) {
                         Snackbar.show({
-                            text: 'Xóa người dùng thất bại',
+                            text: 'Xóa dịch vụ chuẩn đoán thất bại',
                             textColor: '#fbeced',
                             backgroundColor: '#e7515a',
                             actionText: 'Bỏ qua',

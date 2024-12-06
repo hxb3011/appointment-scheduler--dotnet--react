@@ -21,6 +21,11 @@ namespace AppointmentScheduler.Presentation.Controllers
             _profileService = profileService;
         }
 
+        public async Task<IActionResult> AppointmentInfo(uint id)
+        {
+            var appointment = await _appointmentService.GetAppointmentById(id);
+            return Ok(appointment);
+        }
 
         public async Task<IActionResult> Index(int offset = 0, int count = 1000)
         {

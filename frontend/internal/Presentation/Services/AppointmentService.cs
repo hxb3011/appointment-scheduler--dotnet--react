@@ -1,4 +1,5 @@
 ﻿using AppointmentScheduler.Domain.Requests;
+using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Presentation.Models;
 using System.Net.Http.Headers;
 using System.Text;
@@ -52,6 +53,40 @@ public class AppointmentService
         }
     }
 
+    public async Task<IEnumerable<AppointmentResponse>> GetPagedAppointments(PagedGetAllRequest request)
+    {
+        try
+        {
+            var token = _httpApiService.Context.Session.GetString("AuthToken");
+            var jsonBody = _httpApiService.SerializeJson(request);
+
+            var httpRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("api/appointment", UriKind.Relative),
+                Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
+            };
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            var response = await _httpApiService.SendAsync(httpRequest);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var appointments = _httpApiService.DeserializeJson<IEnumerable<AppointmentResponse>>(jsonString);
+
+            return appointments;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching appointments.");
+            return null;
+        }
+    }
 
 
     public async Task<AppointmentModel> GetAppointmentById(uint id)
