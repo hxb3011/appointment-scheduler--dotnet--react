@@ -2,7 +2,7 @@ import { apiServer } from "../utils/api";
 
 type BaseAuthErrorResponse = {
     type: "error";
-    message?: string;
+    message?: any;
 }
 
 export type AuthRequest = FormData
@@ -10,36 +10,31 @@ export type RegisterRequest = FormData;
 
 export type AuthResponse = BaseAuthErrorResponse | {
     type: "ok";
-    access_token: string;
+    access_token?: string;
 }
 
 export type RegisterResponse = BaseAuthErrorResponse | {
     type: "ok";
-    message?: string;
+    message?: any;
 }
 
 export async function login(request: AuthRequest): Promise<AuthResponse> {
     try {
-        const response: Response = await fetch(apiServer + "auth/authenticate", {
+        const response: Response = await fetch(apiServer + "auth/token", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: request.get("username"),
-                password: request.get("password"),
-            }),
+            body: request,
         });
         if ((response.status / 400) == 1) return {
             type: "error",
-            message: await response.json()
+            message: await response.text()
         };
         if (!response.ok) return {
             type: "error",
             message: `HTTP error! status: ${response.status}`
         };
         const result = await response.json();
-        return { type: "ok", ...result }
+        result.type = "ok";
+        return result;
     } catch (error) {
         return {
             type: "error",
@@ -52,24 +47,17 @@ export async function register(request: RegisterRequest): Promise<RegisterRespon
     try {
         const response: Response = await fetch(apiServer + "auth/register", {
             method: "POST",
-            body: JSON.stringify({
-                phone: request.get("username"),
-                email: request.get("email"),
-                full_name: request.get("full_name"),
-                password: request.get("password"),
-                otp: 123456
-            })
+            body: request
         });
         if ((response.status / 400) == 1) return {
             type: "error",
-            message: await response.json()
+            message: await response.text()
         };
         if (!response.ok) return {
             type: "error",
             message: `HTTP error! status: ${response.status}`
         };
-        const result = await response.json();
-        return { type: "ok", message: result.toString() };
+        return { type: "ok", message: response.text() };
     } catch (error) {
         return {
             type: "error",
@@ -79,7 +67,6 @@ export async function register(request: RegisterRequest): Promise<RegisterRespon
 }
 
 export function setAccessToken(token?: string): void {
-    console.log("setAccessToken");
     if (token) sessionStorage.setItem("access_token", token);
     else sessionStorage.removeItem("access_token");
 }

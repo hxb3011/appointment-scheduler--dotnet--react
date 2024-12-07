@@ -200,7 +200,7 @@ public static class Extensions
         Action<IServiceProvider, JSONWebTokenOptions> jwtConfigure = null,
         Action<IServiceProvider, FormOptions> formConfigure = null,
         Action<IServiceProvider, PasswordHasherOptions> passwordHasherConfigure = null
-    ) => services.AddDbContext<IRepository, DefaultRepository>(dbConfigure, ServiceLifetime.Singleton)
+    ) => services.AddDbContext<IRepository, DefaultRepository>(dbConfigure, ServiceLifetime.Scoped)
         .AddConfigurator(jwtConfigure, ServiceLifetime.Singleton)
         .AddConfigurator(ConfigureJSONSerializerOptions + jsonSerializerConfigure, ServiceLifetime.Singleton)
         .AddConfigurator(ConfigureFormOptions + formConfigure, ServiceLifetime.Singleton)

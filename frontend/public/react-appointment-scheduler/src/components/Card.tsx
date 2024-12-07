@@ -66,7 +66,6 @@ type NavCardProps = React.Attributes & {
         name?: string;
         url?: string
     }[];
-    user?: Patient;
 }
 
 export function NavCard(props: NavCardProps) {

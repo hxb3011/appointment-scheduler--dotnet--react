@@ -4,7 +4,7 @@ import { getAccessToken } from "./auth";
 
 type BaseErrorResponse = {
     type: "error";
-    message?: string;
+    message?: any;
 }
 
 export type Part = {
@@ -28,11 +28,11 @@ export async function getParts(): Promise<PartsResponse> {
         });
         if ((response.status / 400) == 1) return {
             type: "error",
-            message: await response.json()
+            message: await response.text()
         };
         if (!response.ok) return {
             type: "error",
-            message: `HTTP error! status: ${response.status}; content: ${JSON.stringify(response)};`
+            message: `HTTP error! status: ${response.status}; content: ${await response.text()};`
         };
         const result = await response.json();
         result.type = "ok";

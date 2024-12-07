@@ -1,3 +1,8 @@
+using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Repositories;
+using AppointmentScheduler.Infrastructure.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 namespace AppointmentScheduler.Service.Controllers
 {
 	[ApiController, Route("api/[controller]")]
@@ -13,7 +18,7 @@ namespace AppointmentScheduler.Service.Controllers
 		}
 
 		[HttpGet("part"), JSONWebToken(RequiredPermissions = [Permission.UpdateUser])]
-		public async Task<ActionResult<SchedulerParts>> GetParts()
+		public async Task<ActionResult<SchedulerPart>> GetParts()
 			=> Ok((await _repository.GetService<ISchedulerService>()).Parts);
 	}
 }

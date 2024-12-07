@@ -29,7 +29,6 @@ public class DefaultRepository : DbContext, IRepository
             .Entity<Prescription>(MySQLEntitiesExtensions.BuildPrescriptionEntity)
             .Entity<Medicine>(MySQLEntitiesExtensions.BuildMedicineEntity)
             .Entity<PrescriptionDetail>(MySQLEntitiesExtensions.BuildPrescriptionDetailEntity);
-
     }
 
     private IEnumerable<TEntity> GetEntitiesBy<TEntity, TKey>(

@@ -4,7 +4,7 @@ import { getAccessToken } from "./auth";
 
 type BasePatientErrorResponse = {
     type: "error";
-    message?: string;
+    message?: any;
 }
 
 export type PatientRequest = {
@@ -31,7 +31,7 @@ export type PatientResponse = BasePatientErrorResponse | (Patient & {
 export async function currentUser(): Promise<PatientResponse> {
     try {
         const token = getAccessToken();
-        const response: Response = await fetch(apiServer + "user/current", {
+        const response: Response = await fetch(apiServer + "patient/current", {
             headers: {
                 ...(token ? { "Authorization": `Bearer ${token}` } : {})
             },
@@ -39,14 +39,15 @@ export async function currentUser(): Promise<PatientResponse> {
         });
         if ((response.status / 400) == 1) return {
             type: "error",
-            message: await response.json()
+            message: await response.text()
         };
         if (!response.ok) return {
             type: "error",
-            message: `HTTP error! status: ${response.status}; content: ${JSON.stringify(response)};`
+            message: `HTTP error! status: ${response.status}; content: ${await response.text()};`
         };
         const result = await response.json();
-        return { type: "ok", ...result }
+        result.type = "ok";
+        return result;
     } catch (error) {
         return {
             type: "error",

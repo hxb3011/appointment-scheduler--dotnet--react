@@ -17,7 +17,6 @@ public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPa
     private readonly IPasswordHasher<IUser> _hasher = hasher;
     private readonly ILogger<AuthController> _logger = logger;
 
-
     [HttpPost("token")]
     public ActionResult<AuthTokenResponse> SignIn([FromForm] AuthRequest request)
     {
@@ -30,9 +29,15 @@ public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPa
             return NotFound("user not found.");
 
         var passwordVerificationResult = _hasher.VerifyHashedPassword(user, user.Password, request.Password);
-        if (passwordVerificationResult != PasswordVerificationResult.Success
-            && passwordVerificationResult != PasswordVerificationResult.SuccessRehashNeeded)
-            return BadRequest("invalid pass not found.");
+        if (passwordVerificationResult != PasswordVerificationResult.Success)
+        {
+            if (passwordVerificationResult == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                user.Password = _hasher.HashPassword(user, request.Password);
+                user.Update();
+            }
+            else return BadRequest("invalid pass not found.");
+        }
 
         return Ok(new AuthTokenResponse()
         {

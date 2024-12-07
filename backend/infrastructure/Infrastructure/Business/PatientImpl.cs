@@ -27,11 +27,8 @@ internal sealed class PatientImpl : UserImpl, IPatient
 
     IEnumerable<IProfile> IPatient.Profiles
     {
-        get => _profiles ??= (
-            from p in _dbContext.Set<Profile>()
-            where p.PatientId == _patient.Id
-            select CreateProfile(p).WaitForResult(Timeout.Infinite, default)
-        ).Cached();
+        get => _profiles ??= _dbContext.Set<Profile>().Where(p => p.PatientId == _patient.Id).ToList()
+            .AsQueryable().Select(p => CreateProfile(p).WaitForResult(Timeout.Infinite, default)).Cached();
     }
 
     IEnumerable<IAppointment> IPatient.Appointments
@@ -39,13 +36,10 @@ internal sealed class PatientImpl : UserImpl, IPatient
         get
         {
             var now = DateOnly.FromDateTime(DateTime.Now);
-            return _appointment ??= (
-                from ap in _dbContext.Set<Appointment>()
-                from p in _dbContext.Set<Profile>()
-                where p.PatientId == _patient.Id && DateOnly.FromDateTime(ap.AtTime) >= now
-                orderby ap.AtTime ascending
-                select CreateAppointment(ap).WaitForResult(Timeout.Infinite, default)
-            ).Cached();
+            return _appointment ??= _dbContext.Set<Profile>().SelectMany(p =>
+                    _dbContext.Set<Appointment>().Where(a => p.Id == a.ProfileId && DateOnly.FromDateTime(a.AtTime) >= now))
+                .OrderBy(a => a.AtTime).ToList().AsQueryable().Select(a =>
+                    CreateAppointment(a).WaitForResult(Timeout.Infinite, default)).Cached();
         }
     }
 

@@ -7,7 +7,7 @@ import "./Page.css";
 import "./RegisterPage.css";
 import { FormField } from "../components/FormField";
 import { SubmitButton } from "../components/Button";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { register } from "../services/auth";
 
 export function Register() {
@@ -144,7 +144,7 @@ export function Register() {
                     padding: "16px"
                 }
             }}>Đăng ký</SubmitButton>
-            <span className="note">Bạn đã có tài khoản? <a href={"/login" + location.search}>Đăng nhập</a></span>
+            <span className="note">Bạn đã có tài khoản? <Link to={"/login" + location.search}>Đăng nhập</Link></span>
         </form>
     );
 }

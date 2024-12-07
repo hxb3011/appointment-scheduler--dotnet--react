@@ -25,13 +25,18 @@ public class ProfileController : ControllerBase
         => !_repository.TryGetKeyOf(role, out Profile key) ? null
         : new() { Id = key.Id, Patient = key.PatientId, FullName = key.FullName, DateOfBirth = key.DateOfBirth, Gender = key.Gender };
 
-    [HttpGet]
-    [JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
-    public ActionResult<IEnumerable<ProfileResponse>> GetPagedProfiles([FromBody] PagedGetAllRequest request)
+    [HttpGet, JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    public ActionResult<IEnumerable<ProfileResponse>> GetPagedProfiles([FromQuery] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IProfile>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
-    [HttpGet("{id}")]
-    [JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    [HttpGet("patient/current"), JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    public ActionResult<IEnumerable<ProfileResponse>> GetPagedProfilesByCurrentPatient([FromQuery] PagedGetAllRequest request)
+    {
+        if (HttpContext.GetAuthUser() is not IPatient patient) return Forbid("signed in user is not a patient");
+        else return Ok(patient.Profiles.Skip(request.Offset).Take(request.Count).Select(MakeResponse));
+    }
+
+    [HttpGet("{id}"), JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
     public async Task<ActionResult<ProfileResponse>> GetProfile(uint id)
     {
         var profile = await _repository.GetEntityBy<uint, IProfile>(id);
@@ -39,9 +44,8 @@ public class ProfileController : ControllerBase
         return Ok(MakeResponse(profile));
     }
 
-    [HttpPost]
-    [JSONWebToken(RequiredPermissions = [Permission.CreateProfile])]
-    public async Task<ActionResult> CreateProfile([FromBody] ProfileRequest request)
+    [HttpPost, JSONWebToken(RequiredPermissions = [Permission.CreateProfile])]
+    public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] ProfileRequest request)
     {
         var patient = await _repository.GetEntityBy<uint, IPatient>(request.Patient);
         if (patient == null) return NotFound("patient not found");
@@ -64,8 +68,7 @@ public class ProfileController : ControllerBase
         return Ok("success");
     }
 
-    [HttpPut("{id}")]
-    [JSONWebToken(RequiredPermissions = [Permission.UpdateProfile])]
+    [HttpPut("{id}"), JSONWebToken(RequiredPermissions = [Permission.UpdateProfile])]
     public async Task<ActionResult> UpdateProfile([FromBody] ProfileRequest request, uint id)
     {
         var profile = await _repository.GetEntityBy<uint, IProfile>(id);
@@ -91,8 +94,7 @@ public class ProfileController : ControllerBase
         return Ok("success");
     }
 
-    [HttpDelete("{id}")]
-    [JSONWebToken(RequiredPermissions = [Permission.DeleteProfile])]
+    [HttpDelete("{id}"), JSONWebToken(RequiredPermissions = [Permission.DeleteProfile])]
     public async Task<ActionResult> DeleteProfile(uint id)
     {
         var profile = await _repository.GetEntityBy<uint, IProfile>(id);

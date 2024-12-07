@@ -24,8 +24,8 @@ public class DoctorController : UserController
 		: new() { Id = u.Id, UserName = u.UserName, FullName = u.FullName, Email = d.Email, Phone = d.Phone, Certificate = d.Certificate, Position = d.Position, Role = u.RoleId };
 
 	[HttpGet]
-	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
-	public ActionResult<IEnumerable<DoctorResponse>> GetPagedDoctors([FromBody] PagedGetAllRequest request)
+	[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
+	public ActionResult<IEnumerable<DoctorResponse>> GetPagedDoctors([FromQuery] PagedGetAllRequest request)
 		=> Ok(_repository.GetEntities<IDoctor>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
 	[HttpGet("{id}")]
@@ -143,7 +143,7 @@ public class DoctorController : UserController
 
 	[HttpGet("{id}/examdiag")]
 	[JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
-	public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromBody] PagedGetAllRequest request, uint id)
+	public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromQuery] PagedGetAllRequest request, uint id)
 	{
 		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
 		if (doctor == null) return NotFound();

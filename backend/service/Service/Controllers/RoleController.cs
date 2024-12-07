@@ -22,7 +22,7 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
 
     [HttpGet]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadRole])]
-    public ActionResult<IEnumerable<RoleResponse>> GetPagedRoles([FromBody] PagedGetAllRequest request)
+    public ActionResult<IEnumerable<RoleResponse>> GetPagedRoles([FromQuery] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IRole>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
     [HttpGet("{id}")]

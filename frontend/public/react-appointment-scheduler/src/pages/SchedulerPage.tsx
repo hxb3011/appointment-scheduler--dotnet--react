@@ -10,14 +10,19 @@ import { getParts, Part } from "../services/scheduler";
 import { getProfiles, Profile } from "../services/profile";
 import { createAppointment } from "../services/appointment";
 import { useNavigate } from "react-router-dom";
+import { Patient } from "../services/patient";
 
-export function Scheduler() {
+type SchedulerProps = {
+    user?: Patient;
+};
+
+export function Scheduler(props: SchedulerProps) {
     const navigate = useNavigate();
 
     const [doctors, setDoctors] = useState<Doctor[]>([]);
     useEffect(() => {
         getDoctors().then((value) => {
-            if (value.type == "ok") {
+            if (value.type === "ok") {
                 setDoctors(value);
                 return;
             }
@@ -27,7 +32,7 @@ export function Scheduler() {
     const [parts, setParts] = useState<Part[]>([]);
     useEffect(() => {
         getParts().then(value => {
-            if (value.type == "ok") {
+            if (value.type === "ok") {
                 setParts(value);
                 return;
             }
@@ -36,8 +41,8 @@ export function Scheduler() {
 
     const [profiles, setProfiles] = useState<Profile[]>([]);
     useEffect(() => {
-        getProfiles().then(value => {
-            if (value.type == "ok") {
+        getProfiles({}).then(value => {
+            if (value.type === "ok") {
                 setProfiles(value);
                 return;
             }
@@ -57,9 +62,11 @@ export function Scheduler() {
             begin_time: start,
             end_time: end
         });
-        if (response.type == "ok") {
-            if (response.payment_url)
-                window.location.href = response.payment_url;
+        if (response.type === "ok") {
+            // if (response.payment_url)
+            //     window.location.href = response.payment_url;
+            alert("Đặt lịch thành công.");
+            navigate("/appointment");
         } else {
             alert("Lịch đã kín.");
         }
@@ -68,10 +75,16 @@ export function Scheduler() {
     return (
         <form ref={formRef} className="Scheduler Page" onSubmit={handleSubmit}>
             <h2 className="title">Đặt lịch</h2>
+            <ComboBox label="Hồ sơ" attributes={{ name: "profile", value: profiles[0]?.id }}>
+                {profiles.map(function (value) {
+                    return (<option value={value.id}>{value.full_name}</option>);
+                })}
+                <option value="new">&lt;Thêm hồ sơ&gt;</option>
+            </ComboBox>
             <ComboBox label="Chuyên khoa" attributes={{ name: "doctor" }}>
                 <option value="none">(Chọn chuyên khoa)</option>
                 {doctors.map(function (value) {
-                    return (<option value={value.id}>Chuyên khoa {value.position || "không xác định"}</option>);
+                    return (<option value={value.id}>{`Chuyên khoa ${value.position || "không xác định"} - BS.${value.full_name}`}</option>);
                 })}
             </ComboBox>
             <Calendar label="Ngày khám" formName="date" children={
@@ -95,12 +108,6 @@ export function Scheduler() {
                     };
                 })
             } />
-            <ComboBox label="Hồ sơ" attributes={{ name: "profile", value: profiles[0]?.id }}>
-                {profiles.map(function (value) {
-                    return (<option value={value.id}>{value.full_name}</option>);
-                })}
-                <option value="new">&lt;Thêm hồ sơ&gt;</option>
-            </ComboBox>
             <ComboBox label="Khung giờ" attributes={{ name: "timerange" }}>
                 {parts.map(function (value) {
                     function simplify(time?: string) {

@@ -4,10 +4,8 @@ using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Infrastructure.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -23,7 +21,7 @@ public class PatientController : UserController
 
 	[HttpGet]
 	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
-	public ActionResult<IEnumerable<PatientResponse>> GetPagedPatients([FromBody] PagedGetAllRequest request)
+	public ActionResult<IEnumerable<PatientResponse>> GetPagedPatients([FromQuery] PagedGetAllRequest request)
 		=> Ok(_repository.GetEntities<IPatient>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
 	[HttpGet("{id}")]

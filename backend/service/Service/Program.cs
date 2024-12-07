@@ -13,7 +13,7 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         var services = builder.Services;
-        services.AddSwaggerGen();
+        // services.AddSwaggerGen();
 
         services.AddInfrastructure
         (
@@ -24,7 +24,7 @@ public static class Program
         {
             options.AddPolicy("AllowSpecificOrigins", builder =>
             {
-                builder.WithOrigins("*").WithMethods("*").WithHeaders("*");
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             });
         });
         services.AddControllers();

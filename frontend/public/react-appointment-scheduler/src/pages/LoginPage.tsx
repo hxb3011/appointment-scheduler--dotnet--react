@@ -1,5 +1,5 @@
 
-import React, { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { FormEvent, useEffect, useRef } from 'react';
 
 import $ from 'jquery';
 import 'jquery-validation';
@@ -8,7 +8,7 @@ import "./Page.css";
 import "./LoginPage.css";
 import { FormField } from "../components/FormField";
 import { SubmitButton } from "../components/Button";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { login, setAccessToken } from '../services/auth'
 
 type LoginPageProps = {
@@ -70,9 +70,9 @@ export function Login(props: LoginPageProps) {
                 },
                 password: {
                     required: true,
-                    // minlength: 8,
-                    // maxlength: 50,
-                    // passwordValidation: true
+                    minlength: 8,
+                    maxlength: 50,
+                    passwordValidation: true
                 }
             },
             messages: {
@@ -83,17 +83,18 @@ export function Login(props: LoginPageProps) {
                 },
                 password: {
                     required: "Vui lòng nhập mật khẩu",
-                    // minlength: "Mật khẩu phải có tối thiểu 8 ký tự.",
-                    // maxlength: "Mật khẩu phải không dài quá 50 ký tự."
+                    minlength: "Mật khẩu phải có tối thiểu 8 ký tự.",
+                    maxlength: "Mật khẩu phải không dài quá 50 ký tự."
                 }
             },
             submitHandler: async function (form: HTMLFormElement, e: FormEvent) {
                 e.preventDefault();
                 const response = await login(new FormData(form));
-                if (response.type == "ok") {
+                if (response.type === "ok") {
                     setAccessToken(response.access_token);
-                    await navigate(redirect && redirect.length ? redirect : '/profile');
-                } else if (response.message == "user not found.") {
+                    alert("Đăng nhập thành công.");
+                    await navigate(redirect?.length ? redirect : '/profile');
+                } else if (response.message === "user not found.") {
                     alert("Người dùng không tồn tại.")
                 } else {
                     alert("Thông tin đăng nhập không đúng.");
@@ -107,7 +108,7 @@ export function Login(props: LoginPageProps) {
             <h2 className="title">Đăng nhập</h2>
             <FormField label="Tên đăng nhập" attributes={{ name: "username", type: "text" }} />
             <FormField label="Mật khẩu" attributes={{ name: "password", type: "password" }} />
-            <a className="note end" href="#">Quên mật khẩu?</a>
+            <Link className="note end" to="#">Quên mật khẩu?</Link>
             <SubmitButton attributes={{
                 style: {
                     borderRadius: "8px",
@@ -116,7 +117,7 @@ export function Login(props: LoginPageProps) {
                     padding: "16px"
                 }
             }}>Đăng nhập</SubmitButton>
-            <span className="note">Bạn chưa có tài khoản? <a href={"/register" + location.search}>Đăng ký</a> ngay</span>
+            <span className="note">Bạn chưa có tài khoản? <Link to={"/register" + location.search}>Đăng ký</Link> ngay</span>
         </form>
     );
 }

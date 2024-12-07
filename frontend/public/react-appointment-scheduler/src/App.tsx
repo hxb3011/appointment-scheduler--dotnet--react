@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 import { Icon } from "./assets/icons/mdi";
 
@@ -10,10 +10,6 @@ import { Profile } from "./pages/ProfilePage";
 import { Appointment } from "./pages/AppointmentPage";
 import { Scheduler } from "./pages/SchedulerPage";
 
-import logo from "./logo.svg";
-
-import { FontFamily } from "./assets/fonts/noto"
-
 import "./App.css";
 import { Login } from "./pages/LoginPage";
 import { Register } from "./pages/RegisterPage";
@@ -21,6 +17,7 @@ import { ProfileEditor } from "./pages/ProfileEditorPage";
 import { currentUser, Patient } from "./services/patient";
 import { getAccessToken, setAccessToken } from "./services/auth";
 import { apiServer } from "./utils/api";
+import { wrap } from "module";
 
 function AppContent() {
   const location = useLocation();
@@ -28,21 +25,31 @@ function AppContent() {
   const [user, setUser] = useState<Patient>();
   useEffect(() => {
     currentUser().then(value => {
-      if (value.type == "ok") {
+      if (value.type === "ok") {
         setUser(value);
         return;
       }
+      console.log("access_token", getAccessToken());
       setAccessToken();
       setUser(undefined);
+      if (!["/", "/login", "/register"].includes(location.pathname))
+        navigate("/login?redirect=" + encodeURIComponent(location.pathname + location.search + location.hash));
     }, reason => {
+      console.log("access_token", getAccessToken());
       setAccessToken();
       setUser(undefined);
+      if (["/", "/login", "/register"].includes(location.pathname))
+        navigate("/login?redirect=" + encodeURIComponent(location.pathname + location.search + location.hash));
     });
   }, [getAccessToken()])
 
+  function wrapLogIn(url: string) {
+    return user ? url : "/login?redirect=" + url;
+  }
+
   return (
     <div className="App" mdc-theme="system">
-      <Card heading="Phòng khám Khoa Niên" attributes={{
+      <Card heading="Phòng khám ABC" attributes={{
         style: { width: "100%" }
       }} />
       {(location.pathname.startsWith("/login")
@@ -50,34 +57,33 @@ function AppContent() {
       ) ? '' : (<>
         <AccountCard
           user={user}
-          name={user && user.full_name}
+          name={user?.full_name}
           username={(user && (user.username || user.phone)) || "Bạn cần đăng nhập để thực hiện chức năng đặt lịch, xem lịch đã đặt, ..."}
-          imageURL={user && (user.image || user.id ? apiServer + "user/current/image" : "/favicon.ico")}
+          imageURL={user && (user.image || user.id ? apiServer + "patient/" + user.id + "/image" : "/favicon.ico")}
           actionAttributes={{
             async onClick() {
-              if (!user) {
-                await navigate("/login");
-              } else {
+              if (user) {
+                console.log("access_token", getAccessToken());
                 setAccessToken();
                 setUser(undefined);
                 await navigate("/");
-              }
+              } else await navigate("/login");
             }
           }} />
-        <NavCard user={user} key={user && user.id || "_"} navigations={[
-          { activeIcon: Icon.calendar_multiselect, icon: Icon.calendar_multiselect_outline, name: "Đặt lịch", url: user ? "/schedule" : "/login?redirect=%2Fschedule" },
-          { activeIcon: Icon.history, icon: Icon.history, name: "Lịch đã đặt", url: user ? "/appointment" : "/login?redirect=%2Fappointment" },
-          { activeIcon: Icon.account_box, icon: Icon.account_box_outline, name: "Hồ sơ", url: user ? "/profile" : "/login?redirect=%2Fprofile" },
+        <NavCard key={(user && user.id) || "_"} navigations={[
+          { activeIcon: Icon.calendar_multiselect, icon: Icon.calendar_multiselect_outline, name: "Đặt lịch", url: wrapLogIn("/schedule") },
+          { activeIcon: Icon.history, icon: Icon.history, name: "Lịch đã đặt", url: wrapLogIn("/appointment") },
+          { activeIcon: Icon.account_box, icon: Icon.account_box_outline, name: "Hồ sơ", url: wrapLogIn("/profile") },
           { activeIcon: Icon.information, icon: Icon.information_outline, name: "Giới thiệu", url: "/" }
         ]} />
       </>)}
       <Routes>
         <Route index={!user} path="/" element={<Home />} />
         {!user ? '' : (<>
-          <Route index={!!user} path="/profile" element={<Profile />} />
-          <Route path="/profile/create" element={<ProfileEditor />} />
-          <Route path="/appointment" element={<Appointment />} />
-          <Route path="/schedule" element={<Scheduler />} />
+          <Route index={!!user} path="/profile" element={<Profile user={user} />} />
+          <Route path="/profile/create" element={<ProfileEditor user={user} />} />
+          <Route path="/appointment" element={<Appointment user={user} />} />
+          <Route path="/schedule" element={<Scheduler user={user} />} />
         </>)}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

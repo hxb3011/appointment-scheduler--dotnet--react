@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import "./Button.css"
+import { Link } from "react-router-dom";
 
 type ButtonProps = React.Attributes & {
     attributes?: React.HTMLAttributes<HTMLElement>
@@ -11,7 +12,7 @@ type ButtonProps = React.Attributes & {
 export function FilledButton(props: ButtonProps) {
     const attributes = props.attributes || {};
     return (
-        <a {...attributes} className="Filled Button" href={props.url}>{props.children}</a>
+        <Link {...attributes} className="Filled Button" to={props.url || "#"}>{props.children}</Link>
     );
 }
 
@@ -25,6 +26,6 @@ export function SubmitButton(props: ButtonProps) {
 export function OutlinedButton(props: ButtonProps) {
     const attributes = props.attributes || {};
     return (
-        <a {...attributes} className="Outlined Button" href={props.url}>{props.children}</a>
+        <Link {...attributes} className="Outlined Button" to={props.url || "#"}>{props.children}</Link>
     );
 }

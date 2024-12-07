@@ -4,7 +4,7 @@ import { getAccessToken } from "./auth";
 
 type BaseDoctorErrorResponse = {
     type: "error";
-    message?: string;
+    message?: any;
 }
 
 export type DoctorRequest = {
@@ -24,7 +24,7 @@ export type Doctor = {
     position?: string;
     certificate?: string;
     image?: string;
-    gender: 'M' | 'F';
+    gender?: 'M' | 'F';
     roleId: number;
     userId: number;
 }
@@ -48,11 +48,11 @@ export async function getDoctors(): Promise<DoctorsResponse> {
         });
         if ((response.status / 400) == 1) return {
             type: "error",
-            message: await response.json()
+            message: await response.text()
         };
         if (!response.ok) return {
             type: "error",
-            message: `HTTP error! status: ${response.status}; content: ${JSON.stringify(response)};`
+            message: `HTTP error! status: ${response.status}; content: ${await response.text()};`
         };
         const result = await response.json();
         result.type = "ok";
