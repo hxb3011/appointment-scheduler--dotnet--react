@@ -70,9 +70,9 @@ export function Login(props: LoginPageProps) {
                 },
                 password: {
                     required: true,
-                    minlength: 8,
-                    maxlength: 50,
-                    passwordValidation: true
+                    // minlength: 8,
+                    // maxlength: 50,
+                    // passwordValidation: true
                 }
             },
             messages: {
@@ -83,8 +83,8 @@ export function Login(props: LoginPageProps) {
                 },
                 password: {
                     required: "Vui lòng nhập mật khẩu",
-                    minlength: "Mật khẩu phải có tối thiểu 8 ký tự.",
-                    maxlength: "Mật khẩu phải không dài quá 50 ký tự."
+                    // minlength: "Mật khẩu phải có tối thiểu 8 ký tự.",
+                    // maxlength: "Mật khẩu phải không dài quá 50 ký tự."
                 }
             },
             submitHandler: async function (form: HTMLFormElement, e: FormEvent) {

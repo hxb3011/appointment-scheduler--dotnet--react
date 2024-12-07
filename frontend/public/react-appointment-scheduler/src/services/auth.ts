@@ -20,9 +20,15 @@ export type RegisterResponse = BaseAuthErrorResponse | {
 
 export async function login(request: AuthRequest): Promise<AuthResponse> {
     try {
-        const response: Response = await fetch(apiServer + "auth/token", {
+        const response: Response = await fetch(apiServer + "auth/authenticate", {
             method: "POST",
-            body: request
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: request.get("username"),
+                password: request.get("password"),
+            }),
         });
         if ((response.status / 400) == 1) return {
             type: "error",
@@ -46,7 +52,13 @@ export async function register(request: RegisterRequest): Promise<RegisterRespon
     try {
         const response: Response = await fetch(apiServer + "auth/register", {
             method: "POST",
-            body: request
+            body: JSON.stringify({
+                phone: request.get("username"),
+                email: request.get("email"),
+                full_name: request.get("full_name"),
+                password: request.get("password"),
+                otp: 123456
+            })
         });
         if ((response.status / 400) == 1) return {
             type: "error",

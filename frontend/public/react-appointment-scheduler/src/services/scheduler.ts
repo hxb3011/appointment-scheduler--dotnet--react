@@ -2,36 +2,25 @@ import { useState } from "react";
 import { apiServer } from "../utils/api";
 import { getAccessToken } from "./auth";
 
-type BasePatientErrorResponse = {
+type BaseErrorResponse = {
     type: "error";
     message?: string;
 }
 
-export type PatientRequest = {
-    full_name: string;
-    user_name: string;
-    email: string;
-    phone: string;
-}
-
-export type Patient = {
+export type Part = {
     id?: number;
-    full_name?: string;
-    username?: string;
-    email?: string;
-    phone?: string;
-    role?: number;
-    image?: string;
+    start?: string;
+    end?: string;
 }
 
-export type PatientResponse = BasePatientErrorResponse | (Patient & {
+export type PartsResponse = BaseErrorResponse | (Part[] & {
     type: "ok";
 })
 
-export async function currentUser(): Promise<PatientResponse> {
+export async function getParts(): Promise<PartsResponse> {
     try {
         const token = getAccessToken();
-        const response: Response = await fetch(apiServer + "user/current", {
+        const response: Response = await fetch(apiServer + "scheduler/part", {
             headers: {
                 ...(token ? { "Authorization": `Bearer ${token}` } : {})
             },
@@ -46,7 +35,8 @@ export async function currentUser(): Promise<PatientResponse> {
             message: `HTTP error! status: ${response.status}; content: ${JSON.stringify(response)};`
         };
         const result = await response.json();
-        return { type: "ok", ...result }
+        result.type = "ok";
+        return result;
     } catch (error) {
         return {
             type: "error",
@@ -54,4 +44,3 @@ export async function currentUser(): Promise<PatientResponse> {
         };
     }
 }
-

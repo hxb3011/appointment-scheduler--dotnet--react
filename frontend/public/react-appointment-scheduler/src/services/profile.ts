@@ -20,7 +20,7 @@ export type Profile = {
     id?: number;
     patient?: number;
     full_name?: string;
-    birthdate?: string;
+    date_of_birth?: string;
     gender?: 'M' | 'F';
 }
 
@@ -37,15 +37,11 @@ export type ProfilesResponse = BaseProfileErrorResponse | (Profile[] & {
     type: "ok";
 })
 
-export async function getProfiles(offset: number, count: number): Promise<ProfilesResponse> {
+export async function getProfiles(): Promise<ProfilesResponse> {
     try {
         const token = getAccessToken();
-        const response: Response = await fetch(apiServer + "profile/current", {
-            headers: {
-                "Content-Type": "application/json",
-                ...(token ? { "Authorization": `Bearer ${token}` } : {})
-            },
-            body: JSON.stringify({ offset, count }),
+        const response: Response = await fetch(apiServer + "profile/user/current", {
+            headers: (token ? { "Authorization": `Bearer ${token}` } : {}),
             method: "GET"
         });
         if ((response.status / 400) == 1) return {
@@ -57,7 +53,8 @@ export async function getProfiles(offset: number, count: number): Promise<Profil
             message: `HTTP error! status: ${response.status}; content: ${JSON.stringify(response)};`
         };
         const result = await response.json();
-        return { type: "ok", ...result }
+        result.type = "ok";
+        return result
     } catch (error) {
         return {
             type: "error",
@@ -69,7 +66,7 @@ export async function getProfiles(offset: number, count: number): Promise<Profil
 export async function createProfile(request: ProfileRequest): Promise<CreateProfileResponse> {
     try {
         const token = getAccessToken();
-        const response: Response = await fetch(apiServer + "profile/current", {
+        const response: Response = await fetch(apiServer + "profile", {
             headers: {
                 "Content-Type": "application/json",
                 ...(token ? { "Authorization": `Bearer ${token}` } : {})
@@ -95,13 +92,11 @@ export async function createProfile(request: ProfileRequest): Promise<CreateProf
     }
 }
 
-export async function getProfile(id: number): Promise<ProfilesResponse> {
+export async function getProfile(id: number): Promise<ProfileResponse> {
     try {
         const token = getAccessToken();
-        const response: Response = await fetch(apiServer + "profile/current/" + id, {
-            headers: {
-                ...(token ? { "Authorization": `Bearer ${token}` } : {})
-            },
+        const response: Response = await fetch(apiServer + "profile/" + id, {
+            headers: (token ? { "Authorization": `Bearer ${token}` } : {}),
             method: "GET"
         });
         if ((response.status / 400) == 1) return {

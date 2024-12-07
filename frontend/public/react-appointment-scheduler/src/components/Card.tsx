@@ -19,7 +19,7 @@ export function Card(props: CardProps) {
     return (
         <div {...attributes} className="Card">
             <h1 className="heading">{props.heading}</h1>
-            <div className="description">{props.description || "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptas expedita voluptatibus molestiae nihil? Sapiente ab, hic accusamus dolor fuga laborum voluptates omnis, maiores aliquid explicabo adipisci iusto dolore corrupti facilis!"}</div>
+            <div className="description">{props.description || "Chào mừng bạn đến với phòng khám ABC, nơi chăm sóc sức khỏe của bạn là ưu tiên hàng đầu của chúng tôi. Với đội ngũ bác sĩ giàu kinh nghiệm và nhiệt huyết, cùng trang thiết bị hiện đại, chúng tôi cam kết mang đến dịch vụ y tế chất lượng cao và tận tâm nhất."}</div>
         </div>
     );
 }

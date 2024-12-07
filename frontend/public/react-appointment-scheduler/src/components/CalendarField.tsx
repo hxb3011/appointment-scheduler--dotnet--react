@@ -26,7 +26,6 @@ export function Calendar(props: CalendarProps) {
                         return (<label className="Header Item">{value}</label>);
                     })}
                 {props.children && Array.from(props.children, function (value, k) {
-                    console.log(`children[${k}]: `, value);
                     return (<label className="Item">
                         {value.label}
                         <input disabled={value.disabled} hidden={true} name={props.formName} value={value.key} type="radio" />

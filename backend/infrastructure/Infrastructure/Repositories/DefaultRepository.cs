@@ -1,5 +1,3 @@
-// #define DEMO
-
 using System.Linq.Expressions;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
@@ -105,14 +103,6 @@ public class DefaultRepository : DbContext, IRepository
 
     async Task<TEntity> IRepository.GetEntityBy<TKey, TEntity>(TKey key)
     {
-#if DEMO
-        if (typeof(TEntity).IsAssignableFrom(typeof(IUser)))
-        {
-            if (key is string sk && sk == "testkey") return (TEntity)await
-                this.Initialize((IUser)new DemoUserImpl());
-        }
-        return null;
-#else
         if (typeof(TEntity).IsAssignableFrom(typeof(IRole)))
         {
             if (key is Role role || (key is uint id
@@ -203,7 +193,6 @@ public class DefaultRepository : DbContext, IRepository
         }
         // TODO: ...more Impl
         return null;
-#endif
     }
 
     async Task<TEntity> IRepository.ObtainEntity<TEntity>()
@@ -241,19 +230,6 @@ public class DefaultRepository : DbContext, IRepository
 
     bool IRepository.TryGetKeyOf<TEntity, TKey>(TEntity entity, out TKey key)
     {
-#if DEMO
-        if (entity is DemoUserImpl demoUser)
-        {
-            string sk = "testkey";
-            if (sk is TKey kk)
-            {
-                key = kk;
-                return true;
-            }
-        }
-        key = default;
-        return false;
-#else
         if (entity is RoleImpl role)
         {
             var inner = role._role;
@@ -393,12 +369,12 @@ public class DefaultRepository : DbContext, IRepository
                 return true;
             }
             var dInner = diagnosticService._diagsv;
-            if (eInner is TKey dk)
+            if (dInner is TKey dk)
             {
                 key = dk;
                 return true;
             }
-            var id = eInner == null ? eInner.Id : dInner.Id;
+            var id = eInner != null ? eInner.Id : dInner.Id;
             if (id is TKey uk)
             {
                 key = uk;
@@ -413,211 +389,5 @@ public class DefaultRepository : DbContext, IRepository
         // TODO: ...more Impl
         key = default;
         return false;
-#endif
     }
 }
-
-#if DEMO
-
-public class DemoUserImpl : IUser
-{
-    private class RoleImpl : IRole
-    {
-        public string Name { get => "Role"; set => throw new NotImplementedException(); }
-        public string Description { get => "Description"; set => throw new NotImplementedException(); }
-
-        public IEnumerable<Permission> Permissions => [Permission.Perm2, Permission.Perm3];
-
-        event EventHandler IBehavioralEntity.Created
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        event EventHandler IBehavioralEntity.Updated
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        event EventHandler IBehavioralEntity.Deleted
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public async Task<bool> IsNameExisted() => false;
-
-        public bool IsNameValid => true;
-
-        public bool IsDescriptionValid => true;
-
-        public async Task<bool> Create()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> Delete()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsPermissionGranted(Permission permission)
-        {
-            return permission == Permission.Perm2 || permission == Permission.Perm3;
-        }
-
-        public void SetPermissionGranted(Permission permission, bool granted = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> Update()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IRole.IsNameExisted()
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IRole.IsPermissionGranted(Permission permission)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IRole.SetPermissionGranted(Permission permission, bool granted)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IBehavioralEntity.Create()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IBehavioralEntity.Update()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> IBehavioralEntity.Delete()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public string UserName { get => "test@company.com"; set => throw new NotImplementedException(); }
-    public string Password { get => "HeLlo|12"; set => throw new NotImplementedException(); }
-    public string FullName { get => "Test"; set => throw new NotImplementedException(); }
-    public IRole Role { get => new RoleImpl(); set => throw new NotImplementedException(); }
-
-    public bool IsUserNameValid => true;
-
-    public bool IsPasswordValid => true;
-
-    public bool IsFullNameValid => true;
-
-    event EventHandler IBehavioralEntity.Created
-    {
-        add
-        {
-            throw new NotImplementedException();
-        }
-
-        remove
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    event EventHandler IBehavioralEntity.Updated
-    {
-        add
-        {
-            throw new NotImplementedException();
-        }
-
-        remove
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    event EventHandler IBehavioralEntity.Deleted
-    {
-        add
-        {
-            throw new NotImplementedException();
-        }
-
-        remove
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public async Task<bool> Create()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> Delete()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<bool> Update()
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<bool> IUser.IsUserNameExisted()
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<bool> IBehavioralEntity.Create()
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<bool> IBehavioralEntity.Update()
-    {
-        throw new NotImplementedException();
-    }
-
-    Task<bool> IBehavioralEntity.Delete()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> ChangeRole(IRole role)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-#endif

@@ -2,36 +2,45 @@ import { useState } from "react";
 import { apiServer } from "../utils/api";
 import { getAccessToken } from "./auth";
 
-type BasePatientErrorResponse = {
+type BaseDoctorErrorResponse = {
     type: "error";
     message?: string;
 }
 
-export type PatientRequest = {
+export type DoctorRequest = {
     full_name: string;
     user_name: string;
     email: string;
     phone: string;
 }
 
-export type Patient = {
+export type Doctor = {
     id?: number;
     full_name?: string;
     username?: string;
     email?: string;
     phone?: string;
     role?: number;
+    position?: string;
+    certificate?: string;
     image?: string;
+    gender: 'M' | 'F';
+    roleId: number;
+    userId: number;
 }
 
-export type PatientResponse = BasePatientErrorResponse | (Patient & {
+export type DoctorResponse = BaseDoctorErrorResponse | (Doctor & {
     type: "ok";
 })
 
-export async function currentUser(): Promise<PatientResponse> {
+export type DoctorsResponse = BaseDoctorErrorResponse | (Doctor[] & {
+    type: "ok";
+})
+
+export async function getDoctors(): Promise<DoctorsResponse> {
     try {
         const token = getAccessToken();
-        const response: Response = await fetch(apiServer + "user/current", {
+        const response: Response = await fetch(apiServer + "doctor", {
             headers: {
                 ...(token ? { "Authorization": `Bearer ${token}` } : {})
             },
@@ -46,7 +55,8 @@ export async function currentUser(): Promise<PatientResponse> {
             message: `HTTP error! status: ${response.status}; content: ${JSON.stringify(response)};`
         };
         const result = await response.json();
-        return { type: "ok", ...result }
+        result.type = "ok";
+        return result;
     } catch (error) {
         return {
             type: "error",
@@ -54,4 +64,3 @@ export async function currentUser(): Promise<PatientResponse> {
         };
     }
 }
-
