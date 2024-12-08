@@ -29,12 +29,12 @@ public class ExaminationController : ControllerBase
 
     [HttpGet]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadExamination])]
-    public ActionResult<IEnumerable<ExaminationResponse>> GetPagedExaminations([FromBody] PagedGetAllRequest request)
+    public ActionResult<IEnumerable<ExaminationResponse>> GetPagedExaminations([FromQuery] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IExamination>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
     [HttpGet]
     [JSONWebToken(RequiredPermissions = [Permission.ReadExamination])]
-    public async Task<ActionResult<IEnumerable<ExaminationResponse>>> GetPagedExaminationsByDoctor([FromBody] PagedGetAllRequest request, uint doctor)
+    public async Task<ActionResult<IEnumerable<ExaminationResponse>>> GetPagedExaminationsByDoctor([FromQuery] PagedGetAllRequest request, uint doctor)
     {
         var d = await _repository.GetEntityBy<uint, IDoctor>(doctor);
         if (d == null) return NotFound("doctor not found");

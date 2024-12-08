@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using AppointmentScheduler.Domain.Entities;
 
-namespace AppointmentScheduler.Infrastructure.Business;
+namespace AppointmentScheduler.Infrastructure.Repositories;
 
 internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEnumerator<Permission>, IEnumerator, IDisposable
 {
     private byte[] _permissions;
     private long _byteIndex, _bitIndex;
 
-    public PermissionEnumerable(byte[] permissions)
+    internal PermissionEnumerable(byte[] permissions)
     {
         _permissions = permissions;
         _byteIndex = -1;
     }
 
-    public readonly Permission Current
+    readonly Permission IEnumerator<Permission>.Current
     {
         get
         {
@@ -26,9 +26,7 @@ internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEn
         }
     }
 
-    readonly object IEnumerator.Current => Current;
-
-    public readonly IEnumerator<Permission> GetEnumerator() => new PermissionEnumerable(_permissions);
+    readonly object IEnumerator.Current => ((IEnumerator<Permission>)this).Current;
 
     void IDisposable.Dispose()
     {
@@ -37,39 +35,40 @@ internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEn
         _bitIndex = 0;
     }
 
-    readonly IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    readonly IEnumerator<Permission> IEnumerable<Permission>.GetEnumerator()
+        => new PermissionEnumerable(_permissions);
+
+    readonly IEnumerator IEnumerable.GetEnumerator()
+        => new PermissionEnumerable(_permissions);
 
     bool IEnumerator.MoveNext()
     {
         if (_permissions == null) throw new InvalidOperationException("Enumerator had been disposed.");
         long x = _byteIndex, y = _bitIndex, l = _permissions.LongLength;
         if (x >= l) return false;
-        if ((~x) != 0) goto eachbit;
-        x = 0;
-        y = 8;
-    eachbyte:
-        if (x >= l)
-        {
-            _byteIndex = x;
-            _bitIndex = y;
-            return false;
+        while (true) {
+            while (true) {
+                if (--y < 0) {
+                    ++x;
+                    y = 8;
+                    break;
+                }
+                if (((((ulong)_permissions[x]) >> (int)(y & 7)) & 1) != 0) {
+                    _byteIndex = x;
+                    _bitIndex = y;
+                    return true;
+                }
+            }
+            while (true) {
+                if (x >= l) {
+                    _byteIndex = x;
+                    _bitIndex = y;
+                    return false;
+                }
+                if (_permissions[x] != 0) break;
+                ++x;
+            }
         }
-        if (_permissions[x] == 0)
-        {
-            ++x;
-            goto eachbyte;
-        }
-    eachbit:
-        if (--y < 0)
-        {
-            ++x;
-            y = 8;
-            goto eachbyte;
-        }
-        if (((((ulong)_permissions[x]) >> (int)(y & 7)) & 1) == 0) goto eachbit;
-        _byteIndex = x;
-        _bitIndex = y;
-        return true;
     }
 
     void IEnumerator.Reset()
@@ -79,7 +78,7 @@ internal struct PermissionEnumerable : IEnumerable<Permission>, IEnumerable, IEn
     }
 
     /*
-    private static IEnumerable<Permission> GetPermissions(byte[] permissions)
+    static IEnumerable<Permission> GetPermissions(byte[] permissions)
     {
         for (long _byteIndex = 0, _length = permissions.LongLength; _byteIndex < _length; ++_byteIndex)
         {

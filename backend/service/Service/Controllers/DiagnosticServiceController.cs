@@ -32,7 +32,7 @@ public class DiagnosticServiceController : ControllerBase
 
     [HttpGet]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadDiagnosticService])]
-    public ActionResult<IEnumerable<DiagnosticServiceResponse>> GetPagedDiagnosticServices([FromBody] PagedGetAllRequest request)
+    public ActionResult<IEnumerable<DiagnosticServiceResponse>> GetPagedDiagnosticServices([FromQuery] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IDiagnosticService>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
 
@@ -102,11 +102,11 @@ public class DiagnosticServiceController : ControllerBase
 
     private ExaminationDiagnosticResponse MakeExaminationDiagnosticResponse(IDiagnosticService examinationDiagnostic)
         => !_repository.TryGetKeyOf(examinationDiagnostic, out ExaminationService key) ? null
-        : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, DoctorId = key.DoctorId, DiagnosticServiceId = key.DiagnosticServiceId, ExaminationId = key.ExaminationId };
+        : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, Doctor = key.DoctorId, DiagnosticService = key.DiagnosticServiceId, Examination = key.ExaminationId };
 
     [HttpGet]
     [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
-    public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromBody] PagedGetAllRequest request, uint examination)
+    public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromQuery] PagedGetAllRequest request, uint examination)
     {
         var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
         if (ex == null) return NotFound("examination not found");

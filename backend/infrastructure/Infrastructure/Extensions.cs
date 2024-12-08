@@ -14,6 +14,7 @@ using AppointmentScheduler.Domain;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
+
 using AppointmentScheduler.Infrastructure.Authorization;
 using AppointmentScheduler.Infrastructure.Business;
 using AppointmentScheduler.Infrastructure.Repositories;
@@ -199,7 +200,7 @@ public static class Extensions
         Action<IServiceProvider, JSONWebTokenOptions> jwtConfigure = null,
         Action<IServiceProvider, FormOptions> formConfigure = null,
         Action<IServiceProvider, PasswordHasherOptions> passwordHasherConfigure = null
-    ) => services.AddDbContext<IRepository, DefaultRepository>(dbConfigure, ServiceLifetime.Singleton)
+    ) => services.AddDbContext<IRepository, DefaultRepository>(dbConfigure, ServiceLifetime.Scoped)
         .AddConfigurator(jwtConfigure, ServiceLifetime.Singleton)
         .AddConfigurator(ConfigureJSONSerializerOptions + jsonSerializerConfigure, ServiceLifetime.Singleton)
         .AddConfigurator(ConfigureFormOptions + formConfigure, ServiceLifetime.Singleton)

@@ -48,7 +48,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     {
         get
         {
-            var now = DateOnly.FromDateTime(DateTime.UtcNow);
+            var now = DateOnly.FromDateTime(DateTime.Now);
             return _diagnosticServices ??= (
             from es in _dbContext.Set<ExaminationService>()
             from ds in _dbContext.Set<DiagnosticService>()

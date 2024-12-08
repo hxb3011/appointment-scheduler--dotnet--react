@@ -20,12 +20,12 @@ public class DoctorController : UserController
 		: base(repository, passwordHasher, logger) { }
 
 	private DoctorResponse MakeResponse(IDoctor doctor)
-		=> !_repository.TryGetKeyOf(doctor, out uint id) ? null
-		: new() { Id = id, UserName = doctor.UserName, FullName = doctor.FullName, Email = doctor.Email, Phone = doctor.Phone, Certificate = doctor.Certificate, Position = doctor.Position };
+		=> !_repository.TryGetKeyOf(doctor, out Doctor d) || !_repository.TryGetKeyOf(doctor, out User u) ? null
+		: new() { Id = u.Id, UserName = u.UserName, FullName = u.FullName, Email = d.Email, Phone = d.Phone, Certificate = d.Certificate, Position = d.Position, Role = u.RoleId };
 
 	[HttpGet]
-	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
-	public ActionResult<IEnumerable<DoctorResponse>> GetPagedDoctors([FromBody] PagedGetAllRequest request)
+	[JSONWebToken(RequiredPermissions = [Permission.ReadUser])]
+	public ActionResult<IEnumerable<DoctorResponse>> GetPagedDoctors([FromQuery] PagedGetAllRequest request)
 		=> Ok(_repository.GetEntities<IDoctor>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
 	[HttpGet("{id}")]
@@ -139,11 +139,11 @@ public class DoctorController : UserController
 
     private ExaminationDiagnosticResponse MakeExaminationDiagnosticResponse(IDiagnosticService examinationDiagnostic)
         => !_repository.TryGetKeyOf(examinationDiagnostic, out ExaminationService key) ? null
-        : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, DoctorId = key.DoctorId, DiagnosticServiceId = key.DiagnosticServiceId, ExaminationId = key.ExaminationId };
+        : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, Doctor = key.DoctorId, DiagnosticService = key.DiagnosticServiceId, Examination = key.ExaminationId };
 
 	[HttpGet("{id}/examdiag")]
 	[JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
-	public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromBody] PagedGetAllRequest request, uint id)
+	public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromQuery] PagedGetAllRequest request, uint id)
 	{
 		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
 		if (doctor == null) return NotFound();

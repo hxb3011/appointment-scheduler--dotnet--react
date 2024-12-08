@@ -7,7 +7,9 @@ using System.Text;
 using System.Text.Json.Nodes;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Repositories;
+using AppointmentScheduler.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,15 +18,13 @@ namespace AppointmentScheduler.Infrastructure.Authorization;
 public class JSONWebTokenMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly IRepository _repository;
-    private readonly JSONWebTokenOptions _options;
+    private readonly JSONWebTokenOptions _jwtOpts;
     private readonly ILogger<JSONWebTokenMiddleware> _logger;
 
-    public JSONWebTokenMiddleware(RequestDelegate next, IRepository repository, JSONWebTokenOptions options, ILogger<JSONWebTokenMiddleware> logger)
+    public JSONWebTokenMiddleware(RequestDelegate next, JSONWebTokenOptions jwtOpts, ILogger<JSONWebTokenMiddleware> logger)
     {
         _next = next;
-        _repository = repository;
-        _options = options;
+        _jwtOpts = jwtOpts;
         _logger = logger;
     }
     private static IEnumerable<string> ValueOfType(IEnumerable<Claim> claims, string type)
@@ -39,7 +39,7 @@ public class JSONWebTokenMiddleware
             Expression.Property(param, nameof(Claim.Value)), param
         ));
     }
-    public async Task Invoke(HttpContext context)
+    public async Task Invoke(HttpContext context, IRepository repository)
     {
         var attr = context.GetEndpoint()?.Metadata.GetMetadata<JSONWebTokenAttribute>();
         if (attr != null && attr.AuthenticationRequired)
@@ -65,9 +65,10 @@ public class JSONWebTokenMiddleware
             var tokenHandler = new JwtSecurityTokenHandler();
             var parameters = new TokenValidationParameters
             {
-                ValidateAudience = false, ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateIssuer = false,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_options.SymmetricSecurityKey)
+                    Encoding.UTF8.GetBytes(_jwtOpts.SymmetricSecurityKey)
                 )
             };
 
@@ -83,7 +84,7 @@ public class JSONWebTokenMiddleware
                 return;
             }
 
-            var user = await _repository.GetEntityBy<string, IUser>(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Id).FirstOrDefault());
+            IUser user = await repository.GetEntityBy<string, IUser>(ValueOfType(jwtToken.Claims, JSONWebTokenOptions.Id).FirstOrDefault());
             if (user == null)
             {
                 await ErrorResponse(context.Response);

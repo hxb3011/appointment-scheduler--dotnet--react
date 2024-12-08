@@ -13,14 +13,20 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         var services = builder.Services;
-        services.AddSwaggerGen();
+        // services.AddSwaggerGen();
 
         services.AddInfrastructure
         (
             dbConfigure: ConfigureDbContext,
             jwtConfigure: builder.Configuration.GetSection("JWTSettings").ConfigureJSONWebToken
         );
-
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigins", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
+        });
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddProblemDetails();
@@ -30,6 +36,7 @@ public static class Program
 
         app.UseInfrastructure();
 
+        app.UseCors("AllowSpecificOrigins");
         app.UseHttpsRedirection();
         app.UseStatusCodePages();
 
