@@ -9,7 +9,7 @@ import { Doctor, getDoctors } from "../services/doctor";
 import { getParts, Part } from "../services/scheduler";
 import { getProfiles, Profile } from "../services/profile";
 import { createAppointment } from "../services/appointment";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Patient } from "../services/patient";
 import { getAccessToken, setAccessToken } from "../services/auth";
 
@@ -18,6 +18,7 @@ type SchedulerProps = {
 };
 
 export function Scheduler(props: SchedulerProps) {
+    const location = useLocation();
     const navigate = useNavigate();
 
     const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -32,7 +33,7 @@ export function Scheduler(props: SchedulerProps) {
                 }
             }
         })
-    }, [])
+    }, [navigate])
 
     const [parts, setParts] = useState<Part[]>([]);
     useEffect(() => {
@@ -46,7 +47,7 @@ export function Scheduler(props: SchedulerProps) {
                 }
             }
         });
-    }, [])
+    }, [navigate])
 
     const [profiles, setProfiles] = useState<Profile[]>([]);
     useEffect(() => {
@@ -60,7 +61,7 @@ export function Scheduler(props: SchedulerProps) {
                 }
             }
         });
-    }, [])
+    }, [navigate])
 
     const formRef = useRef<HTMLFormElement>(null);
 

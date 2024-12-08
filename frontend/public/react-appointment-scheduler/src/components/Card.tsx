@@ -2,10 +2,10 @@ import * as React from "react";
 
 import { Icon } from "../assets/icons/mdi";
 
-import { FilledButton, OutlinedButton } from "./Button";
+import { FilledButton } from "./Button";
 
 import "./Card.css"
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Patient } from "../services/patient";
 
 type CardProps = React.Attributes & {

@@ -1,10 +1,6 @@
-import { useState } from "react";
 import { apiServer } from "../utils/api";
 import { getAccessToken } from "./auth";
-import { json } from "stream/consumers";
-import { count } from "console";
-import { getProfile, getProfiles } from "./profile";
-import { escape } from "querystring";
+import { getProfile } from "./profile";
 
 type BaseAppointmentErrorResponse = {
     type: "error";
@@ -64,7 +60,7 @@ export async function getAppointments(): Promise<AppointmentsResponse> {
             type: "error",
             message: "unauth"
         }
-        if ((response.status / 400) == 1) return {
+        if ((response.status / 400) === 1) return {
             type: "error",
             message: await response.text()
         };
@@ -85,11 +81,11 @@ export async function getAppointments(): Promise<AppointmentsResponse> {
 
 export async function getFutureAppointments(): Promise<FutureAppointmentsResponse> {
     const appointments = await getAppointments();
-    if (appointments.type == "ok") {
+    if (appointments.type === "ok") {
         const result = await Promise.all(appointments.map(async function (v) {
             if (v.profile) {
                 const profile = await getProfile(v.profile);
-                if (profile.type == "ok") {
+                if (profile.type === "ok") {
                     return {
                         id: v.id,
                         at: v.at,
@@ -124,7 +120,7 @@ export async function createAppointment(request: AppointmentRequest): Promise<Cr
             type: "error",
             message: "unauth"
         }
-        if ((response.status / 400) == 1) return {
+        if ((response.status / 400) === 1) return {
             type: "error",
             message: await response.text()
         };
@@ -141,8 +137,7 @@ export async function createAppointment(request: AppointmentRequest): Promise<Cr
     }
 }
 
-//
-export async function getAppointment(id: number): Promise<AppointmentsResponse> {
+export async function getAppointment(id: number): Promise<AppointmentResponse> {
     try {
         const token = getAccessToken();
         const response: Response = await fetch(apiServer + "appointment/" + id, {
@@ -153,7 +148,7 @@ export async function getAppointment(id: number): Promise<AppointmentsResponse> 
             type: "error",
             message: "unauth"
         }
-        if ((response.status / 400) == 1) return {
+        if ((response.status / 400) === 1) return {
             type: "error",
             message: await response.text()
         };

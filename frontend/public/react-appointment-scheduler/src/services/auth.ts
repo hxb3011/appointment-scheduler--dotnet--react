@@ -24,7 +24,7 @@ export async function login(request: AuthRequest): Promise<AuthResponse> {
             method: "POST",
             body: request,
         });
-        if ((response.status / 400) == 1) return {
+        if ((response.status / 400) === 1) return {
             type: "error",
             message: await response.text()
         };
@@ -49,7 +49,7 @@ export async function register(request: RegisterRequest): Promise<RegisterRespon
             method: "POST",
             body: request
         });
-        if ((response.status / 400) == 1) return {
+        if ((response.status / 400) === 1) return {
             type: "error",
             message: await response.text()
         };

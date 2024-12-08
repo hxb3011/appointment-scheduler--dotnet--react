@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { apiServer } from "../utils/api";
 import { getAccessToken } from "./auth";
 
@@ -41,7 +40,7 @@ export async function currentUser(): Promise<PatientResponse> {
             type: "error",
             message: "unauth"
         }
-        if ((response.status / 400) == 1) return {
+        if ((response.status / 400) === 1) return {
             type: "error",
             message: await response.text()
         };

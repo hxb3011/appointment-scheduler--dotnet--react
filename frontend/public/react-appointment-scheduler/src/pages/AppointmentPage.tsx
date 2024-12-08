@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import "./Page.css";
 import "./AppointmentPage.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FutureAppointment, getFutureAppointments } from "../services/appointment";
 import { Patient } from "../services/patient";
 import { setAccessToken } from "../services/auth";
@@ -12,6 +12,7 @@ type AppointmentProps = {
 };
 
 export function Appointment(props: AppointmentProps) {
+    const location = useLocation();
     const navigate = useNavigate();
     const [appointments, setAppointments] = useState<FutureAppointment[]>();
     useEffect(() => {
@@ -21,7 +22,7 @@ export function Appointment(props: AppointmentProps) {
             } else if (value.type === "error") {
                 if (value.message === "unauth") {
                     setAccessToken();
-                    navigate("/login?redirect=" + encodeURIComponent("/appointment"))
+                    navigate("/login?redirect=" + encodeURIComponent(location.pathname + location.search + location.hash));
                 }
             }
         });

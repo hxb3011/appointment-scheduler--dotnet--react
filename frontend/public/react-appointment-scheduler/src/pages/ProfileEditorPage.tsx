@@ -4,13 +4,14 @@ import $ from "jquery";
 import "jquery-validation"
 
 import "./Page.css";
-import "./ProfilePage.css";
+import "./ProfileEditorPage.css";
 import { SubmitButton } from "../components/Button";
 import { ComboBox } from "../components/ComboBoxField";
 import { FormField } from "../components/FormField";
 import { Patient } from "../services/patient";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createProfile, getProfile, Profile, ProfileRequest, updateProfile } from "../services/profile";
+import { setAccessToken } from "../services/auth";
 
 type ProfileEditorProps = {
     user?: Patient;
@@ -29,6 +30,11 @@ export function ProfileEditor(props: ProfileEditorProps) {
             if (value.type === "ok") {
                 setProfile(value);
                 return;
+            } if (value.type === "error") {
+                if (value.message === "unauth") {
+                    setAccessToken();
+                    navigate("/login?redirect=" + encodeURIComponent(location.pathname + location.search + location.hash));
+                }
             }
         });
     }, [profile_id])

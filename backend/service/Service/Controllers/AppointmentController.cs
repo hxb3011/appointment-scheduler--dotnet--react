@@ -47,6 +47,16 @@ public class AppointmentController : ControllerBase
             whereProperty: nameof(Appointment.ProfileId), andValue: profile
         ).Select(MakeResponse));
 
+    [HttpGet("filter")]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
+    public async Task<ActionResult<IEnumerable<AppointmentResponse>>> GetPagedExaminationsByProfileAndFilterDates([FromQuery] PagedGetAllRequest request, uint profile, DateOnly start, DateOnly end)
+    {
+        var p = await _repository.GetEntityBy<uint, IProfile>(profile);
+        if (p == null) return NotFound("profile not found");
+        return Ok(p.Appointments.AsQueryable().Where(x => DateOnly.FromDateTime(x.AtTime) >= start && DateOnly.FromDateTime(x.AtTime) <= end)
+            .OrderByPropertyName(request.By).Skip(request.Offset).Take(request.Count).Select(MakeResponse));
+    }
+
     [HttpGet]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public async Task<ActionResult<IEnumerable<AppointmentResponse>>> GetPagedAppointmentsByPatient([FromQuery] PagedGetAllRequest request, uint patient)

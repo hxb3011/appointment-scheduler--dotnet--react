@@ -17,7 +17,7 @@ import { ProfileEditor } from "./pages/ProfileEditorPage";
 import { currentUser, Patient } from "./services/patient";
 import { getAccessToken, setAccessToken } from "./services/auth";
 import { apiServer } from "./utils/api";
-import { wrap } from "module";
+import { ProfileInfo } from "./pages/ProfileInfoPage";
 
 function AppContent() {
   const location = useLocation();
@@ -41,7 +41,7 @@ function AppContent() {
       if (["/", "/login", "/register"].includes(location.pathname))
         navigate("/login?redirect=" + encodeURIComponent(location.pathname + location.search + location.hash));
     });
-  }, [getAccessToken()])
+  }, [getAccessToken(), navigate])
 
   function wrapLogIn(url: string) {
     return user ? url : "/login?redirect=" + url;
@@ -82,6 +82,7 @@ function AppContent() {
         {!user ? '' : (<>
           <Route index={!!user} path="/profile" element={<Profile user={user} />} />
           <Route path="/profile/create" element={<ProfileEditor user={user} />} />
+          <Route path="/profile/info" element={<ProfileInfo user={user} />} />
           <Route path="/appointment" element={<Appointment user={user} />} />
           <Route path="/schedule" element={<Scheduler user={user} />} />
         </>)}
