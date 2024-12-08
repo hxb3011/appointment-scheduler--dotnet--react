@@ -59,3 +59,18 @@ export async function currentUser(): Promise<PatientResponse> {
     }
 }
 
+export async function currentUserImage(): Promise<{ type: "ok" | "error"; url?: string; }> {
+    try {
+        const token = getAccessToken();
+        const response: Response = await fetch(apiServer + "patient/current/image", {
+            headers: {
+                ...(token ? { "Authorization": `Bearer ${token}` } : {})
+            },
+            method: "GET"
+        });
+        if (!response.ok) return { type: "error" };
+        return { type: "ok", url: URL.createObjectURL(await response.blob()) };
+    } catch (error) {
+        return { type: "error" };
+    }
+}

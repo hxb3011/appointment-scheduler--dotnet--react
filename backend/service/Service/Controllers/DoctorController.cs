@@ -157,7 +157,9 @@ public class DoctorController : UserController
 	{
 		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
 		if (doctor == null) return NotFound();
-		return File(doctor.Image(readOnly: true), "application/octet-stream");
+		var image = doctor.Image(readOnly: true);
+		if (image is MemoryStream) return NotFound();
+		return File(image, "application/octet-stream");
 	}
 
 	[HttpPost("{id}/image")]
@@ -229,7 +231,9 @@ public class DoctorController : UserController
 	public ActionResult GetImage()
 	{
 		if (HttpContext.GetAuthUser() is not IDoctor doctor) return NotFound();
-		return File(doctor.Image(readOnly: true), "application/octet-stream");
+		var image = doctor.Image(readOnly: true);
+		if (image is MemoryStream) return NotFound();
+		return File(image, "application/octet-stream");
 	}
 
 	[HttpPost("current/image")]

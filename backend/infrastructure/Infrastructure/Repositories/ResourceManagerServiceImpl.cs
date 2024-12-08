@@ -14,6 +14,7 @@ internal class ResourceManagerServiceImpl : IResourceManagerService
         if (!Directory.Exists(PrefixDirectoryPath))
             Directory.CreateDirectory(PrefixDirectoryPath);
         var path = MakeResourcePathById<TEntity>(resourceId);
+        if (readOnly && !File.Exists(path)) return new MemoryStream(0);
         return new FileStream(path,
             readOnly ? FileMode.Open : FileMode.Create,
             readOnly ? FileAccess.Read : FileAccess.Write

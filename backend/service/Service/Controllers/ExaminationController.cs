@@ -148,7 +148,9 @@ public class ExaminationController : ControllerBase
         if (examination == null) return NotFound("examination not found");
         var perscription = examination.Prescription;
         if (perscription != null) return NotFound();
-        return File(perscription.Document(), "application/octet-stream");
+		var image = perscription.Document(readOnly: true);
+		if (image is MemoryStream) return NotFound();
+		return File(image, "application/octet-stream");
     }
 
     [HttpDelete("{id}/perscription")]

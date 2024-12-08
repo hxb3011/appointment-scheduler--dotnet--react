@@ -41,10 +41,9 @@ export function ProfileInfo(props: ProfileInfoProps) {
     useEffect(() => {
     }, [props.user?.id])
 
-    const formRef = useRef<HTMLFormElement>(null);
-    async function onFilterSubmit(e: FormEvent) {
+    async function onFilterSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const form = e.currentTarget as HTMLFormElement;
+        const form = e.currentTarget;
         const start = form.start.value, end = form.end.value;
         console.log(form, start, end);
         if (start && end) {
@@ -87,7 +86,7 @@ export function ProfileInfo(props: ProfileInfoProps) {
                 <span className="gender">{profile?.gender === "M" ? "Nam" : profile?.gender === "F" ? "Nam" : "(Khác)"}</span>
             </div>
         </div>
-        <form className="Filter" key={profile_id || "_"} ref={formRef} onSubmit={onFilterSubmit}>
+        <form className="Filter" key={profile_id || "_"} onSubmit={onFilterSubmit}>
             <FormField label="Ngày bắt đầu" attributes={{ name: "start", type: "date" }} />
             <SubmitButton attributes={{
                 style: {

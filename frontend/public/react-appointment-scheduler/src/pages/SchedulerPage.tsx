@@ -63,11 +63,9 @@ export function Scheduler(props: SchedulerProps) {
         });
     }, [navigate])
 
-    const formRef = useRef<HTMLFormElement>(null);
-
-    async function handleSubmit(this: HTMLFormElement, event: FormEvent) {
+    async function onSchedulerSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        var form = formRef.current as any;
+        var form = event.currentTarget;
         const [start, end] = form.timerange.value.split("@");
         const response = await createAppointment({
             doctor: Number(form.doctor.value),
@@ -86,7 +84,7 @@ export function Scheduler(props: SchedulerProps) {
     }
 
     return (
-        <form ref={formRef} className="Scheduler Page" onSubmit={handleSubmit}>
+        <form className="Scheduler Page" onSubmit={onSchedulerSubmit}>
             <h2 className="title">Đặt lịch</h2>
             <ComboBox label="Hồ sơ" attributes={{ name: "profile", value: profiles[0]?.id }}>
                 {profiles.map(function (value) {

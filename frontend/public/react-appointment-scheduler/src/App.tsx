@@ -14,7 +14,7 @@ import "./App.css";
 import { Login } from "./pages/LoginPage";
 import { Register } from "./pages/RegisterPage";
 import { ProfileEditor } from "./pages/ProfileEditorPage";
-import { currentUser, Patient } from "./services/patient";
+import { currentUser, currentUserImage, Patient } from "./services/patient";
 import { getAccessToken, setAccessToken } from "./services/auth";
 import { apiServer } from "./utils/api";
 import { ProfileInfo } from "./pages/ProfileInfoPage";
@@ -41,7 +41,18 @@ function AppContent() {
       if (["/", "/login", "/register"].includes(location.pathname))
         navigate("/login?redirect=" + encodeURIComponent(location.pathname + location.search + location.hash));
     });
-  }, [getAccessToken(), navigate])
+  }, [getAccessToken(), navigate]);
+
+  const [userImage, setUserImage] = useState<string>();
+  useEffect(() => {
+    currentUserImage().then(value => {
+      if (value.type === "ok" && value.url) {
+        setUserImage(value.url);
+      } else setUserImage("/favicon.ico")
+    }, reason => {
+      setUserImage("/favicon.ico")
+    });
+  }, [getAccessToken(), navigate]);
 
   function wrapLogIn(url: string) {
     return user ? url : "/login?redirect=" + url;
@@ -59,9 +70,10 @@ function AppContent() {
           user={user}
           name={user?.full_name}
           username={(user && (user.username || user.phone)) || "Bạn cần đăng nhập để thực hiện chức năng đặt lịch, xem lịch đã đặt, ..."}
-          imageURL={user && (user.image || user.id ? apiServer + "patient/" + user.id + "/image" : "/favicon.ico")}
+          imageURL={userImage}
           actionAttributes={{
-            async onClick() {
+            async onClick(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+              event.preventDefault();
               if (user) {
                 console.log("access_token", getAccessToken());
                 setAccessToken();
