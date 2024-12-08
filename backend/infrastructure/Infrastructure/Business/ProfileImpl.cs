@@ -25,9 +25,8 @@ internal sealed class ProfileImpl : BaseEntity, IProfile
     IEnumerable<IAppointment> IProfile.Appointments
     {
         get => _appointments ??= (
-            from ap in _dbContext.Set<Appointment>()
-            where ap.ProfileId == _profile.Id
-            select CreateAppointment(ap).WaitForResult(Timeout.Infinite, default)
+            _dbContext.Set<Appointment>().Where(ap => ap.ProfileId == _profile.Id).ToList().AsQueryable()
+            .Select(ap => CreateAppointment(ap).WaitForResult(Timeout.Infinite, default))
         ).Cached();
     }
 

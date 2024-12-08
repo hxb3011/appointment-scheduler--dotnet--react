@@ -37,6 +37,10 @@ export async function currentUser(): Promise<PatientResponse> {
             },
             method: "GET"
         });
+        if (response.status === 401) return {
+            type: "error",
+            message: "unauth"
+        }
         if ((response.status / 400) == 1) return {
             type: "error",
             message: await response.text()

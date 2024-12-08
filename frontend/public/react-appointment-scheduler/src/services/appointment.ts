@@ -42,6 +42,7 @@ export type AppointmentResponse = BaseAppointmentErrorResponse | (Appointment & 
 
 export type CreateAppointmentResponse = BaseAppointmentErrorResponse | (Appointment & {
     type: "ok";
+    message?: any;
 })
 
 export type AppointmentsResponse = BaseAppointmentErrorResponse | (Appointment[] & {
@@ -59,6 +60,10 @@ export async function getAppointments(): Promise<AppointmentsResponse> {
             headers: (token ? { "Authorization": `Bearer ${token}` } : {}),
             method: "GET"
         });
+        if (response.status === 401) return {
+            type: "error",
+            message: "unauth"
+        }
         if ((response.status / 400) == 1) return {
             type: "error",
             message: await response.text()
@@ -107,13 +112,18 @@ export async function getFutureAppointments(): Promise<FutureAppointmentsRespons
 export async function createAppointment(request: AppointmentRequest): Promise<CreateAppointmentResponse> {
     try {
         const token = getAccessToken();
-        const response: Response = await fetch(apiServer + `appointment?date=${encodeURIComponent(request.date || '')}&start=${encodeURIComponent(request.begin_time || '')}&end=${encodeURIComponent(request.end_time || '')}&doctor=${encodeURIComponent(request.doctor || '')}&profile=${encodeURIComponent(request.profile || '')}`, {
+        const response: Response = await fetch(apiServer + "appointment", {
             headers: {
                 "Content-Type": "application/json",
                 ...(token ? { "Authorization": `Bearer ${token}` } : {})
             },
+            body: JSON.stringify(request),
             method: "POST"
         });
+        if (response.status === 401) return {
+            type: "error",
+            message: "unauth"
+        }
         if ((response.status / 400) == 1) return {
             type: "error",
             message: await response.text()
@@ -122,9 +132,7 @@ export async function createAppointment(request: AppointmentRequest): Promise<Cr
             type: "error",
             message: `HTTP error! status: ${response.status}; content: ${await response.text()};`
         };
-        const result = await response.json();
-        result.type = "ok";
-        return result;
+        return { type: "ok", message: await response.text() };
     } catch (error) {
         return {
             type: "error",
@@ -141,6 +149,10 @@ export async function getAppointment(id: number): Promise<AppointmentsResponse> 
             headers: (token ? { "Authorization": `Bearer ${token}` } : {}),
             method: "GET"
         });
+        if (response.status === 401) return {
+            type: "error",
+            message: "unauth"
+        }
         if ((response.status / 400) == 1) return {
             type: "error",
             message: await response.text()

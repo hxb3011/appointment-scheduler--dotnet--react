@@ -12,7 +12,7 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     private IEnumerable<IAppointment> _appointments;
     private IEnumerable<IExamination> _examinations;
     private IEnumerable<IDiagnosticService> _diagnosticServices;
-    
+
     internal DoctorImpl(User user, Doctor doctor, IRole role) : base(user, role)
     {
         _doctor = doctor ?? throw new ArgumentNullException(nameof(doctor));
@@ -28,11 +28,11 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     IEnumerable<IAppointment> IDoctor.Appointments
     {
         get => _appointments ??= (
-            from ap in _dbContext.Set<Appointment>()
-            where ap.DoctorId == _doctor.Id
-            orderby ap.AtTime ascending
-            select CreateAppointment(ap).WaitForResult(Timeout.Infinite, default)
-        ).Cached();
+                from ap in _dbContext.Set<Appointment>()
+                where ap.DoctorId == _doctor.Id
+                orderby ap.AtTime ascending
+                select ap).ToList().AsQueryable()
+            .Select(ap => CreateAppointment(ap).WaitForResult(Timeout.Infinite, default));
     }
 
     IEnumerable<IExamination> IDoctor.Examinations

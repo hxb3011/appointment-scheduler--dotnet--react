@@ -2,21 +2,27 @@ import React, { useEffect, useState } from "react";
 
 import "./Page.css";
 import "./AppointmentPage.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FutureAppointment, getFutureAppointments } from "../services/appointment";
 import { Patient } from "../services/patient";
+import { setAccessToken } from "../services/auth";
 
 type AppointmentProps = {
     user?: Patient;
 };
 
 export function Appointment(props: AppointmentProps) {
+    const navigate = useNavigate();
     const [appointments, setAppointments] = useState<FutureAppointment[]>();
     useEffect(() => {
         getFutureAppointments().then(value => {
             if (value.type === "ok") {
                 setAppointments(value);
-                return;
+            } else if (value.type === "error") {
+                if (value.message === "unauth") {
+                    setAccessToken();
+                    navigate("/login?redirect=" + encodeURIComponent("/appointment"))
+                }
             }
         });
     }, [])

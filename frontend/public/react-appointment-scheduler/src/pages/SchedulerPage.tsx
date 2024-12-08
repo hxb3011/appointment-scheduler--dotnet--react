@@ -11,6 +11,7 @@ import { getProfiles, Profile } from "../services/profile";
 import { createAppointment } from "../services/appointment";
 import { useNavigate } from "react-router-dom";
 import { Patient } from "../services/patient";
+import { getAccessToken, setAccessToken } from "../services/auth";
 
 type SchedulerProps = {
     user?: Patient;
@@ -24,7 +25,11 @@ export function Scheduler(props: SchedulerProps) {
         getDoctors().then((value) => {
             if (value.type === "ok") {
                 setDoctors(value);
-                return;
+            } else if (value.type === "error") {
+                if (value.message === "unauth") {
+                    setAccessToken();
+                    navigate("/login?redirect=" + encodeURIComponent("/schedule"))
+                }
             }
         })
     }, [])
@@ -34,7 +39,11 @@ export function Scheduler(props: SchedulerProps) {
         getParts().then(value => {
             if (value.type === "ok") {
                 setParts(value);
-                return;
+            } else if (value.type === "error") {
+                if (value.message === "unauth") {
+                    setAccessToken();
+                    navigate("/login?redirect=" + encodeURIComponent("/schedule"))
+                }
             }
         });
     }, [])
@@ -44,7 +53,11 @@ export function Scheduler(props: SchedulerProps) {
         getProfiles({}).then(value => {
             if (value.type === "ok") {
                 setProfiles(value);
-                return;
+            } else if (value.type === "error") {
+                if (value.message === "unauth") {
+                    setAccessToken();
+                    navigate("/login?redirect=" + encodeURIComponent("/schedule"))
+                }
             }
         });
     }, [])
@@ -62,14 +75,13 @@ export function Scheduler(props: SchedulerProps) {
             begin_time: start,
             end_time: end
         });
+        console.warn(response);
         if (response.type === "ok") {
             // if (response.payment_url)
             //     window.location.href = response.payment_url;
             alert("Đặt lịch thành công.");
             navigate("/appointment");
-        } else {
-            alert("Lịch đã kín.");
-        }
+        } else alert("Lịch đã kín.");
     }
 
     return (
