@@ -92,6 +92,7 @@ public static class Program
         services.AddScoped<RoleService>();
         services.AddScoped<PatientService>();
         services.AddScoped<ExaminationService>();
+        services.AddScoped<ScheduleService>();
         return services;
     }
 

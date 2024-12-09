@@ -101,7 +101,8 @@
                                                 <select asp-for="Patient" id="patient"
                                                         class="form-control @(ViewData.ModelState["patient"]?.Errors?.Count > 0 ? "is-invalid" : "")"
                                                         asp-items="ViewBag.Patients"
-                                                        onchange="loadPatientInfo(this.value)">
+                                                        onchange="loadPatientInfo(this.value)"
+                                                        disabled>
                                                     <option value="">Chọn</option>
                                                 </select>
                                                 <span asp-validation-for="Patient" class="invalid-feedback" role="alert"></span>

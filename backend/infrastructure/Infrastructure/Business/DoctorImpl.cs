@@ -28,11 +28,11 @@ internal sealed class DoctorImpl : UserImpl, IDoctor
     IEnumerable<IAppointment> IDoctor.Appointments
     {
         get => _appointments ??= (
-            from ap in _dbContext.Set<Appointment>()
+            (from ap in _dbContext.Set<Appointment>()
             where ap.DoctorId == _doctor.Id
             orderby ap.AtTime ascending
-            select CreateAppointment(ap).WaitForResult(Timeout.Infinite, default)
-        ).Cached();
+            select ap).ToList().AsQueryable().Select(ap => CreateAppointment(ap).WaitForResult(Timeout.Infinite, default))
+        );
     }
 
     IEnumerable<IExamination> IDoctor.Examinations

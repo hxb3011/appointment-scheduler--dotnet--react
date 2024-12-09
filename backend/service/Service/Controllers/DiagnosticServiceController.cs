@@ -145,7 +145,7 @@ public class DiagnosticServiceController : ControllerBase
         return File(diagnosticService.Document(), "application/octet-stream");
     }
 
-    [HttpPost("{id}")]
+    [HttpPost("{id}/examination")]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateDiagnosticService])]
     public async Task<ActionResult> CreateExaminationDiagnostic(uint id, uint examination, uint doctor)
     {
@@ -178,7 +178,7 @@ public class DiagnosticServiceController : ControllerBase
         return Ok("success");
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}/examination")]
     [JSONWebToken(RequiredPermissions = [Permission.DeleteExaminationDiagnostic])]
     public async Task<ActionResult> DeleteExaminationDiagnostic(uint id, uint examination)
     {

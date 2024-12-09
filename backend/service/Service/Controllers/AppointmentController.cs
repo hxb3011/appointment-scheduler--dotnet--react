@@ -82,24 +82,33 @@ public class AppointmentController : ControllerBase
     [JSONWebToken(RequiredPermissions = [Permission.CreateAppointment])]
     public async Task<ActionResult> CreateAppointment([FromBody] AppointmentRequest request)
     {
-        var doctor = await _repository.GetEntityBy<uint, IDoctor>(request.Doctor);
-        if (doctor == null) return NotFound("doctor not found");
-        var scheduler = await _repository.GetService<ISchedulerService>();
-        var allocation = await scheduler.Allocate(doctor, request.Date, request.BeginTime, request.EndTime);
-
-        var appointment = await doctor.ObtainAppointment(
-            new DateTime(request.Date, allocation.AtTime), allocation.Id);
-        if (appointment == null) return BadRequest("can not create");
-        if (request.Profile.HasValue)
+        try
         {
-            var profile = await _repository.GetEntityBy<uint, IProfile>(request.Profile.Value);
-            if (profile == null) return NotFound("profile not found");
-            appointment.Profile = profile;
-        }
+            var doctor = await _repository.GetEntityBy<uint, IDoctor>(request.Doctor);
+            if (doctor == null) return NotFound("doctor not found");
+            var scheduler = await _repository.GetService<ISchedulerService>();
+            var allocation = await scheduler.Allocate(doctor, request.Date, request.BeginTime, request.EndTime);
 
-        if (!await appointment.Create())
-            return BadRequest("can not create");
-        return Ok("success");
+            var appointment = await doctor.ObtainAppointment(
+                new DateTime(request.Date, allocation.AtTime), allocation.Id);
+            if (appointment == null) return BadRequest("can not create");
+            if (request.Profile.HasValue)
+            {
+                var profile = await _repository.GetEntityBy<uint, IProfile>(request.Profile.Value);
+                if (profile == null) return NotFound("profile not found");
+                appointment.Profile = profile;
+            }
+
+            if (!await appointment.Create())
+                return BadRequest("can not create");
+            return Ok("success");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            return BadRequest(ex.ToString());
+        }
+        
     }
 
     [HttpPut("{id}")]

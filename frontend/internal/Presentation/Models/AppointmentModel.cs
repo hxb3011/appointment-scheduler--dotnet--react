@@ -12,10 +12,6 @@ public class AppointmentModel
     [JsonPropertyName("id")]
     public uint? Id {  get; set; }
 
-    [JsonPropertyName("at")]
-    [Required(ErrorMessage = "Chọn ngày đặt lịch hẹn")]
-    public DateTime? AtTime { get; set; }
-
     [Required(ErrorMessage = "Chọn hồ sơ")]
     [JsonPropertyName("profile")]
     public uint? Profile { get; set; } = null;
@@ -28,7 +24,15 @@ public class AppointmentModel
     [JsonPropertyName("state")]
     public EAppointmentState State { get; set; }
 
-    [JsonPropertyName("number")]
-    public uint? Number { get; set; }
+    [Required(ErrorMessage = "Chọn ngày đặt")]
+    public DateOnly? Date { get; set; }
+
+    public TimeOnly? BeginTime { get; set; }
+
+    [JsonPropertyName("end_time")]
+    public TimeOnly EndTime { get; set; }
+
+    [Required(ErrorMessage = "Chọn thời gian đặt lịch")]
+    public uint? ScheduleId {  get; set; }
 
 }
