@@ -118,9 +118,7 @@ public class DiagnosticServiceController : ControllerBase
         => src.repository.TryGetKeyOf(x, out DiagnosticService key) && key.Id == src.id;
 
     private IDiagnosticService ExaminationDiagnosticOf(IExamination examination, uint diagnosticServiceId) {
-        return examination.DiagnosticServices.Where(
-            new Func<(IRepository repository, uint id), IDiagnosticService, bool>(ExaminationDiagnosticFilter)
-                .Method.CreateDelegate<Func<IDiagnosticService, bool>>((_repository, diagnosticServiceId))).FirstOrDefault();
+        return examination.DiagnosticServices.Where(x => _repository.TryGetKeyOf(x, out DiagnosticService key) && key.Id == diagnosticServiceId).FirstOrDefault();
     }
 
     [HttpGet("examination/{id}")]
@@ -162,6 +160,27 @@ public class DiagnosticServiceController : ControllerBase
 
         if (!await examinationDiagnostic.Create())
             return BadRequest("can not create");
+
+        return Ok("success");
+    }
+    
+    [HttpPut("{id}/examination")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateDiagnosticService])]
+    public async Task<ActionResult> UpdateExaminationDiagnostic(uint id, uint examination, uint doctor)
+    {
+        var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
+        if (ex == null) return NotFound("examination not found");
+        var ds = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+        if (ds == null) return NotFound("diagnosticService not found");
+        var d = await _repository.GetEntityBy<uint, IDoctor>(doctor);
+        if (d == null) return NotFound("doctor not found");
+
+        var examinationDiagnostic = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+        if (examinationDiagnostic == null)
+            return BadRequest("can not find this exam diag");
+
+        //if (!await examinationDiagnostic.Update())
+        //    return BadRequest("can not update");
 
         return Ok("success");
     }

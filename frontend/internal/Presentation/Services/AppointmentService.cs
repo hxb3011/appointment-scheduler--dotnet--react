@@ -1,4 +1,5 @@
-﻿using AppointmentScheduler.Domain.Requests;
+﻿using AppointmentScheduler.Domain.Entities;
+using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Presentation.Models;
 using System.Net.Http.Headers;
@@ -208,13 +209,10 @@ public class AppointmentService
     {
         try
         {
-            // Lấy token từ session
             var token = _httpApiService.Context.Session.GetString("AuthToken");
 
-            // Tạo nội dung yêu cầu dưới dạng JSON
             var jsonBody = JsonSerializer.Serialize(new { profileId });
 
-            // Tạo HttpRequestMessage để gọi API
             var httpRequest = new HttpRequestMessage
             {
                 Method = HttpMethod.Put,
@@ -222,16 +220,13 @@ public class AppointmentService
                 Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
             };
 
-            // Thêm Authorization Header nếu có token
             if (!string.IsNullOrEmpty(token))
             {
                 httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
 
-            // Gửi yêu cầu HTTP đến API
             var response = await _httpApiService.SendAsync(httpRequest);
 
-            // Kiểm tra phản hồi từ API
             if (response.IsSuccessStatusCode)
             {
                 _logger.LogInformation("Appointment profile updated successfully.");
@@ -250,6 +245,51 @@ public class AppointmentService
         }
     }
 
+    public async Task<bool> ChangeAppointmentStatus(uint appointmentId, uint status)
+    {
+        try
+        {
+            var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+            // Prepare the body of the request
+            var jsonBody = JsonSerializer.Serialize(new { status });
+
+            var httpRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Put,
+                RequestUri = new Uri($"api/appointment/{appointmentId}/status?statusId={status}", UriKind.Relative), // URL needs appointmentId
+                Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
+            };
+
+            // If the token is available, add it to the Authorization header
+            if (!string.IsNullOrEmpty(token))
+            {
+                httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            // Send the request
+            var response = await _httpApiService.SendAsync(httpRequest);
+
+            // Check if the request was successful
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation($"Appointment {appointmentId} status updated successfully.");
+                return true;
+            }
+            else
+            {
+                // Log the error response for easier debugging
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                _logger.LogWarning($"Failed to update appointment. Status code: {response.StatusCode}. Response: {errorResponse}");
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while updating appointment status.");
+            return false;
+        }
+    }
 
 
     public async Task<bool> DeleteAppointment(uint id)

@@ -219,6 +219,40 @@ namespace AppointmentScheduler.Presentation.Services
             }
         }
 
+        public async Task<ExaminationDiagnosticResponse> GetExaminationDiagnostic(uint id, uint examination)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+                var requestUri = new Uri($"api/diagnosticService/examination/{id}?examination={examination}", UriKind.Relative);
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = requestUri
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var examinationDiagnostic = _httpApiService.DeserializeJson<ExaminationDiagnosticResponse>(jsonString);
+
+                return examinationDiagnostic;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching the examination diagnostic.");
+                return null;
+            }
+        }
+
 
         public async Task<string> AddExaminationDiagnosticService(uint diagnostic, uint examination, uint doctor)
         {
@@ -230,7 +264,6 @@ namespace AppointmentScheduler.Presentation.Services
                     return "Authorization token is missing.";
                 }
 
-                // Modify the URL to include the diagnostic, examination, and doctor parameters
                 var requestUri = new Uri($"api/diagnosticService/{diagnostic}/examination?examination={examination}&doctor={doctor}", UriKind.Relative);
 
                 var httpRequest = new HttpRequestMessage
@@ -239,10 +272,8 @@ namespace AppointmentScheduler.Presentation.Services
                     RequestUri = requestUri
                 };
 
-                // Add the authorization header if the token exists
                 httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                // Send the request
                 var response = await _httpApiService.SendAsync(httpRequest);
 
                 if (response.IsSuccessStatusCode)
@@ -264,6 +295,91 @@ namespace AppointmentScheduler.Presentation.Services
                 return errorMessage;
             }
         }
+        public async Task<string> UpdateExaminationDiagnosticService(uint diagnostic, uint examination, uint doctor)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return "Authorization token is missing.";
+                }
+
+                var requestUri = new Uri($"api/diagnosticService/{diagnostic}/examination?examination={examination}&doctor={doctor}", UriKind.Relative);
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = requestUri
+                };
+
+                httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Diagnostic updated successfully");
+                    return "Diagnostic updated successfully";
+                }
+                else
+                {
+                    var errorMessage = $"Error: {await response.Content.ReadAsStringAsync()}";
+                    _logger.LogWarning(errorMessage);
+                    return errorMessage;
+                }
+            }
+            catch (Exception e)
+            {
+                var errorMessage = "Error occurred while update Diagnostic";
+                _logger.LogError(e, errorMessage);
+                return errorMessage;
+            }
+        }
+
+        public async Task<string> DeleteExaminationDiagnosticService(uint diagnostic, uint examination)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return "Authorization token is missing.";
+                }
+
+                var requestUri = new Uri($"api/diagnosticService/{diagnostic}/examination?examination={examination}", UriKind.Relative);
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = requestUri
+                };
+
+                httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Diagnostic Delete successfully");
+                    return "Diagnostic Delete successfully";
+                }
+                else
+                {
+                    var errorMessage = $"Error: {await response.Content.ReadAsStringAsync()}";
+                    _logger.LogWarning(errorMessage);
+                    return errorMessage;
+                }
+            }
+            catch (Exception e)
+            {
+                var errorMessage = "Error occurred while delete Diagnostic";
+                _logger.LogError(e, errorMessage);
+                return errorMessage;
+            }
+        }
+
+
 
 
     }

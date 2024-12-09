@@ -73,19 +73,13 @@ namespace AppointmentScheduler.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AppointmentModel appointment)
         {
-            //var random = new Random();
-            //appointment.Number = (uint)random.Next(1, 1000);
             if (appointment.EndTime != default)
             {
                 if(appointment.Date != null)
                 {
-                    // Tạo một DateTime từ EndTime
                     DateTime endDateTime = new DateTime(appointment.Date.Value.Year, appointment.Date.Value.Month, appointment.Date.Value.Day, appointment.EndTime.Hour, appointment.EndTime.Minute, 0);
 
-                    // Trừ 30 phút từ EndTime để tính BeginTime
                     DateTime beginDateTime = endDateTime.AddMinutes(-30);
-
-                    // Cập nhật BeginTime trong AppointmentModel
                     appointment.BeginTime = new TimeOnly(beginDateTime.Hour, beginDateTime.Minute);
                 }
                 if (await _appointmentService.AddAppointment(appointment))

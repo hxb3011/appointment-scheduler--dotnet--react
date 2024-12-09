@@ -35,8 +35,8 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
             from es in _dbContext.Set<ExaminationService>()
             from ds in _dbContext.Set<DiagnosticService>()
             where es.ExaminationId == _examination.Id && es.DiagnosticServiceId == ds.Id
-            select CreateDiagnosticServices(ds, es, null).WaitForResult(Timeout.Infinite, default)
-        ).Cached();
+            select new ValueTuple<DiagnosticService, ExaminationService>(ds, es)
+        ).ToList().AsQueryable().Select(x => CreateDiagnosticServices(x.Item1, x.Item2, null).WaitForResult(Timeout.Infinite, default));
     }
 
     async Task<IPrescription> IExamination.ObtainPrescription()

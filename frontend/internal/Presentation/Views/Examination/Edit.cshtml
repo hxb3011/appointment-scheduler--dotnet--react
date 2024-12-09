@@ -132,7 +132,7 @@
                                             </div>
 
 
-                                            <div class="form-group mb-4">
+                                            @* <div class="form-group mb-4">
                                                 <label for="state">Trạng thái<strong class="text-danger">*</strong></label>
                                                 <select asp-for="State" id="state"
                                                         class="form-control @(ViewData.ModelState["State"]?.Errors?.Count > 0 ? "is-invalid" : "")"
@@ -140,7 +140,7 @@
                                                     <option value="">Chọn</option>
                                                 </select>
                                                 <span asp-validation-for="State" class="invalid-feedback" role="alert"></span>
-                                            </div>
+                                            </div> *@
 
                                             <div class="diagnostic-list">
                                                 @foreach (var diagnostic in (IEnumerable<dynamic>)ViewBag.Diagnostics)
@@ -157,19 +157,43 @@
                                                             @diagnostic.Name
                                                         </label>
 
-                                                        <div class="doctor-selection" id="doctorSelection_@diagnostic.Id" style="display: none;">
+                                                        <div class="doctor-selection" id="doctorSelection_@diagnostic.Id" style="display: @(Model.SelectedDiagnostics != null && Model.SelectedDiagnostics.Contains(diagnostic.Id) ? "block" : "none")">
                                                             <label for="doctor_@diagnostic.Id">Tên bác sĩ<strong class="text-danger">*</strong></label>
                                                             <select id="doctor_@diagnostic.Id"
                                                                     name="SelectedDoctors[@diagnostic.Id]"
                                                                     class="form-control"
                                                                     asp-items="ViewBag.Doctors">
                                                                 <option value="">Chọn</option>
+                                                                @foreach (var doctor in (IEnumerable<SelectListItem>)ViewBag.Doctors)
+                                                                {
+                                                                    var selected = Model.SelectedDoctors != null &&
+                                                                    Model.SelectedDoctors.ContainsKey(diagnostic.Id) &&
+                                                                    Model.SelectedDoctors[diagnostic.Id] == Convert.ToUInt32(doctor.Value)
+                                                                    ? "selected" : "";
+
+                                                                    <!-- In ra nếu đã có bác sĩ được chọn, và sau đó dừng vòng lặp -->
+                                                                    @if (selected == "selected")
+                                                                    {
+                                                                        <div>
+                                                                            <p>Doctor Value: @doctor.Value, Selected: @selected</p>
+                                                                        </div>
+                                                                        break;
+                                                                    }
+
+                                                                    <option value="@doctor.Value" selected>
+                                                                        @doctor.Text
+                                                                    </option>
+                                                                }
+
+
                                                             </select>
                                                             <span class="invalid-feedback" role="alert"></span>
                                                         </div>
                                                     </div>
                                                 }
                                             </div>
+
+
 
 
 
@@ -270,10 +294,10 @@
                 const doctorSelect = document.getElementById(`doctor_${diagnosticId}`);
 
                 if (checkbox.checked) {
-                    doctorSelection.style.display = "block"; 
+                    doctorSelection.style.display = "block";
                 } else {
-                    doctorSelection.style.display = "none"; 
-                    doctorSelect.value = "";                 
+                    doctorSelection.style.display = "none";
+                    doctorSelect.value = "";
                 }
             }
 
@@ -281,7 +305,7 @@
                 const checkboxes = document.querySelectorAll('.form-check-input');
                 checkboxes.forEach(checkbox => {
                     const diagnosticId = checkbox.id.split('_')[1];
-                    toggleDoctorSelection(diagnosticId); 
+                    toggleDoctorSelection(diagnosticId);
                 });
             });
 

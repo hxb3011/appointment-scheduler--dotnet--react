@@ -140,6 +140,18 @@ public class AppointmentController : ControllerBase
         return Ok("success");
     }
 
+    [HttpPut("{id}/status")]
+    [JSONWebToken(RequiredPermissions = [Permission.CreateAppointment])]
+    public async Task<ActionResult> ChangeAppointmentStatus(uint id, uint statusId)
+    {
+        var appointment = await _repository.GetEntityBy<uint, IAppointment>(id);
+        if (appointment == null) return NotFound();
+        appointment.State = statusId;
+        if (!await appointment.Update())
+            return BadRequest("can not update");
+        return Ok("success");
+    }
+
     [HttpDelete("{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.DeleteAppointment])]
     public async Task<ActionResult> DeleteAppointment(uint id)
