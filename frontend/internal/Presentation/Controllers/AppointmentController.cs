@@ -39,7 +39,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 
         public async Task<IActionResult> AppointmentInfo(uint id)
         {
-            var appointment = await _appointmentService.GetAppointmentById(id);
+            var appointment = await _appointmentService.GetAppointmentResponseById(id);
             return Ok(appointment);
         }
 

@@ -3,6 +3,7 @@ using AppointmentScheduler.Presentation.Models;
 using AppointmentScheduler.Presentation.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Reflection;
 
 namespace AppointmentScheduler.Presentation.Controllers
 {
@@ -10,11 +11,21 @@ namespace AppointmentScheduler.Presentation.Controllers
     {
         private readonly ExaminationService _examinationService;
         private readonly AppointmentService _appointmentService;
+        private readonly DiagnosticSerService _diagnosticSerService;
+        private readonly DoctorService _doctorService;
+        private readonly ILogger<ExaminationController> _logger;
 
-        public ExaminationController(ExaminationService examinationService, AppointmentService appointmentService)
+        public ExaminationController(ExaminationService examinationService, 
+            AppointmentService appointmentService, 
+            DiagnosticSerService diagnosticSerService,
+            DoctorService doctorService,
+            ILogger<ExaminationController> logger)
         {
             _examinationService = examinationService;
             _appointmentService = appointmentService;
+            _diagnosticSerService = diagnosticSerService;
+            _doctorService = doctorService;
+            _logger = logger;
         }
 
         public PagedGetAllRequest getPage()
@@ -87,35 +98,79 @@ namespace AppointmentScheduler.Presentation.Controllers
             var appointments = await _appointmentService.GetPagedAppointments(page);
             ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
 
+			var diagnosticServices = await _diagnosticSerService.GetPagedDiagnosticSers(page);
+            ViewBag.Diagnostics = diagnosticServices;
+
+            var doctors = await _doctorService.GetPagedDoctors(page);
+            ViewBag.Doctors = new SelectList(doctors, "Id", "FullName");
+
             ViewBag.SelectedAppointmentIdInExam = exam.Appointment;
 
             return View(exam);
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(ExaminationModel exam)
+        //{
+        //    string resultMessage = "Lỗi không thể sửa khám bệnh này";
+        //    if (ModelState.IsValid)
+        //    {
+        //        resultMessage = await _examinationService.UpdateExamination(exam);
+        //        if (resultMessage == "Examination updated successfully")
+        //        {
+        //            TempData["Success"] = "Chỉnh sửa khám bệnh thành công";
+        //            return RedirectToAction("Index");
+        //        }
+        //    }
+
+        //    TempData["Error"] = resultMessage;
+        //    var page = getPage();
+
+        //    var appointments = await _appointmentService.GetPagedAppointments(page);
+        //    ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
+
+        //    var diagnosticServices = await _diagnosticSerService.GetPagedDiagnosticSers(page);
+        //    ViewBag.Diagnostics = diagnosticServices;
+
+        //    ViewBag.SelectedAppointmentIdInExam = exam.Appointment;
+        //    return View(exam);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> Edit(ExaminationModel exam)
         {
             string resultMessage = "Lỗi không thể sửa khám bệnh này";
-            if (ModelState.IsValid)
-            {
-                resultMessage = await _examinationService.UpdateExamination(exam);
-                if (resultMessage == "Examination updated successfully")
-                {
-                    TempData["Success"] = "Chỉnh sửa khám bệnh thành công";
-                    return RedirectToAction("Index");
-                }
-            }
-
 
             TempData["Error"] = resultMessage;
+
             var page = getPage();
 
+            // Reload appointments and diagnostics for the form
             var appointments = await _appointmentService.GetPagedAppointments(page);
             ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
+
+            var diagnosticServices = await _diagnosticSerService.GetPagedDiagnosticSers(page);
+            ViewBag.Diagnostics = diagnosticServices;
+
+            var doctors = await _doctorService.GetPagedDoctors(page);
+            ViewBag.Doctors = new SelectList(doctors, "Id", "FullName");
+
+            if (exam.SelectedDoctors != null && exam.SelectedDoctors.Count > 0)
+            {
+                foreach (var doctor in exam.SelectedDoctors)
+                {
+                    if(doctor.Value != 0)
+                    {
+                        _logger.LogInformation($"Diagnostic ID: {doctor.Key}, Doctor ID: {doctor.Value}");
+                        await _diagnosticSerService.AddExaminationDiagnosticService(doctor.Key, exam.Id, doctor.Value);
+                    }
+                }
+            }
 
             ViewBag.SelectedAppointmentIdInExam = exam.Appointment;
             return View(exam);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Delete(uint id)

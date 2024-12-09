@@ -218,5 +218,53 @@ namespace AppointmentScheduler.Presentation.Services
                 return false;
             }
         }
+
+
+        public async Task<string> AddExaminationDiagnosticService(uint diagnostic, uint examination, uint doctor)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+                if (string.IsNullOrEmpty(token))
+                {
+                    return "Authorization token is missing.";
+                }
+
+                // Modify the URL to include the diagnostic, examination, and doctor parameters
+                var requestUri = new Uri($"api/diagnosticService/{diagnostic}/examination?examination={examination}&doctor={doctor}", UriKind.Relative);
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = requestUri
+                };
+
+                // Add the authorization header if the token exists
+                httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                // Send the request
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Diagnostic added successfully");
+                    return "Diagnostic added successfully";
+                }
+                else
+                {
+                    var errorMessage = $"Error: {await response.Content.ReadAsStringAsync()}";
+                    _logger.LogWarning(errorMessage);
+                    return errorMessage;
+                }
+            }
+            catch (Exception e)
+            {
+                var errorMessage = "Error occurred while adding Diagnostic";
+                _logger.LogError(e, errorMessage);
+                return errorMessage;
+            }
+        }
+
+
     }
 }

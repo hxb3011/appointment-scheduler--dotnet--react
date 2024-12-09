@@ -44,6 +44,17 @@
             .widget-content-area {
                 padding: 20px !important;
             }
+
+            .diagnostic-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px; /* Adjust the gap between items */
+            }
+
+                .diagnostic-list .form-check {
+                    flex: 0 0 calc(25% - 10px); /* 25% width for 4 items per row, minus gap */
+                    box-sizing: border-box;
+                }
         </style>
     </div>
 </head>
@@ -89,13 +100,12 @@
                                         <div class="col-12">
                                             <div class="form-group mb-4">
                                                 <label for="appointment">Đơn đặt<strong class="text-danger">*</strong></label>
-                                                <input asp-for="Appointment"
-                                                       type="text"
-                                                       id="appointment"
-                                                       class="form-control @(ViewData.ModelState["Appointment"]?.Errors?.Count > 0 ? "is-invalid" : "")"
-                                                       readonly
-                                                       value="@Model.Appointment" style="color: cornflowerblue"/>
-                                                <span asp-validation-for="Appointment" class="invalid-feedback" role="alert"></span>
+                                                <select asp-for="Appointment" id="profile"
+                                                        class="form-control @(ViewData.ModelState["Appointment"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                        asp-items="ViewBag.Appointments"
+                                                        onchange="loadAppointmentInfo(this.value)">
+                                                    <option value="">Chọn</option>
+                                                </select>
                                             </div>
 
 
@@ -110,7 +120,7 @@
                                                        placeholder="Chuẩn đoán">
                                                 <span asp-validation-for="Diagnostic" class="invalid-feedback" role="alert"></span>
                                             </div>
-                                            
+
                                             <div class="form-group mb-4">
                                                 <label for="description">Mô tả <strong class="text-danger">*</strong></label>
                                                 <input asp-for="Description"
@@ -131,6 +141,40 @@
                                                 </select>
                                                 <span asp-validation-for="State" class="invalid-feedback" role="alert"></span>
                                             </div>
+
+                                            <div class="diagnostic-list">
+                                                @foreach (var diagnostic in (IEnumerable<dynamic>)ViewBag.Diagnostics)
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input"
+                                                               type="checkbox"
+                                                               id="diagnostic_@diagnostic.Id"
+                                                               name="SelectedDiagnostics"
+                                                               value="@diagnostic.Id"
+                                                               onchange="toggleDoctorSelection(@diagnostic.Id)"
+                                                        @(Model.SelectedDiagnostics != null && Model.SelectedDiagnostics.Contains(diagnostic.Id) ? "checked" : "") />
+                                                        <label class="form-check-label" for="diagnostic_@diagnostic.Id">
+                                                            @diagnostic.Name
+                                                        </label>
+
+                                                        <div class="doctor-selection" id="doctorSelection_@diagnostic.Id" style="display: none;">
+                                                            <label for="doctor_@diagnostic.Id">Tên bác sĩ<strong class="text-danger">*</strong></label>
+                                                            <select id="doctor_@diagnostic.Id"
+                                                                    name="SelectedDoctors[@diagnostic.Id]"
+                                                                    class="form-control"
+                                                                    asp-items="ViewBag.Doctors">
+                                                                <option value="">Chọn</option>
+                                                            </select>
+                                                            <span class="invalid-feedback" role="alert"></span>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+
+
+
+
+
 
                                             <p class="text-muted mb-4">!!! Vui lòng điền đầy đủ thông tin và ngày đặt trước khi hoàn tất.</p>
 
@@ -219,6 +263,73 @@
                     document.querySelector('#appointment').value = selectedExamId;
                 }
             });
+
+            function toggleDoctorSelection(diagnosticId) {
+                const checkbox = document.getElementById(`diagnostic_${diagnosticId}`);
+                const doctorSelection = document.getElementById(`doctorSelection_${diagnosticId}`);
+                const doctorSelect = document.getElementById(`doctor_${diagnosticId}`);
+
+                if (checkbox.checked) {
+                    doctorSelection.style.display = "block"; 
+                } else {
+                    doctorSelection.style.display = "none"; 
+                    doctorSelect.value = "";                 
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const checkboxes = document.querySelectorAll('.form-check-input');
+                checkboxes.forEach(checkbox => {
+                    const diagnosticId = checkbox.id.split('_')[1];
+                    toggleDoctorSelection(diagnosticId); 
+                });
+            });
+
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("#general-settings");
+
+                form.addEventListener("submit", function (event) {
+                    let isValid = true; // Biến kiểm tra tính hợp lệ của form
+                    const diagnosticCheckboxes = document.querySelectorAll('.form-check-input');
+
+                    // Lặp qua tất cả các checkbox đã chọn
+                    diagnosticCheckboxes.forEach(function (checkbox) {
+                        if (checkbox.checked) {
+                            const diagnosticId = checkbox.value;
+                            const doctorSelect = document.getElementById(`doctor_${diagnosticId}`);
+
+                            // Kiểm tra xem bác sĩ đã được chọn hay chưa
+                            if (!doctorSelect.value) {
+                                // Nếu chưa chọn bác sĩ, hiển thị thông báo lỗi
+                                const errorMessage = `Vui lòng chọn bác sĩ cho chuẩn đoán ${checkbox.nextElementSibling.textContent.trim()}.`;
+                                alert(errorMessage); // Hoặc bạn có thể hiển thị thông báo lỗi ở phần nào đó trên UI
+                                isValid = false; // Đặt lại form thành không hợp lệ
+                            }
+                        }
+                    });
+
+                    // Nếu form không hợp lệ, ngừng việc submit
+                    if (!isValid) {
+                        event.preventDefault(); // Ngừng submit form
+                    }
+                });
+            });
+
+            function toggleDoctorSelection(diagnosticId) {
+                const checkbox = document.getElementById(`diagnostic_${diagnosticId}`);
+                const doctorSelection = document.getElementById(`doctorSelection_${diagnosticId}`);
+                const doctorSelect = document.getElementById(`doctor_${diagnosticId}`);
+
+                // Nếu checkbox được chọn, hiển thị phần chọn bác sĩ
+                if (checkbox.checked) {
+                    doctorSelection.style.display = "block";
+                } else {
+                    doctorSelection.style.display = "none";
+                    doctorSelect.value = ""; // Clear selection of doctor if checkbox is unchecked
+                }
+            }
+
         </script>
     </div>
     <!--  END CUSTOM SCRIPTS FILE  -->

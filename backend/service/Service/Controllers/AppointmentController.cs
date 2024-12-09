@@ -27,9 +27,24 @@ public class AppointmentController : ControllerBase
         : new() { Id = key.Id, AtTime = key.AtTime, Number = key.Number, State = key.State, Profile = key.ProfileId, Doctor = key.DoctorId };
 
     [HttpGet]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadAppointment])]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointments([FromQuery] PagedGetAllRequest request)
-        => Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By).Select(MakeResponse));
+    {
+        var user = HttpContext.GetAuthUser();
+        if (!_repository.TryGetKeyOf(user, out Doctor key))
+        {
+            return BadRequest("Authorized user is not a doctor");
+        }
+
+        if (user.Role.IsPermissionGranted(Permission.SystemPrivilege))
+        {
+            return Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By).Select(MakeResponse));
+        }
+
+
+
+        return Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By, whereProperty: nameof(Appointment.DoctorId), andValue: key.Id).Select(MakeResponse));
+    }
 
     [HttpGet("byDoctor")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]

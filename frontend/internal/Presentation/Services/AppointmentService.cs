@@ -126,7 +126,7 @@ public class AppointmentService
         }
     }
 
-    public async Task<AppointmentResponseModel> GetAppointmentResponseById(uint id)
+	public async Task<AppointmentResponseModel> GetAppointmentResponseById(uint id)
     {
         try
         {

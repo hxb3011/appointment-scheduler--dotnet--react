@@ -55,6 +55,8 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
         var exdiag = new ExaminationService();
         if (!await _dbContext.IdGenerated(exdiag, nameof(ExaminationService.Id))) return null;
         exdiag.DoctorId = id;
+        exdiag.ExaminationId = _examination.Id;
+        exdiag.DiagnosticServiceId = diagsv.Id;
         return await CreateDiagnosticServices(diagsv, exdiag, doctor);
     }
 

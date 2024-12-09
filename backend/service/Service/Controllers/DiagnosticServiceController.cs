@@ -123,7 +123,7 @@ public class DiagnosticServiceController : ControllerBase
                 .Method.CreateDelegate<Func<IDiagnosticService, bool>>((_repository, diagnosticServiceId))).FirstOrDefault();
     }
 
-    [HttpGet("Examination/{id}")]
+    [HttpGet("examination/{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
     public async Task<ActionResult<ExaminationDiagnosticResponse>> GetExaminationDiagnostic(uint id, uint examination)
     {

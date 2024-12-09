@@ -50,7 +50,7 @@
 						<thead>
 							<tr>
 								<th style="width: 5%">STT</th>
-								<th>Number</th>
+								<th>Mã lịch đặt</th>
 								<th>Mã hồ sơ</th>
 								<th>Mã bác sĩ</th>
 								<th>Thời gian đặt</th>
@@ -69,7 +69,7 @@
 									var meta = appointment.State.GetMetadata();
 									<tr>
 										<td>@stt</td>
-										<td>@appointment.Number</td>
+										<td>@appointment.Id</td>
 										<td>@appointment.Profile</td>
 										<td>@appointment.Doctor</td>
 										<td>@appointment.AtTime</td>
@@ -81,6 +81,13 @@
 
 
 										<td class="table-controls d-flex justify-content-center align-items-center pt-2">
+											<li>
+												<a href="@Url.Action("Edit", "Examination", new { id = appointment.Id })"
+												   class="bs-tooltip edit" data-bs-toggle="tooltip"
+												   data-bs-placement="top">
+													Thêm khám bệnh
+												</a>
+											</li>
 											<li>
 												<a href="@Url.Action("Edit", "Appointment", new { id = appointment.Id })"
 												   class="bs-tooltip edit" data-bs-toggle="tooltip"
