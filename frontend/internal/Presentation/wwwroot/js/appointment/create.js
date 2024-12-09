@@ -24,7 +24,7 @@
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Tên: </p>
-                                <p class="text-dark">${data.certificate}</p>
+                                <p class="text-dark">${data.full_name}</p>
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Email: </p>
@@ -65,6 +65,7 @@ function loadProfileInfo(profileId) {
             return response.json();
         })
         .then(data => {
+            console.log(data); // Kiểm tra các trường trả v
             // Hiển thị thông tin bác sĩ
             const genderText = data.gender === 'M' ? 'Nam' : data.gender === 'F' ? 'Nữ' : 'Không xác định';
 
@@ -75,7 +76,7 @@ function loadProfileInfo(profileId) {
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Mã bệnh nhân: </p>
-                                <p class="text-dark">${data.patientId}</p>
+                                <p class="text-dark">${data.patient}</p>
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Họ tên: </p>
@@ -96,4 +97,42 @@ function loadProfileInfo(profileId) {
             document.querySelector('#profile-info').innerHTML = `<p class="text-danger">Không tìm thấy thông tin hồ sơ.</p>`;
         });
 }
+
+
+function loadScheduleInfo(beginTimeId) {
+    console.log("Selected BeginTime ID:", beginTimeId);
+    
+    if (!beginTimeId) {
+        // Clear the EndTime field if no BeginTime is selected
+        document.querySelector('#end').value = '';
+        return;
+    }
+
+    const baseUrl = window.location.origin; // Get base URL (e.g., https://localhost)
+    const url = `${baseUrl}/Schedule/ScheduleInfo/${beginTimeId}`;
+
+    // Make the API call to fetch the schedule based on the selected BeginTime
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Schedule not found');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Assuming the API returns a schedule with an 'end' time field
+            if (data && data.end) {
+                // Set the EndTime field with the fetched 'end' time
+                document.querySelector('#end').value = data.end;
+            } else {
+                // If no end time is available, reset the EndTime field
+                document.querySelector('#end').value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.querySelector('#end').value = ''; // Reset EndTime in case of error
+        });
+}
+
 

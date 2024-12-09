@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 
-@model IEnumerable<AppointmentModel>
+@model IEnumerable<AppointmentResponseModel>
 
 
 <!-- CSS riêng cho lớp con -->
@@ -70,8 +70,8 @@
 									<tr>
 										<td>@stt</td>
 										<td>@appointment.Number</td>
-										<td>@appointment.ProfileId</td>
-										<td>@appointment.DoctorId</td>
+										<td>@appointment.Profile</td>
+										<td>@appointment.Doctor</td>
 										<td>@appointment.AtTime</td>
 										<td>
 											<span class="badge badge-light-@meta.Badge">

@@ -31,7 +31,7 @@ public class AppointmentController : ControllerBase
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointments([FromQuery] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
-    [HttpGet]
+    [HttpGet("byDoctor")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointmentsByDoctor([FromQuery] PagedGetAllRequest request, uint doctor)
         => Ok(_repository.GetEntities<IAppointment>(
@@ -39,7 +39,7 @@ public class AppointmentController : ControllerBase
             whereProperty: nameof(Appointment.DoctorId), andValue: doctor
         ).Select(MakeResponse));
 
-    [HttpGet]
+    [HttpGet("byProfile")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointmentsByProfile([FromQuery] PagedGetAllRequest request, uint profile)
         => Ok(_repository.GetEntities<IAppointment>(
@@ -47,7 +47,7 @@ public class AppointmentController : ControllerBase
             whereProperty: nameof(Appointment.ProfileId), andValue: profile
         ).Select(MakeResponse));
 
-    [HttpGet]
+    [HttpGet("byPatient")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public async Task<ActionResult<IEnumerable<AppointmentResponse>>> GetPagedAppointmentsByPatient([FromQuery] PagedGetAllRequest request, uint patient)
     {
@@ -82,24 +82,33 @@ public class AppointmentController : ControllerBase
     [JSONWebToken(RequiredPermissions = [Permission.CreateAppointment])]
     public async Task<ActionResult> CreateAppointment([FromBody] AppointmentRequest request)
     {
-        var doctor = await _repository.GetEntityBy<uint, IDoctor>(request.Doctor);
-        if (doctor == null) return NotFound("doctor not found");
-        var scheduler = await _repository.GetService<ISchedulerService>();
-        var allocation = await scheduler.Allocate(doctor, request.Date, request.BeginTime, request.EndTime);
-
-        var appointment = await doctor.ObtainAppointment(
-            new DateTime(request.Date, allocation.AtTime), allocation.Id);
-        if (appointment == null) return BadRequest("can not create");
-        if (request.Profile.HasValue)
+        try
         {
-            var profile = await _repository.GetEntityBy<uint, IProfile>(request.Profile.Value);
-            if (profile == null) return NotFound("profile not found");
-            appointment.Profile = profile;
-        }
+            var doctor = await _repository.GetEntityBy<uint, IDoctor>(request.Doctor);
+            if (doctor == null) return NotFound("doctor not found");
+            var scheduler = await _repository.GetService<ISchedulerService>();
+            var allocation = await scheduler.Allocate(doctor, request.Date, request.BeginTime, request.EndTime);
 
-        if (!await appointment.Create())
-            return BadRequest("can not create");
-        return Ok("success");
+            var appointment = await doctor.ObtainAppointment(
+                new DateTime(request.Date, allocation.AtTime), allocation.Id);
+            if (appointment == null) return BadRequest("can not create");
+            if (request.Profile.HasValue)
+            {
+                var profile = await _repository.GetEntityBy<uint, IProfile>(request.Profile.Value);
+                if (profile == null) return NotFound("profile not found");
+                appointment.Profile = profile;
+            }
+
+            if (!await appointment.Create())
+                return BadRequest("can not create");
+            return Ok("success");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            return BadRequest(ex.ToString());
+        }
+        
     }
 
     [HttpPut("{id}")]

@@ -5,6 +5,8 @@ using AppointmentScheduler.Domain.Requests;
 using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace AppointmentScheduler.Service.Controllers;
 
@@ -25,18 +27,22 @@ public class ProfileController : ControllerBase
         => !_repository.TryGetKeyOf(role, out Profile key) ? null
         : new() { Id = key.Id, Patient = key.PatientId, FullName = key.FullName, DateOfBirth = key.DateOfBirth, Gender = key.Gender };
 
-    [HttpGet, JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
-    public ActionResult<IEnumerable<ProfileResponse>> GetPagedProfiles([FromQuery] PagedGetAllRequest request)
+    // Endpoint lấy danh sách profile phân trang
+    [HttpGet]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    public ActionResult<IEnumerable<ProfileResponse>> GetPagedProfiles([FromBody] PagedGetAllRequest request)
         => Ok(_repository.GetEntities<IProfile>(request.Offset, request.Count, request.By).Select(MakeResponse));
 
-    [HttpGet("patient/current"), JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
-    public ActionResult<IEnumerable<ProfileResponse>> GetPagedProfilesByCurrentPatient([FromQuery] PagedGetAllRequest request)
-    {
-        if (HttpContext.GetAuthUser() is not IPatient patient) return Forbid("signed in user is not a patient");
-        else return Ok(patient.Profiles.Skip(request.Offset).Take(request.Count).Select(MakeResponse));
-    }
+    [HttpGet("patient/{patientId}")]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    public ActionResult<IEnumerable<ProfileResponse>> GetPagedAppointmentsByProfile([FromBody] PagedGetAllRequest request, uint patientId)
+        => Ok(_repository.GetEntities<IProfile>(
+            request.Offset, request.Count, request.By,
+            whereProperty: nameof(Profile.PatientId), andValue: patientId
+        ).Select(MakeResponse));
 
-    [HttpGet("{id}"), JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
+    [HttpGet("{id}")]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadProfile])]
     public async Task<ActionResult<ProfileResponse>> GetProfile(uint id)
     {
         var profile = await _repository.GetEntityBy<uint, IProfile>(id);

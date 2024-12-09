@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 
-@model AppointmentModel
+@model AppointmentResponseModel
 <head>
     <title>Chỉnh sửa đơn đặt</title>
     <div layout:fragment="headerFiles">
@@ -44,6 +44,7 @@
             .widget-content-area {
                 padding: 20px !important;
             }
+
         </style>
     </div>
 </head>
@@ -89,53 +90,51 @@
                                         <div class="col-12">
                                             <div class="form-group mb-4">
                                                 <label for="profile">Tên hồ sơ<strong class="text-danger">*</strong></label>
-                                                <select asp-for="ProfileId" id="profile"
+                                                <select asp-for="Profile" id="profile"
                                                         class="form-control @(ViewData.ModelState["ProfileId"]?.Errors?.Count > 0 ? "is-invalid" : "")"
                                                         asp-items="ViewBag.Profiles"
                                                         onchange="loadProfileInfo(this.value)">
                                                     <option value="">Chọn</option>
                                                 </select>
-                                                <span asp-validation-for="ProfileId" class="invalid-feedback" role="alert"></span>
+                                                <span asp-validation-for="Profile" class="invalid-feedback" role="alert"></span>
                                             </div>
 
 
 
                                             <div class="form-group mb-4">
                                                 <label for="doctor">Tên bác sĩ<strong class="text-danger">*</strong></label>
-                                                <select asp-for="DoctorId" id="doctor"
+                                                <select asp-for="Doctor" id="doctor"
                                                         class="form-control @(ViewData.ModelState["DoctorId"]?.Errors?.Count > 0 ? "is-invalid" : "")"
                                                         asp-items="ViewBag.Doctors"
-                                                        onchange="loadDoctorInfo(this.value)">
+                                                        onchange="loadDoctorInfo(this.value)" disabled>
                                                     <option value="">Chọn</option>
                                                 </select>
-                                                <span asp-validation-for="DoctorId" class="invalid-feedback" role="alert"></span>
+                                                <span asp-validation-for="Doctor" class="invalid-feedback" role="alert"></span>
                                             </div>
-
 
                                             <div class="form-group mb-4">
                                                 <label for="state">Trạng thái<strong class="text-danger">*</strong></label>
                                                 <select asp-for="State" id="state"
                                                         class="form-control @(ViewData.ModelState["State"]?.Errors?.Count > 0 ? "is-invalid" : "")"
-                                                        asp-items="Html.GetEnumSelectList<EAppointmentState>()">
+                                                        asp-items="Html.GetEnumSelectList<EAppointmentState>()" disabled>
                                                     <option value="">Chọn</option>
                                                 </select>
                                                 <span asp-validation-for="State" class="invalid-feedback" role="alert"></span>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label for="date">Thời gian đặt<strong class="text-danger">*</strong></label>
-                                                        <input asp-for="AtTime"
-                                                               id="atTime"
-                                                               placeholder="Chọn thời gian đặt"
-                                                               type="datetime-local"
-                                                               class="form-control @(ViewData.ModelState["AtTime"]?.Errors?.Count > 0 ? "is-invalid" : "")"
-                                                               min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
-                                                        <span asp-validation-for="AtTime" class="invalid-feedback" role="alert"></span>
-                                                    </div>
-                                                </div>
+
+                                            <div class="form-group mb-4">
+                                                <label for="date">Thời gian đặt<strong class="text-danger">*</strong></label>
+                                                <input asp-for="AtTime"
+                                                       id="atTime"
+                                                       placeholder="Chọn thời gian đặt"
+                                                       type="datetime-local"
+                                                       style="color:cadetblue"
+                                                       class="form-control @(ViewData.ModelState["AtTime"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" readonly />
+                                                <span asp-validation-for="AtTime" class="invalid-feedback" role="alert"></span>
                                             </div>
+
 
                                             <p class="text-muted mb-4">!!! Vui lòng điền đầy đủ thông tin và ngày đặt trước khi hoàn tất.</p>
 
@@ -261,7 +260,7 @@
         <script src="~/plugins/tomSelect/tom-select.base.js"></script>
         <script src="~/plugins/tomSelect/custom-tom-select.js"></script>
 
-        <script src="~/js/doctor/create.js"></script>
+        <script src="~/js/appointment/create.js"></script>
         <script>
             $('#inventoryvoucher-table')
                 .DataTable(
@@ -321,12 +320,12 @@
 
                 if (selectedDoctorId) {
                     loadDoctorInfo(selectedDoctorId);
-                    document.querySelector('#doctor').value = selectedDoctorId; // Chọn giá trị mặc định
+                    document.querySelector('#doctor').value = selectedDoctorId;
                 }
 
                 if (selectedProfileId) {
                     loadProfileInfo(selectedProfileId);
-                    document.querySelector('#profile').value = selectedProfileId; // Chọn giá trị mặc định
+                    document.querySelector('#profile').value = selectedProfileId;
                 }
             });
         </script>

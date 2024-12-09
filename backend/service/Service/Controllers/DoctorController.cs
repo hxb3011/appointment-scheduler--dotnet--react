@@ -84,6 +84,7 @@ public class DoctorController : UserController
 		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
 		if (doctor == null) return NotFound();
 		string v;
+		uint r;
 		if ((v = request.Username) != null)
 		{
 			doctor.UserName = v;
@@ -105,7 +106,7 @@ public class DoctorController : UserController
 				return BadRequest("password not valid");
 			doctor.Password = _passwordHasher.HashPassword(doctor, doctor.Password);
 		}
-		if ((v = request.Email) != null)
+        if ((v = request.Email) != null)
 		{
 			doctor.Email = v;
 			if (!doctor.IsEmailValid)
@@ -117,12 +118,20 @@ public class DoctorController : UserController
 			if (!doctor.IsPhoneValid)
 				return BadRequest("phone not valid");
 		}
+
+		if(request.RoleId != 0)
+		{
+            var role = await _repository.GetEntityBy<uint, IRole>(request.RoleId);
+            await doctor.ChangeRole(role);
+        }
+		
+
 		if ((v = request.Certificate) != null)
 			doctor.Certificate = v;
 		if ((v = request.Position) != null)
 			doctor.Position = v;
-		if (!await doctor.Create())
-			return BadRequest("can not create");
+		if (!await doctor.Update())
+			return BadRequest("can not update");
 		return Ok("success");
 	}
 

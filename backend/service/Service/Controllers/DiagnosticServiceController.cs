@@ -104,7 +104,7 @@ public class DiagnosticServiceController : ControllerBase
         => !_repository.TryGetKeyOf(examinationDiagnostic, out ExaminationService key) ? null
         : new() { Name = examinationDiagnostic.Name, Price = examinationDiagnostic.Price, Doctor = key.DoctorId, DiagnosticService = key.DiagnosticServiceId, Examination = key.ExaminationId };
 
-    [HttpGet]
+    [HttpGet("Examination")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
     public async Task<ActionResult<IEnumerable<ExaminationDiagnosticResponse>>> GetPagedExaminationDiagnostics([FromQuery] PagedGetAllRequest request, uint examination)
     {
@@ -123,7 +123,7 @@ public class DiagnosticServiceController : ControllerBase
                 .Method.CreateDelegate<Func<IDiagnosticService, bool>>((_repository, diagnosticServiceId))).FirstOrDefault();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("Examination/{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadDiagnosticService])]
     public async Task<ActionResult<ExaminationDiagnosticResponse>> GetExaminationDiagnostic(uint id, uint examination)
     {
@@ -145,7 +145,7 @@ public class DiagnosticServiceController : ControllerBase
         return File(diagnosticService.Document(), "application/octet-stream");
     }
 
-    [HttpPost("{id}")]
+    [HttpPost("{id}/examination")]
     [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateDiagnosticService])]
     public async Task<ActionResult> CreateExaminationDiagnostic(uint id, uint examination, uint doctor)
     {
@@ -178,7 +178,7 @@ public class DiagnosticServiceController : ControllerBase
         return Ok("success");
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}/examination")]
     [JSONWebToken(RequiredPermissions = [Permission.DeleteExaminationDiagnostic])]
     public async Task<ActionResult> DeleteExaminationDiagnostic(uint id, uint examination)
     {

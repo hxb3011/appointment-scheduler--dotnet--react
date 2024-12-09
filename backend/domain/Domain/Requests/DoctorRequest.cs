@@ -12,4 +12,5 @@ public class DoctorRequest
     public string Phone { get; set; }
     public string Position { get; set; }
     public string Certificate { get; set; }
+    public uint RoleId { get; set; }
 }
