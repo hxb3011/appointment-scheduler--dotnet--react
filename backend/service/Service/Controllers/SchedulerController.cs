@@ -27,29 +27,5 @@ namespace AppointmentScheduler.Service.Controllers
         public async Task<ActionResult<IEnumerable<SchedulerPart>>> GetParts()
         => Ok((await _repository.GetService<ISchedulerService>()).Parts);
 
-        [HttpGet("{id}")]
-        [JSONWebToken(AuthenticationRequired = true)]
-        public async Task<ActionResult<SchedulerPart>> GetScheduleByStartTime(uint id)
-        {
-            try
-            {
-                var schedulerService = await _repository.GetService<ISchedulerService>();
-
-                var schedulerParts = schedulerService.Parts
-                    .Where(sp => sp.Id == id)
-                    .FirstOrDefault();
-
-                if (schedulerParts == null)
-                    return NotFound();
-
-                return Ok(schedulerParts);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error fetching schedule by id {id}: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
     }
 }

@@ -1,0 +1,187 @@
+﻿@using AppointmentScheduler.Presentation.Models.Enums
+@{
+    ViewData["Title"] = "Chỉnh sửa hồ sơ";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
+}
+
+@model RoleModel
+
+<head>
+    <div layout:fragment="headerFiles">
+        <link rel="stylesheet" type="text/css" href="~/css/customs/assets/light/apps/blog-post.css">
+
+        <link rel="stylesheet" type="text/css" href="~/css/customs/assets/light/apps/ecommerce-create.css">
+        <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/datatables.css">
+        <link rel="stylesheet" type="text/css"
+            href="~/plugins/table/datatable/extensions/col-reorder/col-reorder.datatables.min.css">
+        <link rel="stylesheet" type="text/css"
+            href="~/plugins/table/datatable/extensions/fixed-columns/fixed-columns.datatables.min.css">
+
+        <link rel="stylesheet" type="text/css" href="~/css/customs/plugins/light/table/datatable/dt-global_style.css">
+
+        <link rel="stylesheet" type="text/css" href="~/css/customs/plugins/light/table/datatable/custom_dt_custom.css">
+
+        <link rel="stylesheet" type="text/css" href="~/css/customs/assets/light/apps/blog-create.css">
+
+        <link rel="stylesheet" type="text/css"
+            href="@Url.Content("~/css/customs/plugins/light/tomSelect/custom-tomSelect.css")">
+        <link rel="stylesheet" type="text/css"
+            href="@Url.Content("~/css/customs/plugins/dark/tomSelect/custom-tomSelect.css")">
+        <link rel="stylesheet" type="text/css" href="@Url.Content("~/plugins/tomSelect/tom-select.default.min.css")">
+
+        <style>
+            #datatable thead th {
+                font-weight: bold;
+                background-color: #f8f9fa;
+                color: #333;
+            }
+
+            #datatable tbody td {
+                vertical-align: middle;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .widget-content-area {
+                padding: 20px !important;
+            }
+        </style>
+    </div>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+
+        <div class="middle-content container-xxl p-0">
+
+            <div class="d-flex justify-content-between mt-4 mb-2">
+                <div>
+                    <div class="d-flex align-items-start">
+                        <h5 class="text-bold">
+                            CHỈNH SỬA VAI TRÒ
+                            <span class="badge badge-dark"></span>
+                        </h5>
+                    </div>
+
+                </div>
+                <div>
+                    <iframe id="pdfFrame" style="display: none;"></iframe>
+                    <a href="@Url.Action("Index", "Role")" class="btn">
+                        Trở lại
+                    </a>
+                </div>
+            </div>
+
+            <div class="row mb-4 layout-spacing">
+                <div class="col-xxl-8 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="statbox widget box box-shadow">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>Thông tin vai trò</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form asp-action="Edit" method="POST" id="general-settings">
+                            <div class="widget-content widget-content-area blog-create-section">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="col-12">
+                                            <div class="form-group mb-4">
+                                                <label for="Name">Tên hồ sơ<strong
+                                                        class="text-danger">*</strong></label>
+                                                <input asp-for="Name" type="text" id="Name"
+                                                    class="form-control @(ViewData.ModelState["name"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                                    placeholder="Tên hồ sơ">
+                                                <span asp-validation-for="Name" class="invalid-feedback"
+                                                    role="alert"></span>
+                                            </div>
+
+                                            <div class="form-group mb-4">
+                                                <label for="Description">Mô tả</label>
+                                                <input asp-for="Description" type="text" id="Description"
+                                                    class="form-control @(ViewData.ModelState["description"]?.Errors.Count > 0 ? "is-invalid" : "")"
+                                                    placeholder="Mô tả">
+                                                <span asp-validation-for="Description" class="invalid-feedback"
+                                                    role="alert"></span>
+                                            </div>
+
+                                            <div class="form-group mb-4">
+                                                <label for="IsDefault">Vai trò mặc định</label>
+                                                <input style="margin-left: 8px;" type="checkbox" id="IsDefault" onchange="onDefaultChange(event)"
+                                                    @(Model.IsDefault ? "checked disabled" : "") />
+                                            </div>
+                                            <div class="form-group mb-4">
+                                                <label>Danh sách quyền</label>
+                                                <div class="form-control">
+                                                    @foreach (var perm in Model.Permissions)
+                                                    {
+                                                        var meta = perm.Key.GetMetadata();
+                                                        <div class="form-check">
+                                                            <input type="checkbox" id="@perm.Key" value="@perm.Key" onchange="onPermissionChange(event)"
+                                                            @(perm.Value ? "checked" : "") />
+                                                            <label for="@perm.Key">@meta.DisplayName</label>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Hoàn tất</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--  BEGIN CUSTOM SCRIPTS FILE  -->
+    <div layout:fragment="footerFiles">
+
+        <script src="~/js/customs/assets/apps/blog-create.js"></script>
+        <script src="~/plugins/table/datatable/datatables.js"></script>
+        <script src="~/plugins/table/datatable/extensions/col-reorder/col-reorder.datatables.min.js"></script>
+        <script src="~/plugins/table/datatable/extensions/fixed-columns/fixed-columns.datatables.min.js"></script>
+
+        <script src="~/plugins/tomSelect/tom-select.base.js"></script>
+        <script src="~/plugins/tomSelect/custom-tom-select.js"></script>
+
+        <script type="text/javascript">
+            function onDefaultChange(event) {
+                console.log("onDefaultChange entered");
+                const target = event.currentTarget;
+                fetch('@Url.Action("SetDefaultRole", "Role")?roleid=@Model.Id', {
+                    method: 'POST'
+                }).then(responese => responese.json())
+                .then(data => {
+                    if (data.success)
+                        target.setAttribute("disabled", "");
+                    else target.checked = false;
+                    console.log("onDefaultChange: result=", data)
+                }).catch(error => {
+                    console.error('Error updating status:', error);
+                });
+            }
+            function onPermissionChange(event) {
+                console.log("onPermissionChange entered");
+                const target = event.currentTarget;
+                fetch(`@Url.Action("ChangePermission", "Role")?roleid=@Model.Id&permid=${target.value}&isChecked=${target.checked}`, {
+                    method: 'POST'
+                }).then(responese => responese.json())
+                .then(data => {
+                    console.log("onPermissionChange: result=", data)
+                }).catch(error => {
+                    console.error('Error updating status:', error);
+                });
+            }
+        </script>
+    </div>
+    <!--  END CUSTOM SCRIPTS FILE  -->
+</body>
