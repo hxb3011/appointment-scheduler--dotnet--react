@@ -164,26 +164,27 @@ public class DiagnosticServiceController : ControllerBase
         return Ok("success");
     }
     
-    [HttpPut("{id}/examination")]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateDiagnosticService])]
-    public async Task<ActionResult> UpdateExaminationDiagnostic(uint id, uint examination, uint doctor)
-    {
-        var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
-        if (ex == null) return NotFound("examination not found");
-        var ds = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
-        if (ds == null) return NotFound("diagnosticService not found");
-        var d = await _repository.GetEntityBy<uint, IDoctor>(doctor);
-        if (d == null) return NotFound("doctor not found");
+    //[HttpPut("{id}/examination")]
+    //[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateDiagnosticService])]
+    //public async Task<ActionResult> UpdateExaminationDiagnostic(uint id, uint examination, uint doctor)
+    //{
+    //    var ex = await _repository.GetEntityBy<uint, IExamination>(examination);
+    //    if (ex == null) return NotFound("examination not found");
+    //    var ds = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+    //    if (ds == null) return NotFound("diagnosticService not found");
+    //    var d = await _repository.GetEntityBy<uint, IDoctor>(doctor);
+    //    if (d == null) return NotFound("doctor not found");
 
-        var examinationDiagnostic = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
-        if (examinationDiagnostic == null)
-            return BadRequest("can not find this exam diag");
+    //    var examinationDiagnostic = await _repository.GetEntityBy<uint, IDiagnosticService>(id);
+    //    if (examinationDiagnostic == null)
+    //        return BadRequest("can not find this exam diag");
 
-        //if (!await examinationDiagnostic.Update())
-        //    return BadRequest("can not update");
+    //    ///????
+    //    if (!await examinationDiagnostic.Update())
+    //        return BadRequest("can not update");
 
-        return Ok("success");
-    }
+    //    return Ok("success");
+    //}
 
     [HttpPost("{id}/document")]
     [JSONWebToken(RequiredPermissions = [Permission.SealExaminationDiagnostic])]

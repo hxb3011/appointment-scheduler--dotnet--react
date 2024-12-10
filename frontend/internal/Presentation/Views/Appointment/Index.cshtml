@@ -31,6 +31,7 @@
         </nav>
     </div>
     <!-- /BREADCRUMB -->
+
 	<!-- DATATABLE -->
 	<div class="row layout-top-spacing">
 		<div class="col-xl-12 col-lg-12 col-sm-12">
@@ -81,8 +82,9 @@
 
 
 										<td class="table-controls d-flex justify-content-center align-items-center pt-2">
+
 											<li>
-												<a href="@Url.Action("Edit", "Examination", new { id = appointment.Id })"
+												<a href="@Url.Action("Create", "Examination", new { id = appointment.Id })"
 												   class="bs-tooltip edit" data-bs-toggle="tooltip"
 												   data-bs-placement="top">
 													Thêm khám bệnh
@@ -160,7 +162,7 @@
 				},
 				"stripeClasses": [],
 				"lengthMenu": [7, 10, 20, 50],
-				"pageLength": 7,
+				"pageLength": 10,
 				"ordering": false
 			});
 	</script>

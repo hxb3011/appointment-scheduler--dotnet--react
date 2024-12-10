@@ -83,36 +83,60 @@ namespace AppointmentScheduler.Presentation.Services
             }
         }
 
+        public async Task<bool> ExistExaminationByAppointment(uint id)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"api/examination/appointment/{id}", UriKind.Relative)
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+                response.EnsureSuccessStatusCode();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return false;
+            }
+        }
+
         public async Task<string> AddExamination(uint appointmentId)
         {
             try
             {
                 var token = _httpApiService.Context.Session.GetString("AuthToken");
 
-                // Ensure we have the token
                 if (string.IsNullOrEmpty(token))
                 {
                     _logger.LogWarning("Authorization token is missing.");
                     return "Authorization token is missing.";
                 }
 
-                // Construct the URL for the CreateExamination API
                 var requestUri = new Uri($"api/examination/{appointmentId}", UriKind.Relative);
 
-                // Create the HTTP request
                 var httpRequest = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
                     RequestUri = requestUri
                 };
 
-                // Add Authorization header
                 httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                // Send the request asynchronously
                 var response = await _httpApiService.SendAsync(httpRequest);
 
-                // Handle the response
                 if (response.IsSuccessStatusCode)
                 {
                     _logger.LogInformation("Examination created successfully for appointment {appointmentId}", appointmentId);
@@ -222,6 +246,133 @@ namespace AppointmentScheduler.Presentation.Services
             catch (Exception e)
             {
                 _logger.LogError(e, "Error occured while deletes examination");
+                return false;
+            }
+        }
+
+
+        public async Task<PrescriptionResponse> GetPrescription(uint id)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"api/examination/{id}/perscription", UriKind.Relative)
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    var perscription = _httpApiService.DeserializeJson<PrescriptionResponse>(jsonString);
+
+                    return perscription;
+                }
+                else
+                {
+                    return null;
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<string> AddPrescription(uint examId, PrescriptionRequest prescription)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var jsonBody = _httpApiService.SerializeJson(prescription);
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri($"api/examination/{examId}/perscription", UriKind.Relative),
+                    Content = new StringContent(jsonBody, Encoding.UTF8, "application/json")
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Perscription added successfully");
+                    return "Perscription added successfully";
+                }
+                else
+                {
+                    var errorMessage = "";
+
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(errorContent))
+                    {
+                        errorMessage += $"Error: {errorContent}";
+                    }
+
+                    _logger.LogWarning(errorMessage);
+                    return errorMessage;
+                }
+            }
+            catch (Exception e)
+            {
+                var errorMessage = $"Error occurred while adding perscription";
+                _logger.LogError(e, errorMessage);
+                return errorMessage;
+            }
+        }
+
+        public async Task<bool> DeletePerscription(uint id)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = new Uri($"api/examination/{id}/perscription", UriKind.Relative),
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation("Perscription deleted successfully");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogWarning($"Failed to delete perscription. Status code: {response.StatusCode}");
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error occured while deletes perscription");
                 return false;
             }
         }

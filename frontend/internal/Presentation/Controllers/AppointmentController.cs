@@ -46,9 +46,7 @@ namespace AppointmentScheduler.Presentation.Controllers
         public async Task<IActionResult> Index(int offset = 0, int count = 1000)
         {
 
-			PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
-            pagedGetAllRequest.Offset = offset;
-            pagedGetAllRequest.Count = count;
+			PagedGetAllRequest pagedGetAllRequest = GetPage();
             var appointments = await _appointmentService.GetPagedAppointmentsWithBodyAsync(pagedGetAllRequest);
             
             return View(appointments);

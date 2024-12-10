@@ -47,7 +47,7 @@ internal sealed class AppointmentImpl : BaseEntity, IAppointment
 
     IDoctor IAppointment.Doctor => _doctor;
     IExamination IAppointment.Examination => (_examinationTask
-        ??= GetExaminations().Select(CreateExamination).FirstOrDefault()).WaitForResult();
+        ??= GetExaminations().Select(CreateExamination).FirstOrDefault())?.WaitForResult();
 
     async Task<IExamination> IAppointment.ObtainExamination()
     {

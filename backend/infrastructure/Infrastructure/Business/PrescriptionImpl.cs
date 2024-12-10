@@ -11,7 +11,7 @@ internal class PrescriptionImpl : BaseEntity, IPrescription
 
     public PrescriptionImpl(Prescription prescription)
     {
-        _prescription = prescription;
+        _prescription = prescription ?? throw new ArgumentNullException(nameof(prescription));
         ((IBehavioralEntity)this).Deleted += DeleteDocument;
     }
 

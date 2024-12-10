@@ -42,9 +42,23 @@ public class ExaminationController : ControllerBase
             .Skip(request.Offset).Take(request.Count).Select(MakeResponse));
     }
 
+    [HttpGet("appointment/{id}")]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadExamination])]
+    public async Task<ActionResult> ExistExaminationByAppointment(uint id)
+    {
+        var appointment = await _repository.GetEntityBy<uint, IAppointment>(id);
+        if (appointment == null) return NotFound();
+
+        var examination = appointment.Examination;
+
+        if(examination == null) return NotFound();
+
+        return Ok();
+    }
+
     [HttpGet("{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadExamination])]
-    public async Task<ActionResult<RoleResponse>> GetExamination(uint id)
+    public async Task<ActionResult<ExaminationResponse>> GetExamination(uint id)
     {
         var examination = await _repository.GetEntityBy<uint, IExamination>(id);
         if (examination == null) return NotFound();
@@ -124,7 +138,7 @@ public class ExaminationController : ControllerBase
         var examination = await _repository.GetEntityBy<uint, IExamination>(id);
         if (examination == null) return NotFound("examination not found");
         var perscription = examination.Prescription;
-        if (perscription != null) return NotFound();
+        if (perscription == null) return NotFound();
 
         return Ok(!_repository.TryGetKeyOf(perscription, out Prescription key) ? null
             : new PrescriptionResponse() { Examination = key.ExaminationId, Description = key.Description });

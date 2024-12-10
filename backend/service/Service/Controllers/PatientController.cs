@@ -52,9 +52,16 @@ public class PatientController : UserController
 			return BadRequest("full_name not valid");
 
 		patient.Password = request.Password;
-		if (!patient.IsPasswordValid)
-			return BadRequest("password not valid");
-		patient.Password = _passwordHasher.HashPassword(patient, patient.Password);
+
+        if (!patient.IsPasswordValid)
+            return BadRequest("password not valid");
+        patient.Password = _passwordHasher.HashPassword(patient, patient.Password);
+  //      if (patient.Password != null)
+		//{
+  //          if (!patient.IsPasswordValid)
+  //              return BadRequest("password not valid");
+  //          patient.Password = _passwordHasher.HashPassword(patient, patient.Password);
+  //      }
 
 		patient.Email = request.Email;
 		if (!patient.IsEmailValid)
@@ -111,7 +118,7 @@ public class PatientController : UserController
 				return BadRequest("phone not valid");
 		}
 		if (!await patient.Update())
-			return BadRequest("can not create");
+			return BadRequest("can not update");
 		return Ok("success");
 	}
 

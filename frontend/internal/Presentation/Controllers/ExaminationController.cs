@@ -51,20 +51,36 @@ namespace AppointmentScheduler.Presentation.Controllers
             return View(examinations);
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(uint id)
         {
             var page = getPage();
+
+            var examExisted = await _examinationService.ExistExaminationByAppointment(id);
+
+            if(examExisted)
+            {
+                TempData["Error"] = "Đơn này đã được thêm vào khám bệnh, mời bạn vào khám bệnh để xem";
+                return RedirectToAction("Index", "Appointment");
+            }
 
             var appointments = await _appointmentService.GetPagedAppointments(page);
             ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
 
-            return View();
+            ExaminationModel exam = new ExaminationModel();
+
+            exam.Appointment = id;
+
+            ViewBag.SelectedAppointmentIdInExam = exam.Appointment;
+
+            return View(exam);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(ExaminationModel examination)
         {
             string resultMessage = "Lỗi không thể thêm khám bệnh này";
+
+            examination.Appointment = examination.Id;
 
             var appointment = _appointmentService.GetAppointmentById(examination.Appointment.Value);
 
@@ -94,6 +110,13 @@ namespace AppointmentScheduler.Presentation.Controllers
             {
                 TempData["Error"] = "Đã xảy ra lỗi khi truy cập khám bệnh này";
                 return View("Error");
+            }
+
+            var prescription = await _examinationService.GetPrescription(id);
+
+            if (prescription != null)
+            {
+                exam.Prescription = prescription.Description;
             }
 
             var page = getPage();
@@ -139,7 +162,7 @@ namespace AppointmentScheduler.Presentation.Controllers
         {
             string resultMessage = "Lỗi không thể sửa khám bệnh này";
 
-            if (exam.Diagnostic != "")
+            if (exam.Diagnostic != "" && exam.Diagnostic != null)
             {
                 exam.State = EExaminationState.COMPLETED;
                 await _appointmentService.ChangeAppointmentStatus(exam.Appointment.Value, (uint)EAppointmentState.COMPLETED);
@@ -148,6 +171,34 @@ namespace AppointmentScheduler.Presentation.Controllers
             {
                 exam.State = EExaminationState.ENABLE;
             }
+
+            var prescription = await _examinationService.GetPrescription(exam.Id);
+
+            if (prescription != null)
+            {
+                if (exam.Prescription != null)
+                {
+                    await _examinationService.DeletePerscription(exam.Id);
+                    var pres = new PrescriptionRequest();
+                    pres.Description = exam.Prescription;
+                    await _examinationService.AddPrescription(exam.Id, pres);
+                }
+                else
+                {
+                    await _examinationService.DeletePerscription(exam.Id);
+                }
+            }
+            else
+            {
+                if(exam.Prescription != null)
+                {
+                    var pres = new PrescriptionRequest();
+                    pres.Description = exam.Prescription;
+                    await _examinationService.AddPrescription(exam.Id, pres);
+                }
+            }
+
+
 
             resultMessage = await _examinationService.UpdateExamination(exam);
 

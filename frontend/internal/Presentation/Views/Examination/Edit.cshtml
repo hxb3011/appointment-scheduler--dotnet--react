@@ -17,6 +17,8 @@
         <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/extensions/fixed-columns/fixed-columns.datatables.min.css">
 
         <link rel="stylesheet" type="text/css" href="~/css/customs/plugins/light/table/datatable/dt-global_style.css">
+        <link rel="stylesheet" type="text/css" href="~/css/customs/plugins/light/editors/quill/quill.snow.css">
+        <link rel="stylesheet" type="text/css" href="~/css/customs/assets/dark/apps/ecommerce-create.css">
 
         <link rel="stylesheet" type="text/css" href="~/css/customs/plugins/light/table/datatable/custom_dt_custom.css">
 
@@ -55,6 +57,10 @@
                     flex: 0 0 calc(25% - 10px); /* 25% width for 4 items per row, minus gap */
                     box-sizing: border-box;
                 }
+
+            .custom-textarea-left {
+                padding-left: 20px;
+            }
         </style>
     </div>
 </head>
@@ -101,7 +107,7 @@
                                             <div class="form-group mb-4">
                                                 <label for="appointment">Đơn đặt<strong class="text-danger">*</strong></label>
                                                 <select asp-for="Appointment" id="profile"
-                                                        class="form-control @(ViewData.ModelState["Appointment"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                        class="form-control custom-textarea-left @(ViewData.ModelState["Appointment"]?.Errors?.Count > 0 ? "is-invalid" : "")"
                                                         asp-items="ViewBag.Appointments"
                                                         onchange="loadAppointmentInfo(this.value)">
                                                     <option value="">Chọn</option>
@@ -112,7 +118,7 @@
 
 
                                             <div class="form-group mb-4">
-                                                <label for="diagnostic">Chuẩn đoán <strong class="text-danger">*</strong></label>
+                                                <label for="diagnostic">Chuẩn đoán <strong class="text-danger"></strong></label>
                                                 <input asp-for="Diagnostic"
                                                        type="text"
                                                        id="diagnostic"
@@ -122,7 +128,7 @@
                                             </div>
 
                                             <div class="form-group mb-4">
-                                                <label for="description">Mô tả <strong class="text-danger">*</strong></label>
+                                                <label for="description">Mô tả <strong class="text-danger"></strong></label>
                                                 <input asp-for="Description"
                                                        type="text"
                                                        id="description"
@@ -142,7 +148,13 @@
                                                 <span asp-validation-for="State" class="invalid-feedback" role="alert"></span>
                                             </div> *@
 
+                                            <div class="row mt-4 mb-2">
+                                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                                    <h4>Chọn dịch vụ khám</h4>
+                                                </div>
+                                            </div>
                                             <div class="diagnostic-list">
+                                                
                                                 @foreach (var diagnostic in (IEnumerable<dynamic>)ViewBag.Diagnostics)
                                                 {
                                                     <div class="form-check">
@@ -193,20 +205,40 @@
                                                 }
                                             </div>
 
+                                            <div class="col-xxl-9 col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-4 mb-3" style="width: 100%">
+                                                <div class="widget-content widget-content-area ecommerce-create-section">
+                                                    <div class="col-12">
+                                                        <div class="form-group mb-4">
+                                                            <label for="prescription">
+                                                                Đơn thuốc 
+                                                            </label>
+                                                            <!-- Add right padding of 20px directly -->
+                                                            <textarea asp-for="Prescription"
+                                                                      class="form-control @(ViewData.ModelState["Prescription"]?.Errors?.Count > 0 ? "is-invalid" : "")"
+                                                                      id="prescription"
+                                                                      placeholder="Viết đơn thuốc cho bệnh nhân vào đây"
+                                                                      style="padding-right: 20px;"></textarea>
+                                                            <span asp-validation-for="Prescription" class="invalid-feedback" role="alert"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                           
 
 
 
-
-
-
-
-                                            <p class="text-muted mb-4">!!! Vui lòng điền đầy đủ thông tin và ngày đặt trước khi hoàn tất.</p>
+                                            <p class="text-muted mb-4">!!! Vui lòng điền đầy đủ thông tin trước khi hoàn tất.</p>
 
                                             <button type="submit" class="btn btn-primary">Hoàn tất</button>
                                         </div>
                                     </div>
+
+
                                 </div>
                             </div>
+
 
                         </form>
                     </div>
@@ -262,6 +294,8 @@
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -277,6 +311,12 @@
         <script src="~/plugins/tomSelect/tom-select.base.js"></script>
         <script src="~/plugins/tomSelect/custom-tom-select.js"></script>
         <script src="~/js/examination/create.js"></script>
+
+        <script src="~/js/customs/assets/apps/ecommerce-create.js"></script>
+        <script src="~/plugins/tomSelect/tom-select.base.js"></script>
+        <script src="~/plugins/tomSelect/custom-tom-select.js"></script>
+        <script src="~/plugins/editors/quill/quill.js"></script>
+        <script src="~/plugins/editors/quill/custom-quill.js"></script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -354,6 +394,40 @@
                 }
             }
 
+        </script>
+
+        <script type="text/javascript">
+            var quill = new Quill('#perscription', {
+                modules: {
+                    toolbar: [[{
+                        'header': [1, 2, 3, 4, 5, 6, false]
+                    }], [{
+                        'font': []
+                    }, {
+                        'align': []
+                    }], [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }], [{
+                        'indent': '-1'
+                    }, {
+                        'indent': '+1'
+                    }], ['bold', 'italic', 'underline', {
+                        'size': []
+                    }], [{
+                        'color': []
+                    }, {
+                        'background': []
+                    }], ['link', 'image'],]
+                },
+                placeholder: 'Mô tả',
+                theme: 'snow'
+            });
+
+            $('#general-settings').on('submit', function () {
+                $('#hidden-description').val(quill.root.innerHTML);
+            });
         </script>
     </div>
     <!--  END CUSTOM SCRIPTS FILE  -->

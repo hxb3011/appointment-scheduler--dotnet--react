@@ -17,6 +17,8 @@ namespace AppointmentScheduler.Presentation.Models
 
         // Ensure this is a dictionary for storing selected diagnostics and their corresponding doctor IDs
         public Dictionary<uint, uint> SelectedDoctors { get; set; } = new Dictionary<uint, uint>();
+
+        public string Prescription { get; set; }
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace AppointmentScheduler.Infrastructure.Business;
 
@@ -23,11 +24,12 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
     uint IExamination.State { get => _examination.State; set => _examination.State = value; }
 
     IPrescription IExamination.Prescription
-        => (_prescriptionTask ??= (
+        => (_prescriptionTask ??= ((
             from ps in _dbContext.Set<Prescription>()
             where ps.ExaminationId == _examination.Id
-            select CreatePrescription(ps).WaitForResult(Timeout.Infinite, default)
-        ).FirstOrDefaultAsync()).WaitForResult();
+            select ps).FirstOrDefaultAsync()
+            .ContinueWith((rt) => rt.Result == null ? null : CreatePrescription(rt.Result).WaitForResult())
+        )).WaitForResult();
 
     IEnumerable<IDiagnosticService> IExamination.DiagnosticServices
     {

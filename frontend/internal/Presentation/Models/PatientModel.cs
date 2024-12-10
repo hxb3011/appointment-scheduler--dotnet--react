@@ -17,7 +17,6 @@ namespace AppointmentScheduler.Presentation.Models
         [Required(ErrorMessage = "Email không được bỏ trống")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Mật khẩu không được bỏ trống")]
         [PaswordValidation]
         public string Password { get; set; }
 

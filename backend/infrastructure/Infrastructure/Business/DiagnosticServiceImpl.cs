@@ -34,25 +34,32 @@ internal sealed class DiagnosticServiceImpl : BaseEntity, IDiagnosticService
         : _resourceManager.Resource<DiagnosticServiceImpl>(_exdiag.Id.ToString(), readOnly);
 
     private void DeleteDocument(object sender, EventArgs e)
-        => _resourceManager.RemoveResource<DiagnosticServiceImpl>(_exdiag.Id.ToString());
+    {
+        if (_exdiag == null) return;
+        _resourceManager.RemoveResource<DiagnosticServiceImpl>(_exdiag.Id.ToString());
+    }
 
     protected override Task<bool> Create()
     {
         // TODO: Process Document
-        if (_exdiag != null) {
+        if (_exdiag != null)
+        {
             _dbContext.Add(_exdiag);
             _dbContext.Update(_diagsv);
-        } else _dbContext.Add(_diagsv);
+        }
+        else _dbContext.Add(_diagsv);
         return Task.FromResult(true);
     }
 
     protected override Task<bool> Delete()
     {
         // TODO: Process Document
-        if (_exdiag != null) {
-            _dbContext.Add(_exdiag);
+        if (_exdiag != null)
+        {
+            _dbContext.Remove(_exdiag);
             _dbContext.Update(_diagsv);
-        } else _dbContext.Add(_diagsv);
+        }
+        else _dbContext.Remove(_diagsv);
         return Task.FromResult(true);
     }
 
@@ -65,10 +72,12 @@ internal sealed class DiagnosticServiceImpl : BaseEntity, IDiagnosticService
     protected override Task<bool> Update()
     {
         // TODO: Process Document
-        if (_exdiag != null) {
-            _dbContext.Add(_exdiag);
+        if (_exdiag != null)
+        {
+            _dbContext.Update(_exdiag);
             _dbContext.Update(_diagsv);
-        } else _dbContext.Add(_diagsv);
+        }
+        else _dbContext.Update(_diagsv);
         return Task.FromResult(true);
     }
 }
