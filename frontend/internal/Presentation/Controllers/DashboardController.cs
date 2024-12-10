@@ -19,13 +19,30 @@ public class DashboardController : Controller
 
     public async Task<IActionResult> Index()
     {
-        AuthRequest request = new AuthRequest();
-        request.Username = "root00";
-        request.Password = "HeLlo|12";
-        var token = await _authService.SaveTokenToService(request);
-
-        Console.WriteLine("Token: {0}", token);
+        
         return View();
+    }
+
+    public async Task<IActionResult> Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Login(AuthRequest request)
+    {
+        var token = await _authService.SaveTokenToService(request);
+        if(token != null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+        return View(request);
+    }
+
+    public async Task<IActionResult> Logout()
+    {
+        HttpContext.Session.Remove("AuthToken");
+        return RedirectToAction(nameof(Login));
     }
 
     //public IActionResult Privacy()

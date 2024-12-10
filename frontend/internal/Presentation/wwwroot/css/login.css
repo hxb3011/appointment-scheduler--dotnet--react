@@ -1,0 +1,78 @@
+﻿
+.login-container {
+    max-width: 500px;
+    margin: 150px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h1 {
+    color: #333;
+}
+
+.social-login a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    padding: 12px;
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+    .social-login a i {
+        margin-right: 10px;
+        font-size: 24px;
+    }
+
+.phone-number a {
+    background-color: #28a745;
+}
+
+.facebook a {
+    background-color: #3b5998;
+}
+
+.google a {
+    background-color: #db4437;
+}
+
+.container-form-group {
+    padding: 40px 0;
+}
+
+.input-group-text {
+    background-color: #f1f1f1;
+    border: none;
+}
+
+.form-check-label {
+    margin-left: 10px;
+}
+
+.forgot-pasword {
+    float: inline-end;
+}
+
+.button-action .btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+}
+
+.button-action a {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.text-center a {
+    color: #007bff;
+    text-decoration: none;
+}
+
