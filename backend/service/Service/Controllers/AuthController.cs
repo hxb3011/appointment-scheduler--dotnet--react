@@ -25,7 +25,7 @@ public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPa
             andValue: request.Username, areEqual: true
         ).FirstOrDefault();
 
-        if (user == null)
+        if (user is not IPatient)
             return NotFound("user not found.");
 
         var passwordVerificationResult = _hasher.VerifyHashedPassword(user, user.Password, request.Password);
@@ -44,6 +44,35 @@ public class AuthController(IRepository repository, JSONWebTokenOptions jwt, IPa
             AccessToken = _jwt.GetJSONWebToken(user, _repository, _logger)
         });
     }
+
+    [HttpPost("token/doctor")]
+    public ActionResult<AuthTokenResponse> SignInByDoctor([FromForm] AuthRequest request)
+    {
+        var user = _repository.GetEntities<IUser>(
+            whereProperty: nameof(Domain.Entities.User.UserName),
+            andValue: request.Username, areEqual: true
+        ).FirstOrDefault();
+
+        if (user is not IDoctor)
+            return NotFound("user not found.");
+
+        var passwordVerificationResult = _hasher.VerifyHashedPassword(user, user.Password, request.Password);
+        if (passwordVerificationResult != PasswordVerificationResult.Success)
+        {
+            if (passwordVerificationResult == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                user.Password = _hasher.HashPassword(user, request.Password);
+                user.Update();
+            }
+            else return BadRequest("invalid pass not found.");
+        }
+
+        return Ok(new AuthTokenResponse()
+        {
+            AccessToken = _jwt.GetJSONWebToken(user, _repository, _logger)
+        });
+    }
+
 
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] PatientRequest request)
