@@ -84,7 +84,6 @@ public class DoctorController : UserController
 		var doctor = await _repository.GetEntityBy<uint, IDoctor>(id);
 		if (doctor == null) return NotFound();
 		string v;
-		uint r;
 		if ((v = request.Username) != null)
 		{
 			doctor.UserName = v;

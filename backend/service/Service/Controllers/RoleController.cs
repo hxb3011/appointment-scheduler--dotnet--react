@@ -1,8 +1,8 @@
+using System.Reflection;
 using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using AppointmentScheduler.Domain.Repositories;
 using AppointmentScheduler.Domain.Requests;
-using AppointmentScheduler.Domain.Requests.Create;
 using AppointmentScheduler.Domain.Responses;
 using AppointmentScheduler.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -86,6 +86,32 @@ public class RoleController(IRepository repository, ILogger<RoleController> logg
         if (!await role.Update())
             return BadRequest("can not update");
 
+        return Ok("success");
+    }
+
+    private static string GetDefaultRoleKey(IRole role)
+        => (string)role.GetType().GetField("DefaultRoleKey", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+
+    [HttpGet("default/{id}")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateRole])]
+    public async Task<ActionResult> CheckDefaultRole(uint id)
+    {
+        var role = await _repository.GetEntityBy<uint, IRole>(id);
+        if (role == null) return NotFound();
+        var configs = await _repository.GetService<IConfigurationPropertiesService>();
+        if (configs.GetProperty(GetDefaultRoleKey(role), null) != id.ToString())
+            return Ok("");
+        return Ok("success");
+    }
+
+    [HttpPut("default/{id}")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.UpdateRole])]
+    public async Task<ActionResult> UpdateDefaultRole(uint id)
+    {
+        var role = await _repository.GetEntityBy<uint, IRole>(id);
+        if (role == null) return NotFound();
+        var configs = await _repository.GetService<IConfigurationPropertiesService>();
+        configs.SetProperty(GetDefaultRoleKey(role), id.ToString());
         return Ok("success");
     }
 
