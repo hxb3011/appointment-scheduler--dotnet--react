@@ -1,31 +1,112 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\C#\\Project-Appointment\\appointment-scheduler--dotnet--react\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\infrastructure\\infrastructure\\repositories\\schedulerpartenumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\repositories\\schedulerpartenumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\infrastructure\\infrastructure\\business\\patientimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0606F258-9CCF-40E3-A837-3A1F7BD9E20C}|backend\\infrastructure\\Infrastructure\\AppointmentScheduler.Infrastructure.csproj|solutionrelative:backend\\infrastructure\\infrastructure\\business\\patientimpl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\controllers\\examinationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\examinationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\controllers\\schedulercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\schedulercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\frontend\\internal\\presentation\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|solutionrelative:frontend\\internal\\presentation\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\frontend\\internal\\presentation\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|solutionrelative:frontend\\internal\\presentation\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\service\\service\\controllers\\democontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4D6870E1-0CE1-4AAD-9C92-A77F679F514A}|backend\\service\\Service\\AppointmentScheduler.Service.csproj|solutionrelative:backend\\service\\service\\controllers\\democontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\backend\\domain\\domain\\forms\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{609DD5B4-4B25-4DAB-95A1-71738C4CB94D}|backend\\domain\\Domain\\AppointmentScheduler.Domain.csproj|solutionrelative:backend\\domain\\domain\\forms\\loginform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\frontend\\internal\\presentation\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|solutionrelative:frontend\\internal\\presentation\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|c:\\users\\tuanl\\downloads\\appointment_scheduler\\frontend\\internal\\presentation\\appointmentscheduler.presentation.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{65BB4514-F54A-42AD-8A07-B1AF8126123C}|frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj|solutionrelative:frontend\\internal\\presentation\\appointmentscheduler.presentation.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 423,
-          "SelectedChildIndex": -1,
+          "DockedWidth": 211,
+          "SelectedChildIndex": 28,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+              "Name": "ST:1:0:{08a1bf1d-7967-4afc-8253-1790862ab8c9}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{08a1bf1d-7967-4afc-8253-1790862ab8c9}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{08a1bf1d-7967-4afc-8253-1790862ab8c9}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e506b91c-c606-466a-90a9-123d1d1e12b3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
             },
             {
               "$type": "Bookmark",
@@ -33,21 +114,222 @@
             },
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SchedulerPartEnumerable.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\infrastructure\\Infrastructure\\Repositories\\SchedulerPartEnumerable.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Repositories\\SchedulerPartEnumerable.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\infrastructure\\Infrastructure\\Repositories\\SchedulerPartEnumerable.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Repositories\\SchedulerPartEnumerable.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAiwCgAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T00:04:15.53Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PatientImpl.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
+              "RelativeDocumentMoniker": "backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
+              "RelativeToolTip": "backend\\infrastructure\\Infrastructure\\Business\\PatientImpl.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAADwvycAAABaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-09T23:52:33.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppointmentController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\AppointmentController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\AppointmentController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\AppointmentController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\AppointmentController.cs",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAuwGMAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-09T23:09:53.204Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ExaminationController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\ExaminationController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\ExaminationController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\ExaminationController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\ExaminationController.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAACwAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-09T22:56:40.392Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SchedulerController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\SchedulerController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\SchedulerController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\SchedulerController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\SchedulerController.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAABMAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T08:25:54.584Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DemoController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\DemoController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\DemoController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\DemoController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\DemoController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T06:50:52.451Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "LoginForm.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\domain\\Domain\\Forms\\LoginForm.cs",
+              "RelativeDocumentMoniker": "backend\\domain\\Domain\\Forms\\LoginForm.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\domain\\Domain\\Forms\\LoginForm.cs",
+              "RelativeToolTip": "backend\\domain\\Domain\\Forms\\LoginForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T03:39:36.523Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\UserController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\UserController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAswCkAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T02:28:16.413Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ProfileController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\ProfileController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\ProfileController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\ProfileController.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAAEUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T02:22:36.372Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAuwFIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T02:14:35.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "frontend\\internal\\Presentation\\Services\\UserService.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\Services\\UserService.cs",
+              "RelativeToolTip": "frontend\\internal\\Presentation\\Services\\UserService.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAADUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T02:13:38.187Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "frontend\\internal\\Presentation\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\Controllers\\UserController.cs",
+              "RelativeToolTip": "frontend\\internal\\Presentation\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAAGAAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T02:13:11.688Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Program.cs",
+              "RelativeDocumentMoniker": "backend\\service\\Service\\Program.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\backend\\service\\Service\\Program.cs",
+              "RelativeToolTip": "backend\\service\\Service\\Program.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAABgAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T02:07:32.069Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\Program.cs",
+              "RelativeDocumentMoniker": "frontend\\internal\\Presentation\\Program.cs",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\Program.cs",
+              "RelativeToolTip": "frontend\\internal\\Presentation\\Program.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAAEUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-07T02:06:53.249Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AppointmentScheduler.Presentation",
+              "DocumentMoniker": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj",
+              "RelativeDocumentMoniker": "frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj",
+              "ToolTip": "C:\\Users\\tuanl\\Downloads\\appointment_scheduler\\frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj",
+              "RelativeToolTip": "frontend\\internal\\Presentation\\AppointmentScheduler.Presentation.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-12-07T01:50:55.529Z"
             }
           ]
         },
         {
-          "DockedWidth": 373,
+          "DockedWidth": 189,
           "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             }
           ]
         }

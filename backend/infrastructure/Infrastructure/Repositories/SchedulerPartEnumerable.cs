@@ -38,7 +38,7 @@ internal class SchedulerPartEnumerable : IDisposable, IEnumerable<SchedulerPart>
     {
         _b = _id != 0 ? _e : _s.FirstStart;
         _e = _b.Add(_s.BigStepGap);
-        if (_b > _s.LastEnd) return false;
+        if (_e > _s.LastEnd) return false;
         if (_e > _s.FirstEnd && _b < _s.LastStart)
         {
             _b = _s.LastStart;

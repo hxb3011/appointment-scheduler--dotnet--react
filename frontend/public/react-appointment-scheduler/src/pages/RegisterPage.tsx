@@ -18,7 +18,7 @@ export function Register() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        ($ as any).validator.addMethod("phoneValidation", function (this: any, value: string, element: any) {
+        ($ as any).validator.addMethod("emailValidation", function (this: any, value: string, element: any) {
             const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             const methods = ($ as any).validator.methods;
             if (!methods.required.call(this, value, element)) return true;
@@ -28,7 +28,7 @@ export function Register() {
             ) return true;
 
             return emailPattern.test(value);
-        }, "Số điện thoại không hợp lệ.");
+        }, "Email không hợp lệ.");
 
         ($ as any).validator.addMethod("usernameValidation", function (this: any, value: string, element: any) {
             const usernamePattern = /^[a-zA-Z][0-9a-zA-Z_-]{5,49}$/;
@@ -123,7 +123,7 @@ export function Register() {
                 if (response.type == "ok") {
                     await navigate(redirect && redirect.length ? '/login' + location.search : '/login');
                 } else {
-                    alert("Thông tin đăng ký không hợp lệ.");
+                    alert(response.message);
                 }
             }
         });

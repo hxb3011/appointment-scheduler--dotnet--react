@@ -48,12 +48,16 @@ export function ProfileInfo(props: ProfileInfoProps) {
         console.log(form, start, end);
         if (start && end) {
             const dnow = new Date(new Date().toISOString().split("T")[0]), dstart = new Date(start), dend = new Date(end);
-            if (dend > dnow) {
-                alert("Ngày kết thúc không được là ngày tương lai.");
+            if (dstart > dnow) {
+                alert("Ngày bắt đầu không được sau ngày hiện tại .");
                 return;
             }
             if (dstart > dend) {
-                alert("Ngày kết thúc không được là ngày tương lai.");
+                alert("Ngày bắt đầu không được sau ngày kết thúc.");
+                return;
+            }
+            if (dend < dnow) {
+                alert("Ngày kết thúc không được trước ngày hiện tại.");
                 return;
             }
             getExaminations({ profile: profile?.id, start: dstart.toISOString().split("T")[0], end: dend.toISOString().split("T")[0] }).then(value => {

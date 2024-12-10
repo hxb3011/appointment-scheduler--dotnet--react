@@ -47,7 +47,16 @@ export async function register(request: RegisterRequest): Promise<RegisterRespon
     try {
         const response: Response = await fetch(apiServer + "auth/register", {
             method: "POST",
-            body: request
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                full_name: request.get("full_name"),
+                email: request.get("email"),
+                username: request.get("username"),
+                password: request.get("password"),
+                phone: '0123456789'
+            }),
         });
         if ((response.status / 400) === 1) return {
             type: "error",

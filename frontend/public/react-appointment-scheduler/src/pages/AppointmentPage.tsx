@@ -26,7 +26,7 @@ export function Appointment(props: AppointmentProps) {
                 }
             }
         });
-    }, [])
+    }, [props.user?.id])
 
     return (
         <div className="Appointment Page">

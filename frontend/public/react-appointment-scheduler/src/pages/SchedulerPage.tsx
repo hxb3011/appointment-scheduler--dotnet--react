@@ -86,7 +86,7 @@ export function Scheduler(props: SchedulerProps) {
     return (
         <form className="Scheduler Page" onSubmit={onSchedulerSubmit}>
             <h2 className="title">Đặt lịch</h2>
-            <ComboBox label="Hồ sơ" attributes={{ name: "profile", value: profiles[0]?.id }}>
+            <ComboBox label="Hồ sơ" attributes={{ name: "profile" }}>
                 {profiles.map(function (value) {
                     return (<option value={value.id}>{value.full_name}</option>);
                 })}
@@ -114,7 +114,7 @@ export function Scheduler(props: SchedulerProps) {
                 })().map(function (value, index) {
                     return {
                         key: value.date.toISOString().split("T")[0],
-                        label: `${value.date.getDate()}/${value.date.getMonth()}`,
+                        label: `${value.date.getDate()}/${value.date.getMonth()+1}`,
                         disabled: value.isPast
                     };
                 })
