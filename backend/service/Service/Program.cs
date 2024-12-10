@@ -1,6 +1,7 @@
 ﻿using AppointmentScheduler.Domain;
 using AppointmentScheduler.Infrastructure;
 using AppointmentScheduler.Infrastructure.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 
@@ -15,18 +16,12 @@ public static class Program
         var services = builder.Services;
         // services.AddSwaggerGen();
 
+        services.AddCors(new CorsPolicy() { Origins = { "*" }, Methods = { "*" }, Headers = { "*" } }.AsDefaultPolicyToAdd);
         services.AddInfrastructure
         (
             dbConfigure: ConfigureDbContext,
             jwtConfigure: builder.Configuration.GetSection("JWTSettings").ConfigureJSONWebToken
         );
-        services.AddCors(options =>
-        {
-            options.AddPolicy("AllowSpecificOrigins", builder =>
-            {
-                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-            });
-        });
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddProblemDetails();
@@ -34,18 +29,21 @@ public static class Program
 
         var app = builder.Build();
 
-        app.UseInfrastructure();
-
-        app.UseCors("AllowSpecificOrigins");
         app.UseHttpsRedirection();
         app.UseStatusCodePages();
 
         app.MapControllers();
 
+        app.UseInfrastructure();
+
+        app.UseCors();
         app.Run();
 
         return 0;
     }
+
+    private static void AsDefaultPolicyToAdd(this CorsPolicy policy, CorsOptions options)
+        => options.AddDefaultPolicy(policy);
 
     private static void ConfigureDbContext(IServiceProvider provider, DbContextOptionsBuilder optionsBuilder)
     {

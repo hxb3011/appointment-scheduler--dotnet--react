@@ -46,7 +46,7 @@ if [ $_dotnet -eq 0 ] || [ $_mysql -eq 0 ] || [ $_node -eq 0 ] ; then
 fi
 
 docker network create --gateway 10.0.0.1 --subnet 10.0.0.0/8 devEnvNET && echo \"devEnvNET\" Created.
-docker run -v "$PWD:/tmp/workspace" -v vscrm:/root/.vscode-server -e 'DB_SERVER=10.0.0.2' -e 'DB_PORT=3306' -e 'DB_USER=user0' -e 'DB_PASSWORD=HeLlo|12' -e 'DB_DATABASE=apomtschedsys' -e 'API_SERVER=10.0.0.3' -e 'API_PORT=8087' -w /tmp/workspace --network devEnvNET --ip 10.0.0.3 --name dotnet --pull always -td mcr.microsoft.com/dotnet/sdk:8.0 && echo \"dotnet\" Created.
+docker run -v "$PWD:/tmp/workspace" -v vscrm:/root/.vscode-server -e 'DB_SERVER=10.0.0.2' -e 'DB_PORT=3306' -e 'DB_USER=user0' -e 'DB_PASSWORD=HeLlo|12' -e 'DB_DATABASE=apomtschedsys' -e 'API_SERVER=localhost' -e 'API_PORT=8087' -w /tmp/workspace --network devEnvNET --ip 10.0.0.3 --name dotnet --pull always -td mcr.microsoft.com/dotnet/sdk:8.0 && echo \"dotnet\" Created.
 docker run -v "$PWD:/tmp/workspace" -v mysqld:/var/lib/mysql -e 'MYSQL_ROOT_PASSWORD=HeLlo|12' -e 'MYSQL_DATABASE=apomtschedsys' -e 'MYSQL_USER=user0' -e 'MYSQL_PASSWORD=HeLlo|12' -p 64001:3306 -w /tmp/workspace/database --network devEnvNET --ip 10.0.0.2 --name mysql --pull always -td mysql:8.3.0-oraclelinux8 && echo \"mysql\" Created.
 docker run -v "$PWD:/tmp/workspace" -v vscrm:/root/.vscode-server -w /tmp/workspace/frontend/public/react-appointment-scheduler --network devEnvNET --ip 10.0.0.4 --name node --pull always -td node:22.9.0-bullseye && echo \"node\" Created.
 exit 0
