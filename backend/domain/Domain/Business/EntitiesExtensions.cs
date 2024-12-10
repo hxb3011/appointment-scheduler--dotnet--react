@@ -19,11 +19,11 @@ public static class EntitiesExtensions
             && match.Groups[3].Success && match.Groups[4].Success;
     }
     private static bool IsValidByRegex(this string value, Regex regex, bool emptyAllowed)
-        => !string.IsNullOrWhiteSpace(value) && ((emptyAllowed && value.Length == 0) || regex.Match(value).Success);
+        => string.IsNullOrWhiteSpace(value) || ((emptyAllowed && value.Length == 0) || regex.Match(value).Success);
     public static bool IsValidEmail(this string value, bool emptyAllowed = false)
         => value.IsValidByRegex(EmailRegex, emptyAllowed);
     public static bool IsValidPhone(this string value, bool emptyAllowed = false)
         => value.IsValidByRegex(PhoneRegex, emptyAllowed);
     public static bool IsValidDescription(this string value, bool emptyAllowed = false)
-        => !string.IsNullOrWhiteSpace(value) && ((emptyAllowed && value.Length == 0) || value.Length <= 250);
+        => string.IsNullOrWhiteSpace(value) || ((emptyAllowed && value.Length == 0) || value.Length <= 250);
 }

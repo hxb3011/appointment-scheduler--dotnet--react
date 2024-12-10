@@ -208,6 +208,7 @@ public class DefaultRepository : DbContext, IRepository
             if (!await this.IdGenerated(user, nameof(User.Id))) return null;
             var doctor = new Doctor { Id = user.Id };
             var role = await RoleImpl.GetDefault(this);
+            user.RoleId = ((RoleImpl)role)._role.Id;
             return (TEntity)await this.Initialize((IUser)new DoctorImpl(user, doctor, role));
         }
         if (typeof(TEntity).IsAssignableFrom(typeof(IPatient)))
@@ -216,6 +217,7 @@ public class DefaultRepository : DbContext, IRepository
             if (!await this.IdGenerated(user, nameof(User.Id))) return null;
             var patient = new Patient { Id = user.Id };
             var role = await RoleImpl.GetDefault(this);
+            user.RoleId = ((RoleImpl)role)._role.Id;
             return (TEntity)await this.Initialize((IUser)new PatientImpl(user, patient, role));
         }
         if (typeof(TEntity).IsAssignableFrom(typeof(IDiagnosticService)))
