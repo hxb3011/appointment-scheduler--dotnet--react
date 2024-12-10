@@ -15,7 +15,11 @@ namespace AppointmentScheduler.Presentation.Models.Enums
 		EXPIRED = 1,
 
 		[Display(Name = "Đang hoạt động")]
-		[Metadata("DisplayName", "Đang hoạt động", "Badge", "success")]
-		ENABLE = 2
-	}
+		[Metadata("DisplayName", "Đang hoạt động", "Badge", "secondary")]
+		ENABLE = 2,
+
+        [Display(Name = "Hoàn thành")]
+        [Metadata("DisplayName", "Hoàn thành", "Badge", "success")]
+        COMPLETED = 3
+    }
 }

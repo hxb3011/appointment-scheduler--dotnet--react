@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\frontend\internal\Presentation\AppointmentScheduler.Presentation.csproj" />
     <ProjectReference Include="..\..\infrastructure\Infrastructure\AppointmentScheduler.Infrastructure.csproj" />
   </ItemGroup>
 

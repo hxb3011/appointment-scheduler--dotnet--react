@@ -29,7 +29,7 @@ namespace AppointmentScheduler.Service.Controllers
 
         [HttpGet("{id}")]
         [JSONWebToken(AuthenticationRequired = true)]
-        public async Task<ActionResult<SchedulerPart>> GetScheduleByStartTime(uint id)
+        public async Task<ActionResult<SchedulerPart>> GetScheduleById(uint id)
         {
             try
             {

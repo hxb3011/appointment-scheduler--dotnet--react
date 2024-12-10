@@ -7,6 +7,7 @@
     }
     const baseUrl = window.location.origin; // Lấy gốc URL, ví dụ: https://localhost:8080
     const url = `${baseUrl}/appointment/AppointmentInfo/${appointmentId}`;
+    console.log("url", url);
 
     fetch(url)
         .then(response => {
@@ -19,17 +20,10 @@
             // Hiển thị thông tin bác sĩ
             document.querySelector('#appointment-info').innerHTML = `
                             <div class="d-flex">
-                                <p class="text-start me-1">Mã lịch đặt: </p>
-                                <p class="text-dark">${data.id}</p>
-                            </div>
-                            <div class="d-flex">
-                                <p class="text-start me-1">Thời gian đặt: </p>
-                                <p class="text-dark">${data.at}</p>
-                            </div>
-                            <div class="d-flex">
                                 <p class="text-start me-1">Số: </p>
                                 <p class="text-dark text-bold">${data.number}</p>
                             </div>
+
                             <div class="d-flex">
                                 <p class="text-start me-1">Mã hồ sơ: </p>
                                 <p class="text-dark text-bold">${data.profile}</p>
@@ -37,6 +31,14 @@
                             <div class="d-flex">
                                 <p class="text-start me-1">Mã bác sĩ: </p>
                                 <p class="text-dark text-bold">${data.doctor}</p>
+                            </div>
+                            <div class="d-flex">
+                                <p class="text-start me-1">Mã lịch đặt: </p>
+                                <p class="text-dark">${data.id}</p>
+                            </div>
+                            <div class="d-flex">
+                                <p class="text-start me-1">Thời gian đặt: </p>
+                                <p class="text-dark">${data.at}</p>
                             </div>
                         `;
         })

@@ -11,7 +11,11 @@ namespace AppointmentScheduler.Presentation.Models.Enums
 		DISABLE = 0,
 
 		[Display(Name = "Đang hoạt động")]
-		[Metadata("DisplayName", "Đang hoạt động", "Badge", "success")]
-		ENABLE = 1
-	}
+		[Metadata("DisplayName", "Đang hoạt động", "Badge", "secondary")]
+		ENABLE = 1,
+
+        [Display(Name = "Hoàn thành")]
+        [Metadata("DisplayName", "Hoàn thành", "Badge", "success")]
+        COMPLETED = 2
+    }
 }

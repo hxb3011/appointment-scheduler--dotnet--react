@@ -119,7 +119,7 @@ namespace AppointmentScheduler.Presentation.Controllers
             var roles = await _roleService.GetPagedRoles(pagedGetAllRequest);
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
 
-            TempData["Error"] = "Đã có lỗi xảy ra";
+            TempData["Error"] = resultMessage;
             return View(doctor);
         }
 

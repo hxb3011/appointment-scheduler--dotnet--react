@@ -27,9 +27,24 @@ public class AppointmentController : ControllerBase
         : new() { Id = key.Id, AtTime = key.AtTime, Number = key.Number, State = key.State, Profile = key.ProfileId, Doctor = key.DoctorId };
 
     [HttpGet]
-    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadAppointment])]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
     public ActionResult<IEnumerable<AppointmentResponse>> GetPagedAppointments([FromQuery] PagedGetAllRequest request)
-        => Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By).Select(MakeResponse));
+    {
+        var user = HttpContext.GetAuthUser();
+        if (!_repository.TryGetKeyOf(user, out Doctor key))
+        {
+            return BadRequest("Authorized user is not a doctor");
+        }
+
+        if (user.Role.IsPermissionGranted(Permission.SystemPrivilege))
+        {
+            return Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By).Select(MakeResponse));
+        }
+
+
+
+        return Ok(_repository.GetEntities<IAppointment>(request.Offset, request.Count, request.By, whereProperty: nameof(Appointment.DoctorId), andValue: key.Id).Select(MakeResponse));
+    }
 
     [HttpGet("byDoctor")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
@@ -120,6 +135,18 @@ public class AppointmentController : ControllerBase
         var profile = await _repository.GetEntityBy<uint, IProfile>(profileId);
         if (profile == null) return NotFound();
         appointment.Profile = profile;
+        if (!await appointment.Update())
+            return BadRequest("can not update");
+        return Ok("success");
+    }
+
+    [HttpPut("{id}/status")]
+    [JSONWebToken(RequiredPermissions = [Permission.CreateAppointment])]
+    public async Task<ActionResult> ChangeAppointmentStatus(uint id, uint statusId)
+    {
+        var appointment = await _repository.GetEntityBy<uint, IAppointment>(id);
+        if (appointment == null) return NotFound();
+        appointment.State = statusId;
         if (!await appointment.Update())
             return BadRequest("can not update");
         return Ok("success");

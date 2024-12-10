@@ -1,6 +1,7 @@
 ﻿using AppointmentScheduler.Domain.Business;
 using AppointmentScheduler.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace AppointmentScheduler.Infrastructure.Business;
 
@@ -23,11 +24,12 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
     uint IExamination.State { get => _examination.State; set => _examination.State = value; }
 
     IPrescription IExamination.Prescription
-        => (_prescriptionTask ??= (
+        => (_prescriptionTask ??= ((
             from ps in _dbContext.Set<Prescription>()
             where ps.ExaminationId == _examination.Id
-            select CreatePrescription(ps).WaitForResult(Timeout.Infinite, default)
-        ).FirstOrDefaultAsync()).WaitForResult();
+            select ps).FirstOrDefaultAsync()
+            .ContinueWith((rt) => rt.Result == null ? null : CreatePrescription(rt.Result).WaitForResult())
+        )).WaitForResult();
 
     IEnumerable<IDiagnosticService> IExamination.DiagnosticServices
     {
@@ -35,8 +37,8 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
             from es in _dbContext.Set<ExaminationService>()
             from ds in _dbContext.Set<DiagnosticService>()
             where es.ExaminationId == _examination.Id && es.DiagnosticServiceId == ds.Id
-            select CreateDiagnosticServices(ds, es, null).WaitForResult(Timeout.Infinite, default)
-        ).Cached();
+            select new ValueTuple<DiagnosticService, ExaminationService>(ds, es)
+        ).ToList().AsQueryable().Select(x => CreateDiagnosticServices(x.Item1, x.Item2, null).WaitForResult(Timeout.Infinite, default));
     }
 
     async Task<IPrescription> IExamination.ObtainPrescription()
@@ -55,6 +57,8 @@ internal sealed class ExaminationImpl : BaseEntity, IExamination
         var exdiag = new ExaminationService();
         if (!await _dbContext.IdGenerated(exdiag, nameof(ExaminationService.Id))) return null;
         exdiag.DoctorId = id;
+        exdiag.ExaminationId = _examination.Id;
+        exdiag.DiagnosticServiceId = diagsv.Id;
         return await CreateDiagnosticServices(diagsv, exdiag, doctor);
     }
 

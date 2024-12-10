@@ -87,7 +87,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" data-diagService-id="@diagService.Id"
+                                                <a href="#" data-diagser-id="@diagService.Id"
                                                    class="bs-tooltip delete" data-bs-toggle="tooltip"
                                                    data-bs-placement="top">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -153,7 +153,7 @@
 
             $('.delete').on('click', function (e) {
                 e.preventDefault();
-                diagnosticSerIdToDelete = $(this).data('diagService-id');
+                diagnosticSerIdToDelete = $(this).data('diagser-id');
                 $('#deleteModal').modal('show');
             });
 

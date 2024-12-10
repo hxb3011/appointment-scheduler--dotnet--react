@@ -59,56 +59,46 @@ namespace AppointmentScheduler.Presentation.Controllers
             return View(diagnostic);
         }
 
-        //public async Task<IActionResult> Edit(uint id)
-        //{
-        //    var profile = await _profileService.GetProfileById(id);
-        //    if (profile == null)
-        //    {
-        //        TempData["Error"] = "Đã xảy ra lỗi khi truy cập hồ sơ này";
-        //        return View("Error");
-        //    }
-
-        //    var page = GetPage();
-
-        //    var patients = await _patientService.GetPagedPatients(page);
-        //    ViewBag.Patients = new SelectList(patients, "Id", "FullName");
-
-        //    ViewBag.SelectedPatientId = profile.Patient;
-
-        //    return View(profile);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(ProfileModel profile)
-        //{
-        //    string resultMessage = "Lỗi không thể sửa bệnh nhân này";
-        //    if (ModelState.IsValid)
-        //    {
-        //        resultMessage = await _profileService.UpdateProfile(profile);
-        //        if (resultMessage == "Profile updated successfully")
-        //        {
-        //            TempData["Success"] = "Chỉnh sửa bệnh nhân thành công";
-        //            return RedirectToAction("Index");
-        //        }
-        //    }
+        public async Task<IActionResult> Edit(uint id)
+        {
+            var diagnostic = await _diagnosticServiceSer.GetDiagnosticSerModelById(id);
+            if (diagnostic == null)
+            {
+                TempData["Error"] = "Đã xảy ra lỗi khi truy cập dịch vụ chuẩn đoán này";
+                return View("Error");
+            }
 
 
-        //    TempData["Error"] = resultMessage;
-        //    var page = GetPage();
+            return View(diagnostic);
+        }
 
-        //    var patients = await _patientService.GetPagedPatients(page);
-        //    ViewBag.Patients = new SelectList(patients, "Id", "FullName");
-        //    return View(profile);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Edit(DiagnosticSerModel diagnostic)
+        {
+            string resultMessage = "Lỗi không thể sửa dịch vụ chuẩn đoán này";
+            if (ModelState.IsValid)
+            {
+                resultMessage = await _diagnosticServiceSer.UpdateDiagnosticService(diagnostic);
+                if (resultMessage == "Diagnostic updated successfully")
+                {
+                    TempData["Success"] = "Chỉnh sửa dịch vụ chuần đoán thành công";
+                    return RedirectToAction("Index");
+                }
+            }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Delete(uint id)
-        //{
-        //    if (await _profileService.DeleteProfile(id))
-        //    {
-        //        return Ok("Xóa hồ sơ thành công");
-        //    }
-        //    return BadRequest("Không thể xóa hồ sơ");
-        //}
+
+            TempData["Error"] = resultMessage;
+            return View(diagnostic);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(uint id)
+        {
+            if (await _diagnosticServiceSer.DeleteDiagnosticService(id))
+            {
+                return Ok("Xóa dịch vụ chuẩn đoán thành công");
+            }
+            return BadRequest("Không thể xóa dịch vụ chuẩn đoán");
+        }
     }
 }

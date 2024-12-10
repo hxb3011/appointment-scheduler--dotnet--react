@@ -123,6 +123,10 @@ namespace AppointmentScheduler.Presentation.Controllers
 
             var patients = await _patientService.GetPagedPatients(page);
             ViewBag.Patients = new SelectList(patients, "Id", "FullName");
+
+            ViewBag.SelectedPatientId = profile.Patient;
+
+
             return View(profile);
 		}
 

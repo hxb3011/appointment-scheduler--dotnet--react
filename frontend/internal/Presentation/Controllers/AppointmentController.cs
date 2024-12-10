@@ -39,16 +39,14 @@ namespace AppointmentScheduler.Presentation.Controllers
 
         public async Task<IActionResult> AppointmentInfo(uint id)
         {
-            var appointment = await _appointmentService.GetAppointmentById(id);
+            var appointment = await _appointmentService.GetAppointmentResponseById(id);
             return Ok(appointment);
         }
 
         public async Task<IActionResult> Index(int offset = 0, int count = 1000)
         {
 
-			PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
-            pagedGetAllRequest.Offset = offset;
-            pagedGetAllRequest.Count = count;
+			PagedGetAllRequest pagedGetAllRequest = GetPage();
             var appointments = await _appointmentService.GetPagedAppointmentsWithBodyAsync(pagedGetAllRequest);
             
             return View(appointments);
@@ -73,19 +71,13 @@ namespace AppointmentScheduler.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AppointmentModel appointment)
         {
-            //var random = new Random();
-            //appointment.Number = (uint)random.Next(1, 1000);
             if (appointment.EndTime != default)
             {
                 if(appointment.Date != null)
                 {
-                    // Tạo một DateTime từ EndTime
                     DateTime endDateTime = new DateTime(appointment.Date.Value.Year, appointment.Date.Value.Month, appointment.Date.Value.Day, appointment.EndTime.Hour, appointment.EndTime.Minute, 0);
 
-                    // Trừ 30 phút từ EndTime để tính BeginTime
                     DateTime beginDateTime = endDateTime.AddMinutes(-30);
-
-                    // Cập nhật BeginTime trong AppointmentModel
                     appointment.BeginTime = new TimeOnly(beginDateTime.Hour, beginDateTime.Minute);
                 }
                 if (await _appointmentService.AddAppointment(appointment))
