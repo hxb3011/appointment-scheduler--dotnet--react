@@ -140,8 +140,12 @@ public class RoleController : Controller
 	[HttpPost]
 	public async Task<IActionResult> Delete(uint id)
 	{
-		if ("success" == await _roleService.DeleteRole(id))
-			return BadRequest("Không thể xóa vai trò");
-		return Ok("Xóa vai trò thành công");
+		if ("success" != await _roleService.DeleteRole(id))
+		{
+			//TempData["Error"] = "Không thể xóa vai trò";
+            return BadRequest("Không thể xóa vai trò");
+        }
+		//TempData["Success"] = "Xóa vai trò thành công";
+        return Ok("Xóa vai trò thành công");
 	}
 }
