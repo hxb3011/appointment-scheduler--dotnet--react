@@ -1,0 +1,9 @@
+.Login.Page>.note {
+    padding: 16px;
+    text-align: center;
+}
+
+.Login.Page>.note.end {
+    padding: 16px;
+    text-align: end;
+}

@@ -1,0 +1,57 @@
+.Container:has(>.Calendar) {
+    box-sizing: border-box;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 525;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+    line-height: 28px;
+    margin: 0;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.Container>.Calendar {
+    box-sizing: border-box;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 525;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 8px;
+    line-height: 28px;
+    margin: 0;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.Container>.Calendar>.Item {
+    background-color: var(--mdc-surface);
+    border: 2px solid var(--mdc-outline-variant);
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: var(--mdc-on-surface);
+    display: block;
+    font-size: 18px;
+    line-height: 24px;
+    padding: 14px 0;
+    text-align: center;
+    white-space: nowrap;
+    width: calc((100% - 48px) / 7);
+    -webkit-appearance: none;
+}
+
+.Container>.Calendar>.Header {
+    background-color: var(--mdc-secondary-container);
+    border: 2px solid var(--mdc-surface-tint);
+}
+
+.Container>.Calendar>.Item:is(:hover, :focus) {
+    border: 2px solid var(--mdc-surface-tint);
+}
+
+.Container>.Calendar>.Item:has(input:checked) {
+    background-color: var(--mdc-secondary-container);
+    border: 2px solid var(--mdc-surface-tint);
+}

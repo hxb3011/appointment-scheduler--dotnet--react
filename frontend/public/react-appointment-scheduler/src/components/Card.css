@@ -1,0 +1,144 @@
+.Card {
+    background-color: var(--mdc-primary-container);
+    box-sizing: border-box;
+    border-radius: 24px;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 56px;
+    width: calc(50% - 4px);
+}
+
+.Card>.heading {
+    color: var(--mdc-on-primary-container);
+    font-size: 88px;
+    font-weight: 900;
+    line-height: 96px;
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+.Card>.description {
+    color: var(--mdc-on-primary-container);
+    font-size: 22px;
+    line-height: 30px;
+}
+
+@media screen and (max-width: 680px) {
+    .Card {
+        padding: 32px;
+        width: 100%;
+    }
+
+    .Card>.heading {
+        font-size: 45px;
+        line-height: 52px;
+    }
+
+    .Card>.description {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+.Account.Card {
+    background-color: var(--mdc-secondary-container);
+    border-radius: 24px;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 32px;
+    padding: 32px;
+}
+
+.Account.Card>.avatar {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.Account.Card>.avatar>.img {
+    clip-path: circle();
+    font-size: 120px;
+    text-align: center;
+    line-height: 120px;
+    height: 120px;
+    width: 120px;
+}
+
+.Account.Card>.info>.name {
+    color: var(--mdc-on-secondary-container);
+    font-size: 32px;
+    font-weight: 525;
+    line-height: 38px;
+    margin: 16px 0;
+}
+
+.Account.Card>.info>.username {
+    color: var(--mdc-on-secondary-container);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.Nav.Card {
+    align-content: stretch;
+    align-items: start;
+    background-color: var(--mdc-secondary-fixed);
+    border-radius: 24px;
+    color: var(--mdc-on-secondary-fixed-variant);
+    justify-content: space-between;
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0px;
+}
+
+.Nav.Card>.Item {
+    align-items: center;
+    background-color: var(--mdc-secondary-fixed);
+    border: none;
+    border-radius: 16px;
+    box-sizing: border-box;
+    color: var(--mdc-on-secondary-fixed-variant);
+    display: flex;
+    flex-flow: row nowrap;
+    font-weight: 500;
+    font-size: 16px;
+    gap: 16px;
+    justify-content: center;
+    line-height: 20px;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.Nav.Card>.Item>.mdi {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 24px;
+    line-height: 24px;
+    padding: 0;
+    text-decoration: none;
+}
+
+.Nav.Card>.Item.active {
+    background-color: var(--mdc-secondary);
+    color: var(--mdc-on-secondary);
+}
+
+.Nav.Card>.Item:is(:focus, :hover) {
+    background-color: var(--mdc-secondary-fixed-dim);
+    color: var(--mdc-on-secondary-fixed);
+    text-shadow: 0 0 1px var(--mdc-on-secondary-fixed);
+}
+
+.Nav.Card>.Item:active {
+    background-color: var(--mdc-secondary);
+    color: var(--mdc-on-secondary);
+    text-shadow: 0 0 1px var(--mdc-on-secondary);
+}
+
+.Nav.Card>.Item.active:active {
+    background-color: var(--mdc-secondary-fixed);
+    color: var(--mdc-on-secondary-fixed-variant);
+    text-shadow: 0 0 1px var(--mdc-on-secondary-fixed-variant);
+}

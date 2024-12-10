@@ -1,0 +1,74 @@
+.Appointment.Page {
+    gap: 16px;
+
+}
+
+.Appointment>.Item {
+    align-items: center;
+    background-color: var(--mdc-surface);
+    border: 2px solid var(--mdc-outline-variant);
+    box-sizing: border-box;
+    border-radius: 24px;
+    color: var(--mdc-on-surface);
+    font-size: 18px;
+    font-weight: 525;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 16px;
+    line-height: 20px;
+    padding: 16px;
+    text-decoration: none;
+    width: 100%;
+}
+
+.Appointment>.Item>.number {
+    align-items: center;
+    background-color: var(--mdc-surface-container);
+    box-sizing: border-box;
+    border-radius: 40px;
+    font-size: 32px;
+    font-weight: 900;
+    display: flex;
+    flex-flow: column nowrap;
+    height: 80px;
+    justify-content: center;
+    line-height: 80px;
+    margin: 0;
+    width: 80px;
+}
+
+.Appointment>.Item>.info {
+    align-items: start;
+    background-color: var(--mdc-surface);
+    box-sizing: border-box;
+    border-radius: 24px;
+    color: var(--mdc-on-surface);
+    font-weight: 525;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+    margin: 0;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.Appointment>.Item>.info>.name {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 700;
+}
+
+.Appointment>.Item:is(:hover, :focus) {
+    border: 2px solid var(--mdc-surface-tint);
+}
+
+.Appointment>.Item.error {
+    display: none;
+    font-family: "Roboto Medium";
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    margin: 0 4px;
+    padding: 0 16px;
+    width: 100%;
+}

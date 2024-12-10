@@ -1,0 +1,21 @@
+.Page {
+    background-color: var(--mdc-surface-container);
+    border-radius: 24px;
+    box-sizing: border-box;
+    color: var(--mdc-on-surface);
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+    padding: 32px;
+    width: 100%;
+}
+
+.Page>.title {
+    color: var(--mdc-on-primary-container);
+    font-size: 45px;
+    font-weight: 900;
+    line-height: 52px;
+    margin: 0;
+    margin-bottom: 16px;
+    text-align: center;
+}

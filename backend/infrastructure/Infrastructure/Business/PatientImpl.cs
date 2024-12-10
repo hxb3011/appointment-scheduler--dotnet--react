@@ -37,7 +37,7 @@ internal sealed class PatientImpl : UserImpl, IPatient
         {
             var now = DateOnly.FromDateTime(DateTime.Now);
             return _appointment ??= _dbContext.Set<Profile>().SelectMany(p =>
-                    _dbContext.Set<Appointment>().Where(a => p.Id == a.ProfileId && DateOnly.FromDateTime(a.AtTime) >= now))
+                    _dbContext.Set<Appointment>().Where(a => p.PatientId == _patient.Id && p.Id == a.ProfileId && DateOnly.FromDateTime(a.AtTime) >= now))
                 .OrderBy(a => a.AtTime).ToList().AsQueryable().Select(a =>
                     CreateAppointment(a).WaitForResult(Timeout.Infinite, default)).Cached();
         }

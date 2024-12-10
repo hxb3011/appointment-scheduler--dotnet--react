@@ -1,0 +1,97 @@
+.Filled.Button {
+    background-color: var(--mdc-primary);
+    border: none;
+    border-radius: 16px;
+    box-sizing: border-box;
+    color: var(--mdc-on-primary);
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 8px 16px;
+    text-align: center;
+}
+
+.Container>.ComboBox {
+    background-color: var(--mdc-surface);
+    border: 2px solid var(--mdc-outline-variant);
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: var(--mdc-on-surface);
+    display: block;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 4px 0 24px;
+    padding: 14px 16px;
+    white-space: nowrap;
+    width: 100%;
+    -webkit-appearance: none;
+}
+
+.Filled.Button:is(:focus, :hover) {
+    background-color: var(--mdc-primary-fixed-dim);
+    color: var(--mdc-on-primary-fixed);
+}
+
+.Filled.Button:active {
+    background-color: var(--mdc-primary-fixed);
+    color: var(--mdc-on-primary-fixed-variant);
+}
+
+.Outlined.Button {
+    background-color: var(--mdc-surface);
+    border: 2px solid var(--mdc-outline-variant);
+    border-radius: 24px;
+    box-sizing: border-box;
+    color: var(--mdc-surface-tint);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 32px;
+    margin: 4px;
+    padding: 6px 22px;
+}
+
+.Outlined.Button:is(:focus, :hover) {
+    background-color: var(--mdc-surface-container-highest);
+    border: 1px solid var(--mdc-outline);
+    color: var(--mdc-surface-tint);
+    padding: 7px 47px;
+}
+
+.Outlined.Button:active {
+    background-color: var(--mdc-surface-container-highest);
+    border: 2px solid var(--mdc-surface-tint);
+    color: var(--mdc-surface-tint);
+    padding: 6px 46px;
+}
+
+@media screen and (max-width: 600px) {
+    .Filled.Button {
+    }
+
+    .Outlined.Button {
+        background-color: var(--mdc-surface);
+        border: 2px solid var(--mdc-outline-variant);
+        border-radius: 24px;
+        box-sizing: border-box;
+        color: var(--mdc-surface-tint);
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 32px;
+        margin: 4px;
+        padding: 6px 22px;
+    }
+
+    .Outlined.Button:is(:focus, :hover) {
+        background-color: var(--mdc-surface-container-highest);
+        border: 1px solid var(--mdc-outline);
+        color: var(--mdc-surface-tint);
+        padding: 7px 47px;
+    }
+
+    .Outlined.Button:active {
+        background-color: var(--mdc-surface-container-highest);
+        border: 2px solid var(--mdc-surface-tint);
+        color: var(--mdc-surface-tint);
+        padding: 6px 46px;
+    }
+}

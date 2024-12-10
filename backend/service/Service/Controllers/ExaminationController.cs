@@ -56,6 +56,16 @@ public class ExaminationController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("filter")]
+    [JSONWebToken(RequiredPermissions = [Permission.ReadAppointment])]
+    public async Task<ActionResult<IEnumerable<AppointmentResponse>>> GetPagedExaminationsByProfileAndFilterDates([FromQuery] PagedGetAllRequest request, uint profile, DateOnly start, DateOnly end)
+    {
+        var p = await _repository.GetEntityBy<uint, IProfile>(profile);
+        if (p == null) return NotFound("profile not found");
+        return Ok(p.Appointments.AsQueryable().Where(x => DateOnly.FromDateTime(x.AtTime) >= start && DateOnly.FromDateTime(x.AtTime) <= end)
+            .OrderByPropertyName(request.By).Skip(request.Offset).Take(request.Count).Select(x => MakeResponse(x.Examination)));
+    }
+
     [HttpGet("{id}")]
     [JSONWebToken(RequiredPermissions = [Permission.ReadExamination])]
     public async Task<ActionResult<ExaminationResponse>> GetExamination(uint id)
@@ -152,7 +162,9 @@ public class ExaminationController : ControllerBase
         if (examination == null) return NotFound("examination not found");
         var perscription = examination.Prescription;
         if (perscription != null) return NotFound();
-        return File(perscription.Document(), "application/octet-stream");
+		var image = perscription.Document(readOnly: true);
+		if (image is MemoryStream) return NotFound();
+		return File(image, "application/octet-stream");
     }
 
     [HttpDelete("{id}/perscription")]

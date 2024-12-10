@@ -3,7 +3,7 @@ using AppointmentScheduler.Domain.Business;
 
 namespace AppointmentScheduler.Domain.Repositories;
 
-public interface IRepository
+public interface IRepository : IDisposable
 {
     IEnumerable<TEntity> GetEntities<TEntity>(
         int skip = 0, int take = 20, string orderByProperty = null, bool descending = false,

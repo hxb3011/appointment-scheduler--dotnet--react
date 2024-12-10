@@ -1,0 +1,71 @@
+.Profile.Page {
+    gap: 16px;
+
+}
+
+.Profile>.Filter {
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 24px;
+    font-size: 18px;
+    font-weight: 525;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 8px;
+    justify-content: space-evenly;
+    line-height: 20px;
+    padding: 8px;
+    text-decoration: none;
+    width: 100%;
+}
+
+.Profile.Page>.Filter>* {
+    width: calc(100% / 3 - 32px);
+}
+
+.Profile>.Item>:is(.info, .title) {
+    align-items: start;
+    background-color: var(--mdc-surface);
+    box-sizing: border-box;
+    border-radius: 24px;
+    color: var(--mdc-on-surface);
+    font-weight: 525;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+    margin: 0;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.Profile>.Item>:is(.info, .title)>.name {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 700;
+}
+
+.Profile>.Item>.title {
+    font-weight: 700;
+}
+
+.Profile>.Item:is(:hover, :focus) {
+    border: 2px solid var(--mdc-surface-tint);
+}
+
+.Profile>.Filled.Button {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 24px;
+    font-weight: 600;
+    gap: 32px;
+    justify-content: center;
+    line-height: 32px;
+    padding: 16px;
+    text-decoration: none;
+}
+
+.Profile>.Filled.Button>.mdi {
+    font-size: 40px;
+    line-height: 40px;
+}

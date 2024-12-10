@@ -1,0 +1,56 @@
+.Container:has(>.Form.Field) {
+    box-sizing: border-box;
+    border-radius: 24px;
+    font-size: 22px;
+    font-weight: 525;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+    line-height: 28px;
+    margin: 0;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.Container>.Form.Field {
+    background-color: var(--mdc-surface);
+    border: 2px solid var(--mdc-outline-variant);
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: var(--mdc-on-surface);
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 4px 0 34px;
+    padding: 14px 16px;
+    white-space: nowrap;
+    width: 100%;
+    -webkit-appearance: none;
+}
+
+.Container>.Form.Field:is(:hover, :focus) {
+    border: 2px solid var(--mdc-surface-tint);
+}
+
+.Container>.Form.Field.error+.error {
+    display: none;
+    font-size: 14px;
+    height: 18px;
+    line-height: 18px;
+    margin: 0;
+    padding: 0 16px;
+    width: 100%;
+}
+
+.Container>.Form.Field.error {
+    border-color: var(--mdc-on-error-container);
+    background-color: var(--mdc-error-container);
+    margin-bottom: 4px;
+}
+
+.Container>.Form.Field.error+.error {
+    color: var(--mdc-on-error-container);
+    display: block;
+    margin-bottom: 4px;
+}

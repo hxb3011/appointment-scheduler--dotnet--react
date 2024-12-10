@@ -1,23 +1,37 @@
 {
-    "compilerOptions": {
-        "allowJs": true,
-        "jsx": "react",
-        "module": "ES2022",
-        "moduleResolution": "Node",
-        "outDir": "./dist/",
-        "sourceMap": true,
-        "strictNullChecks": true,
-        "target": "ES2022"
-    },
-    "exclude": [
-        "node_modules"
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true,
+    "jsx": "preserve",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "target": "ESNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
     ],
-    "awesomeTypescriptLoaderOptions": {
-        "useBabel": true,
-        "useCache": true
-    },
-    "include": [
-        "./src/**/*",
-        "./global.d.ts"
-    ]
+    "skipLibCheck": false,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": false,
+    "useCache": false
+  },
+  "include": [
+    "./src/**/*",
+    "./global.d.ts"
+  ]
 }
