@@ -63,12 +63,12 @@ namespace AppointmentScheduler.Presentation.Controllers
                 return RedirectToAction("Index", "Appointment");
             }
 
-            var appointment = await _appointmentService.GetAppointmentResponseById(id);
-			if (appointment.AtTime.HasValue && (DateTime.Now < appointment.AtTime.Value.AddMinutes(-15) || appointment.AtTime.Value.AddMinutes(30) < DateTime.Now))
-			{
-				TempData["Error"] = "Không trong thời gian khám bệnh, không thể thêm khám bệnh cho đơn này.";
-				return RedirectToAction("Index", "Appointment");
-			}
+   //         var appointment = await _appointmentService.GetAppointmentResponseById(id);
+			//if (appointment.AtTime.HasValue && (DateTime.Now < appointment.AtTime.Value.AddMinutes(-15) || appointment.AtTime.Value.AddMinutes(30) < DateTime.Now))
+			//{
+			//	TempData["Error"] = "Không trong thời gian khám bệnh, không thể thêm khám bệnh cho đơn này.";
+			//	return RedirectToAction("Index", "Appointment");
+			//}
 
 
 			var appointments = await _appointmentService.GetPagedAppointments(page);
