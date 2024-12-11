@@ -10,16 +10,26 @@ public class DashboardController : Controller
 {
     private readonly ILogger<DashboardController> _logger;
     private readonly AuthService _authService;
+    private readonly DoctorService _doctorService;
+    private readonly RoleService _roleService;
+    private readonly HttpApiService _httpApiService;
 
-    public DashboardController(ILogger<DashboardController> logger, AuthService authService)
+    public DashboardController(
+        ILogger<DashboardController> logger, 
+        AuthService authService,
+        DoctorService doctorService,
+        RoleService roleService,
+        HttpApiService httpApiService)
     {
         _authService = authService;
         _logger = logger;
+        _doctorService = doctorService;
+        _roleService = roleService;
+        _httpApiService = httpApiService;
     }
 
     public async Task<IActionResult> Index()
     {
-        
         return View();
     }
 
@@ -27,15 +37,29 @@ public class DashboardController : Controller
     {
         return View();
     }
-
+    
     [HttpPost]
     public async Task<IActionResult> Login(AuthRequest request)
     {
         var token = await _authService.SaveTokenToService(request);
         if(token != null)
         {
-            return RedirectToAction(nameof(Index));
+			var user = await _doctorService.GetDoctorByUsername(request.Username);
+            var role = await _roleService.GetRoleById(user.RoleId);
+
+            var userLogin = new UserLoginModel();
+
+            userLogin.Id = user.Id;
+            userLogin.FullName = user.FullName;
+            userLogin.Role = role.Name;
+
+            var userLoginJson = _httpApiService.SerializeJson(userLogin);
+
+            _httpApiService.Context.Session.SetString("user", userLoginJson);
+
+			return RedirectToAction(nameof(Index));
         }
+
         return View(request);
     }
 

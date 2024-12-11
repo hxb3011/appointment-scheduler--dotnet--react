@@ -11,10 +11,9 @@ namespace AppointmentScheduler.Presentation.Models
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Tên đăng nhập không được bỏ trống")]
-        [JsonPropertyName("userName")]
+        [JsonPropertyName("username")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Email không được bỏ trống")]
         public string Email { get; set; }
 
         [PaswordValidation]

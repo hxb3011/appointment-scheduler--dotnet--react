@@ -63,7 +63,15 @@ namespace AppointmentScheduler.Presentation.Controllers
                 return RedirectToAction("Index", "Appointment");
             }
 
-            var appointments = await _appointmentService.GetPagedAppointments(page);
+            var appointment = await _appointmentService.GetAppointmentResponseById(id);
+			if (appointment.AtTime.HasValue && (DateTime.Now < appointment.AtTime.Value.AddMinutes(-15) || appointment.AtTime.Value.AddMinutes(30) < DateTime.Now))
+			{
+				TempData["Error"] = "Không trong thời gian khám bệnh, không thể thêm khám bệnh cho đơn này.";
+				return RedirectToAction("Index", "Appointment");
+			}
+
+
+			var appointments = await _appointmentService.GetPagedAppointments(page);
             ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
 
             ExaminationModel exam = new ExaminationModel();
@@ -112,6 +120,8 @@ namespace AppointmentScheduler.Presentation.Controllers
                 return View("Error");
             }
 
+            var page = getPage();
+
             var prescription = await _examinationService.GetPrescription(id);
 
             if (prescription != null)
@@ -119,16 +129,8 @@ namespace AppointmentScheduler.Presentation.Controllers
                 exam.Prescription = prescription.Description;
             }
 
-            var page = getPage();
-
-            var appointments = await _appointmentService.GetPagedAppointments(page);
-            ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
-
             var diagnosticServices = await _diagnosticSerService.GetPagedDiagnosticSers(page);
             ViewBag.Diagnostics = diagnosticServices;
-
-            var doctors = await _doctorService.GetPagedDoctors(page);
-            ViewBag.Doctors = new SelectList(doctors, "Id", "FullName");
 
             exam.SelectedDiagnostics = new List<uint>();
             exam.SelectedDoctors = new Dictionary<uint, uint>();
@@ -150,6 +152,14 @@ namespace AppointmentScheduler.Presentation.Controllers
             }
 
             HttpContext.Session.SetObjectAsJson("SelectedDoctors", selectedDoctors);
+
+            var appointments = await _appointmentService.GetPagedAppointments(page);
+            ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
+
+            
+
+            var doctors = await _doctorService.GetPagedDoctors(page);
+            ViewBag.Doctors = new SelectList(doctors, "Id", "FullName");
 
             Console.WriteLine(selectedDoctors.Count);
             ViewBag.SelectedAppointmentIdInExam = exam.Appointment;

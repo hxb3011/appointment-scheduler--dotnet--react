@@ -65,8 +65,8 @@ function loadProfileInfo(profileId) {
             return response.json();
         })
         .then(data => {
-            console.log(data); // Kiểm tra các trường trả v
-            // Hiển thị thông tin bác sĩ
+            console.log(data); 
+
             const genderText = data.gender === 'M' ? 'Nam' : data.gender === 'F' ? 'Nữ' : 'Không xác định';
 
             document.querySelector('#profile-info').innerHTML = `
@@ -84,7 +84,7 @@ function loadProfileInfo(profileId) {
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Ngày sinh: </p>
-                                <p class="text-dark text-bold">${data.dateOfBirth}</p>
+                                <p class="text-dark text-bold">${data.birthdate}</p>
                             </div>
                             <div class="d-flex">
                                 <p class="text-start me-1">Giới tính: </p>

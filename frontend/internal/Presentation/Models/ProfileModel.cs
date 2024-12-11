@@ -14,6 +14,7 @@ namespace AppointmentScheduler.Presentation.Models
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Ngày sinh không được bỏ trống")]
+        [JsonPropertyName("birthdate")]
         public DateOnly? DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Chọn giới tính")]

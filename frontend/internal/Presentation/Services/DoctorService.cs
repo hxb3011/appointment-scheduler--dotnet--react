@@ -83,6 +83,37 @@ namespace AppointmentScheduler.Presentation.Services
             }
         }
 
+        public async Task<DoctorModel> GetDoctorByUsername(string username)
+        {
+            try
+            {
+                var token = _httpApiService.Context.Session.GetString("AuthToken");
+                var httpRequest = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"api/doctor/username/{username}", UriKind.Relative)
+                };
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                }
+
+                var response = await _httpApiService.SendAsync(httpRequest);
+                response.EnsureSuccessStatusCode();
+
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var doctor = _httpApiService.DeserializeJson<DoctorModel>(jsonString);
+
+                return doctor;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+        }
+
         public async Task<string> AddDoctor(DoctorModel doctor)
         {
             try
