@@ -1,26 +1,104 @@
-﻿
-@{
-	ViewData["Title"] = "Privacy Policy";
-	Layout = "~/Views/Shared/_LayoutProject.cshtml";
+﻿@{
+    ViewData["Title"] = "Trang chủ";
+    Layout = "~/Views/Shared/_LayoutProject.cshtml";
 }
 <head>
-	<title>Trang chủ</title>
+    <title>Trang chủ</title>
+    <!-- Styling for the layered images -->
+    <style>
+        body {
+            background: url('/images/doctor-background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        .middle-content {
+            position: relative;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 50px 0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .widget-card-four {
+            position: relative;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 8px;
+            z-index: 5; /* Make sure text is on top */
+        }
+
+            .widget-card-four h1 {
+                font-size: 40px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+
+            .widget-card-four p {
+                font-size: 18px;
+                line-height: 1.6;
+                color: #555;
+            }
+
+        /* Style for the layered images */
+        .image-stack {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            height: 400px; /* Set a fixed height for the image stack */
+            max-width: 600px; /* Set a max-width if needed */
+            margin: 0 auto; /* Center the image stack */
+        }
+
+            .image-stack img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+
+                .image-stack img:nth-child(1) {
+                    opacity: 0.6;
+                }
+
+                .image-stack img:nth-child(2) {
+                    opacity: 0.7;
+                }
+
+                .image-stack img:nth-child(3) {
+                    opacity: 0.8;
+                }
+
+            /* Optional: Add a nice border or shadow to the images */
+            .image-stack img {
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            }
+
+    </style>
 </head>
 <body>
-	<div layout:fragment="content">
-		<div class="middle-content container-xxl p-0 mt-5">
-			<div class="row layout-top-spacing">
-				<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing" style="width: 100%">
-					<div class="widget widget-card-four" style="width: 100%; font-size: 30px">
-						CHÀO MỪNG BẠN ĐẾN VỚI TRANG WEB ĐẶT LỊCH PHÒNG KHÁM
-					</div>
-				</div>
+    <div layout:fragment="content">
+        <div class="middle-content container-xxl p-0 mt-5">
+            <div class="row layout-top-spacing justify-content-center">
+                <div class="col-xl-8 col-lg-10 col-md-12 col-sm-12 col-12 layout-spacing" style="width: 100%">
+                    <div class="widget widget-card-four">
+                        <h1>CHÀO MỪNG BẠN ĐẾN VỚI TRANG WEB ĐẶT LỊCH PHÒNG KHÁM</h1>
+                        <p>Chúng tôi cung cấp dịch vụ đặt lịch khám bệnh trực tuyến, giúp bạn dễ dàng và nhanh chóng sắp xếp thời gian cho các cuộc hẹn.</p>
 
-			</div>
-
-		</div>
-
-	</div>
+                        <!-- Layered images -->
+                        <div class="image-stack">
+                            <img src="https://barbadostoday.bb/wp-content/uploads/2021/12/appointment.png" alt="Doctor Image 1">
+                            <img src="https://barbadostoday.bb/wp-content/uploads/2021/12/appointment.png" alt="Doctor Image 2">
+                            <img src="https://barbadostoday.bb/wp-content/uploads/2021/12/appointment.png" alt="Doctor Image 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-
 </html>

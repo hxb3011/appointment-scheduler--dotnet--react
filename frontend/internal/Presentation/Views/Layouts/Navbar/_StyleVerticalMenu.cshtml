@@ -1,4 +1,6 @@
-﻿<div class="header-container container-xxl">
+﻿@using AppointmentScheduler.Presentation.Services
+@inject HttpApiService httpApiService
+<div class="header-container container-xxl">
 	<header class="header navbar navbar-expand-sm expand-header">
 
 		<a href="javascript:void(0);" class="sidebarCollapse">
@@ -80,14 +82,31 @@
 					</div>
 				</a>
 
-				<div class="dropdown-menu position-absolute"
+				<div class="dropdown-menu position-absolute" style="width:max-content"
 					 aria-labelledby="userProfileDropdown">
 					<div class="user-profile-section">
 						<div class="media mx-auto">
 							<div class="emoji me-2">&#x1F44B;</div>
-							<div class="media-body">
-								<h5>Đại ca</h5>
-								<p>Quản trị viên</p>
+							<div class="media-body" style="width:fit-content">
+								@{
+									var userJson = httpApiService.Context.Session.GetString("user");
+
+									if (!string.IsNullOrEmpty(userJson))
+									{
+										var user = httpApiService.DeserializeJson<UserLoginModel>(userJson);
+
+										if (user != null)
+										{
+											<h5>@user.FullName</h5>
+											<p>@user.Id</p>
+										}
+									}
+									else
+									{
+										<h6 class="">Administration</h6>
+										<p class="">Quản trị viên</p>
+									}
+								}
 							</div>
 						</div>
 					</div>

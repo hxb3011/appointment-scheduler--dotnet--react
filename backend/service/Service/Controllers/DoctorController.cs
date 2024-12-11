@@ -37,7 +37,17 @@ public class DoctorController : UserController
 		return Ok(MakeResponse(doctor));
 	}
 
-	[HttpPost]
+    [HttpGet("username/{username}")]
+    [JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.ReadUser])]
+    public async Task<ActionResult<DoctorResponse>> GetDoctorByUsername(string username)
+    {
+        var doctors = _repository.GetEntities<IDoctor>(0, 1000, null).Select(MakeResponse);
+		var doctor = doctors.Where(d => d.UserName == username).FirstOrDefault();
+        if (doctor == null) return NotFound();
+        return Ok(doctor);
+    }
+
+    [HttpPost]
 	[JSONWebToken(RequiredPermissions = [Permission.SystemPrivilege, Permission.CreateUser])]
 	public async Task<ActionResult> CreateDoctor([FromBody] DoctorRequest request)
 	{

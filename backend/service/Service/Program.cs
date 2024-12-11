@@ -34,9 +34,8 @@ public static class Program
 
         app.MapControllers();
 
-        app.UseInfrastructure();
-
         app.UseCors();
+        app.UseInfrastructure();
         app.Run();
 
         return 0;

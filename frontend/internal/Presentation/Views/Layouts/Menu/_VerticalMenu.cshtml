@@ -1,4 +1,6 @@
-﻿<div class="sidebar-wrapper sidebar-theme">
+﻿@using AppointmentScheduler.Presentation.Services
+@inject HttpApiService httpApiService
+<div class="sidebar-wrapper sidebar-theme">
 
 	<nav id="sidebar">
 
@@ -28,8 +30,30 @@
 					<img src="/images/profile-30.png" alt="avatar">
 				</div>
 				<div class="profile-content">
-					<h6 class="">Administration</h6>
-					<p class="">Quản trị viên</p>
+					@{
+						var userJson = httpApiService.Context.Session.GetString("user");
+
+						if (!string.IsNullOrEmpty(userJson))
+						{
+							var user = httpApiService.DeserializeJson<UserLoginModel>(userJson);
+
+							if (user != null)
+							{
+								<h6 class="user-name" title="@user.FullName">@user.FullName</h6>
+								<p class="user-role" title="@user.Role">@user.Role</p>
+							}
+							else
+							{
+								<h6 class="">Invalid user data</h6>
+								<p class="">Could not load user data</p>
+							}
+						}
+						else
+						{
+							<h6 class="">Administration</h6>
+							<p class="">Quản trị viên</p>
+						}
+					}
 				</div>
 			</div>
 		</div>

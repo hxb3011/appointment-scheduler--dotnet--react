@@ -56,7 +56,7 @@ public static class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+            pattern: "{controller=Dashboard}/{action=Login}/{id?}");
 
         app.Run();
         return 0;

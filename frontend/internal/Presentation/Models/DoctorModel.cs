@@ -13,7 +13,7 @@ namespace AppointmentScheduler.Presentation.Models
 
         [Required(ErrorMessage = "Tên đăng nhập không được bỏ trống")]
         [RegularExpression(@"^\S*$", ErrorMessage = "Tên đăng nhập không được chứa khoảng cách")]
-        [JsonPropertyName("userName")]
+        [JsonPropertyName("username")]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Email không được bỏ trống")]
@@ -32,7 +32,7 @@ namespace AppointmentScheduler.Presentation.Models
         [PaswordValidation]
         public string Password { get; set; }
 
-        [JsonPropertyName("roleId")]
+        [JsonPropertyName("role")]
         public uint RoleId { get; set; }
     }
 
