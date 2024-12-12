@@ -157,6 +157,101 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="statbox widget box box-shadow mt-3">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>Thông tin hồ sơ:</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-content widget-content-area blog-create-section" id="profile-info">
+                            <div class="row">
+                                <div class="col-xxl-12">
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Mã hồ sơ :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Mã bệnh nhân :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Họ tên :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Ngày sinh :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Giới tính :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="statbox widget box box-shadow mt-3">
+                        <div class="widget-header">
+                            <div class="row">
+                                <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                    <h4>Thông tin bác sĩ:</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-content widget-content-area blog-create-section" id="doctor-info">
+                            <div class="row">
+                                <div class="col-xxl-12">
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Mã bác sĩ :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Tên :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Email :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Vị trí :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+                                    <div class="d-flex">
+                                        <p class="text-start me-1">Chứng chỉ :</p>
+                                        <b>
+                                            <p class="text-dark text-bold"></p>
+                                        </b>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -174,6 +269,7 @@
         <script src="~/plugins/tomSelect/custom-tom-select.js"></script>
         
         <script src="~/js/examination/create.js"></script>
+        <script src="~/js/appointment/create.js"></script>
 
 
         <script type="text/javascript">
@@ -192,6 +288,26 @@
                 if (selectedAppointment) {
                     loadAppointmentInfo(selectedAppointment);
                     document.querySelector('#appointment').value = selectedAppointment;
+                }
+            });
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const selectedDoctorId = '@ViewBag.SelectedDoctorId';
+                const selectedProfileId = '@ViewBag.SelectedProfileId';
+
+                console.log("profile id: ", selectedProfileId);
+                console.log("doctor id: ", selectedDoctorId);
+
+                if (selectedDoctorId) {
+                    loadDoctorInfo(selectedDoctorId);
+                    // document.querySelector('#doctor').value = selectedDoctorId;
+                }
+
+                if (selectedProfileId) {
+                    loadProfileInfo(selectedProfileId);
+                    // document.querySelector('#profile').value = selectedProfileId;
                 }
             });
         </script>

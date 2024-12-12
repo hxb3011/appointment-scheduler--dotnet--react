@@ -83,7 +83,7 @@ namespace AppointmentScheduler.Presentation.Services
             }
         }
 
-        public async Task<DoctorModel> GetDoctorByUsername(string username)
+        public async Task<DoctorModel> GetCurrentDoctor()
         {
             try
             {
@@ -91,7 +91,7 @@ namespace AppointmentScheduler.Presentation.Services
                 var httpRequest = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri($"api/doctor/username/{username}", UriKind.Relative)
+                    RequestUri = new Uri($"api/doctor/current", UriKind.Relative)
                 };
 
                 if (!string.IsNullOrEmpty(token))
