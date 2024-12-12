@@ -16,7 +16,6 @@ namespace AppointmentScheduler.Presentation.Services
         {
             _httpApiService = httpApiService;
             _logger = logger;
-
         }
 
         public async Task<IEnumerable<DoctorModel>> GetPagedDoctors(PagedGetAllRequest request)

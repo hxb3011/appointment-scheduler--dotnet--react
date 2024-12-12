@@ -111,7 +111,7 @@ public class AppointmentController : ControllerBase
         if (doctor == null) return NotFound("doctor not found");
         var scheduler = await _repository.GetService<ISchedulerService>();
         var allocation = await scheduler.Allocate(doctor, request.Date, request.BeginTime, request.EndTime);
-        if (allocation == null) return BadRequest("can not create");
+        if (allocation == null) return BadRequest("Lịch đã đầy");
         var appointment = await doctor.ObtainAppointment(
             new DateTime(request.Date, allocation.AtTime), allocation.Id);
         if (appointment == null) return BadRequest("can not create");

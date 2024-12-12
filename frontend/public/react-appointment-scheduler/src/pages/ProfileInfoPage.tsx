@@ -48,18 +48,18 @@ export function ProfileInfo(props: ProfileInfoProps) {
         console.log(form, start, end);
         if (start && end) {
             const dnow = new Date(new Date().toISOString().split("T")[0]), dstart = new Date(start), dend = new Date(end);
-            if (dstart > dnow) {
-                alert("Ngày bắt đầu không được sau ngày hiện tại .");
+            if (dend > dnow) {
+                alert("Ngày kết thúc không được sau ngày hiện tại .");
                 return;
             }
             if (dstart > dend) {
                 alert("Ngày bắt đầu không được sau ngày kết thúc.");
                 return;
             }
-            if (dend < dnow) {
-                alert("Ngày kết thúc không được trước ngày hiện tại.");
-                return;
-            }
+            // if (dend < dnow) {
+            //     alert("Ngày kết thúc không được trước ngày hiện tại.");
+            //     return;
+            // }
             getExaminations({ profile: profile?.id, start: dstart.toISOString().split("T")[0], end: dend.toISOString().split("T")[0] }).then(value => {
                 if (value.type === "ok") {
                     setExaminations(value);
@@ -101,7 +101,7 @@ export function ProfileInfo(props: ProfileInfoProps) {
                     padding: "16px"
                 }
             }}>Lọc phiếu khám</SubmitButton>
-            <FormField label="Ngày kết thúc" attributes={{ name: "end", type: "date" }} />
+            <FormField label="Ngày kết thúc" attributes={{ name: "end", type: "date", max: new Date().toISOString().split("T")[0]}} />
         </form>
         {(examinations && examinations.length) ? examinations.map((examination) => (
             <Link to="#" className="Item" style={{ alignSelf: "center", alignItems: "start", width: "calc(100% - 64px)" }}>
@@ -111,9 +111,9 @@ export function ProfileInfo(props: ProfileInfoProps) {
                     <span className="description">Mô tả:</span>
                 </div>
                 <div className="info">
-                    <span className="name">{examination.diagnostic}</span>
+                    <span className="name">{examination.diagnostic && examination.diagnostic.length ? examination.diagnostic : "(Chưa được chuẩn đoán)"}</span>
                     <span className="at">{examination.at && new Date(examination.at).toLocaleDateString()}</span>
-                    <span className="description">{examination.description}</span>
+                    <span className="description">{examination.description && examination.description.length ? examination.description : "(Không có mô tả)"}</span>
                 </div>
             </Link>
         )) : (<span style={{ alignSelf: "center" }}>Không tìm thấy phiếu khám.</span>)}
