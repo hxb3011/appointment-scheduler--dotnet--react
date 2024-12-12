@@ -164,7 +164,7 @@ public class AppointmentService
         }
     }
 
-    public async Task<bool> AddAppointment(AppointmentModel appointment)
+    public async Task<string> AddAppointment(AppointmentModel appointment)
     {
         try
         {
@@ -188,20 +188,31 @@ public class AppointmentService
 
             if (response.IsSuccessStatusCode)
             {
-                _logger.LogInformation("Appointment added successfully.");
-                return true;
+                _logger.LogInformation("Appointment added successfully");
+                return "Appointment added successfully";
             }
             else
             {
-                _logger.LogWarning($"Failed to add appointment. Status code: {response.StatusCode}");
-                return false;
+                var errorMessage = "";
+
+                var errorContent = await response.Content.ReadAsStringAsync();
+                if (!string.IsNullOrEmpty(errorContent))
+                {
+                    errorMessage += $"Error: {errorContent}";
+                }
+
+                _logger.LogWarning(errorMessage);
+                return errorMessage;
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            _logger.LogError(ex, "Error occurred while adding appointment.");
-            return false;
+            var errorMessage = $"Error occurred while adding doctor";
+            _logger.LogError(e, errorMessage);
+            return errorMessage;
         }
+
+
     }
 
 

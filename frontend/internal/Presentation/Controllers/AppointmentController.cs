@@ -71,6 +71,8 @@ namespace AppointmentScheduler.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AppointmentModel appointment)
         {
+            var resultMessage = "Không thể thêm lịch đặt này";
+
             if (appointment.EndTime != default)
             {
                 if(appointment.Date != null)
@@ -80,16 +82,19 @@ namespace AppointmentScheduler.Presentation.Controllers
                     DateTime beginDateTime = endDateTime.AddMinutes(-30);
                     appointment.BeginTime = new TimeOnly(beginDateTime.Hour, beginDateTime.Minute);
                 }
-                if (await _appointmentService.AddAppointment(appointment))
+
+                resultMessage = await _appointmentService.AddAppointment(appointment);
+
+                if (resultMessage == "Appointment added successfully")
                 {
                     TempData["Success"] = "Thêm mới đặt lịch thành công";
                     return RedirectToAction(nameof(Index));
                 }
             }
 
-           
+            
 
-            TempData["Error"] = "Đã có lỗi xả ra";
+            TempData["Error"] = resultMessage;
             PagedGetAllRequest pagedGetAllRequest = GetPage();
 
             var doctors = await _doctorService.GetPagedDoctors(pagedGetAllRequest);

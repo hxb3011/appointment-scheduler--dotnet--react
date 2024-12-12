@@ -66,7 +66,7 @@ namespace AppointmentScheduler.Presentation.Controllers
             var appointment = await _appointmentService.GetAppointmentResponseById(id);
             if (appointment.State == EAppointmentState.DISABLE)
             {
-                if(DateTime.Now > appointment.AtTime.Value.AddMinutes(15))
+                if(DateTime.Now > appointment.AtTime.Value.AddMinutes(30))
                 {
                     TempData["Error"] = "Đơn này đã quá hạn và không thể xử lý, bạn hãy đặt lại đơn khác.";
                     await _appointmentService.ChangeAppointmentStatus(id, (uint)EAppointmentState.EXPIRED);

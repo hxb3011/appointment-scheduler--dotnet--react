@@ -48,12 +48,12 @@ namespace AppointmentScheduler.Presentation.Controllers
 
         public async Task<IActionResult> Create()
         {
-            PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
-            pagedGetAllRequest.Offset = 0;
-            pagedGetAllRequest.Count = 20;
+            //PagedGetAllRequest pagedGetAllRequest = new PagedGetAllRequest();
+            //pagedGetAllRequest.Offset = 0;
+            //pagedGetAllRequest.Count = 20;
 
-            var roles = await _roleService.GetPagedRoles(pagedGetAllRequest);
-            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+            //var roles = await _roleService.GetPagedRoles(pagedGetAllRequest);
+            //ViewBag.Roles = new SelectList(roles, "Id", "Name");
             return View();
         }
 

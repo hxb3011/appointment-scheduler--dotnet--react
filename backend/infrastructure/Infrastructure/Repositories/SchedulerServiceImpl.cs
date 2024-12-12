@@ -91,7 +91,7 @@ internal class SchedulerServiceImpl : ISchedulerService
     async Task<SchedulerAllocation> ISchedulerService.Allocate(IDoctor doctor, DateOnly date, TimeOnly start, TimeOnly end)
     {
         var now = DateTime.Now;
-        if (date < DateOnly.FromDateTime(now)) return null;
+        if (date <= DateOnly.FromDateTime(now)) return null;
         ISchedulerService s = this;
         if (start >= end) return null;
         if ((start < s.FirstStart || end > s.FirstEnd)
@@ -116,6 +116,8 @@ internal class SchedulerServiceImpl : ISchedulerService
         TimeOnly last;
         do last = it.Current; while (it.MoveNext());
         last = last.Add(s.StepGap);
+        if(last >= end) return null;
+
         return (
             from al in s.Allocations
             where al.AtTime == last

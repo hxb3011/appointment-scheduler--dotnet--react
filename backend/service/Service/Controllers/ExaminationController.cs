@@ -62,7 +62,7 @@ public class ExaminationController : ControllerBase
     {
         var p = await _repository.GetEntityBy<uint, IProfile>(profile);
         if (p == null) return NotFound("profile not found");
-        return Ok(p.Appointments.AsQueryable().Where(x => DateOnly.FromDateTime(x.AtTime) >= start && DateOnly.FromDateTime(x.AtTime) <= end)
+        return Ok(p.Appointments.AsQueryable().Where(x => DateOnly.FromDateTime(x.AtTime) >= start && DateOnly.FromDateTime(x.AtTime) <= end && x.Examination != null)
             .OrderByPropertyName(request.By).Skip(request.Offset).Take(request.Count).Select(x => MakeResponse(x.Examination)));
     }
 
