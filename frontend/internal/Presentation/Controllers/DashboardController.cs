@@ -44,7 +44,7 @@ public class DashboardController : Controller
         var token = await _authService.SaveTokenToService(request);
         if(token != null)
         {
-			var user = await _doctorService.GetDoctorByUsername(request.Username);
+			var user = await _doctorService.GetCurrentDoctor();
             var role = await _roleService.GetRoleById(user.RoleId);
 
             var userLogin = new UserLoginModel();

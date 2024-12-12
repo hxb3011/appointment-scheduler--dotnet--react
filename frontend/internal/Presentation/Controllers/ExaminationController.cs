@@ -54,7 +54,6 @@ namespace AppointmentScheduler.Presentation.Controllers
         public async Task<IActionResult> Create(uint id)
         {
             var page = getPage();
-
             var examExisted = await _examinationService.ExistExaminationByAppointment(id);
 
             if(examExisted)
@@ -63,15 +62,29 @@ namespace AppointmentScheduler.Presentation.Controllers
                 return RedirectToAction("Index", "Appointment");
             }
 
-   //         var appointment = await _appointmentService.GetAppointmentResponseById(id);
-			//if (appointment.AtTime.HasValue && (DateTime.Now < appointment.AtTime.Value.AddMinutes(-15) || appointment.AtTime.Value.AddMinutes(30) < DateTime.Now))
-			//{
-			//	TempData["Error"] = "Không trong thời gian khám bệnh, không thể thêm khám bệnh cho đơn này.";
-			//	return RedirectToAction("Index", "Appointment");
-			//}
+
+            var appointment = await _appointmentService.GetAppointmentResponseById(id);
+            if (appointment.State == EAppointmentState.DISABLE)
+            {
+                if(DateTime.Now > appointment.AtTime.Value.AddMinutes(15))
+                {
+                    TempData["Error"] = "Đơn này đã quá hạn và không thể xử lý, bạn hãy đặt lại đơn khác.";
+                    await _appointmentService.ChangeAppointmentStatus(id, (uint)EAppointmentState.EXPIRED);
+                    return RedirectToAction("Index", "Appointment");
+                }
+                else if (appointment.AtTime.HasValue && (DateTime.Now < appointment.AtTime.Value.AddMinutes(-15) || appointment.AtTime.Value.AddMinutes(30) < DateTime.Now))
+                {
+                    TempData["Error"] = "Không trong thời gian khám bệnh, không thể thêm khám bệnh cho đơn này, thời gian khám bệnh là trong vòng 30 phút kể từ thời gian đặt.";
+                    return RedirectToAction("Index", "Appointment");
+                }
+            }else if(appointment.State == EAppointmentState.EXPIRED)
+            {
+                TempData["Error"] = "Đơn này đã quá hạn và không thể xử lý, bạn hãy đặt lại đơn khác.";
+                return RedirectToAction("Index", "Appointment");
+            }
 
 
-			var appointments = await _appointmentService.GetPagedAppointments(page);
+            var appointments = await _appointmentService.GetPagedAppointments(page);
             ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
 
             ExaminationModel exam = new ExaminationModel();
@@ -79,6 +92,9 @@ namespace AppointmentScheduler.Presentation.Controllers
             exam.Appointment = id;
 
             ViewBag.SelectedAppointmentIdInExam = exam.Appointment;
+
+            ViewBag.SelectedProfileId = appointment.Profile;
+            ViewBag.SelectedDoctorId = appointment.Doctor;
 
             return View(exam);
         }
@@ -90,7 +106,7 @@ namespace AppointmentScheduler.Presentation.Controllers
 
             examination.Appointment = examination.Id;
 
-            var appointment = _appointmentService.GetAppointmentById(examination.Appointment.Value);
+            var appointment = await _appointmentService.GetAppointmentById(examination.Appointment.Value);
 
             if (examination.Appointment != null && appointment != null)
             {
@@ -106,6 +122,9 @@ namespace AppointmentScheduler.Presentation.Controllers
 
             var appointments = await _appointmentService.GetPagedAppointments(page);
             ViewBag.Appointments = new SelectList(appointments, "Id", "Id");
+
+            ViewBag.SelectedProfileId = appointment.Profile;
+            ViewBag.SelectedDoctorId = appointment.Doctor;
 
             TempData["Error"] = resultMessage;
             return View();
@@ -161,6 +180,10 @@ namespace AppointmentScheduler.Presentation.Controllers
             var doctors = await _doctorService.GetPagedDoctors(page);
             ViewBag.Doctors = new SelectList(doctors, "Id", "FullName");
 
+            var appointment = await _appointmentService.GetAppointmentById((uint)exam.Appointment);
+            ViewBag.SelectedProfileId = appointment.Profile;
+            ViewBag.SelectedDoctorId = appointment.Doctor;
+
             Console.WriteLine(selectedDoctors.Count);
             ViewBag.SelectedAppointmentIdInExam = exam.Appointment;
 
@@ -171,6 +194,11 @@ namespace AppointmentScheduler.Presentation.Controllers
         public async Task<IActionResult> Edit(ExaminationModel exam)
         {
             string resultMessage = "Lỗi không thể sửa khám bệnh này";
+
+            var appointment = await _appointmentService.GetAppointmentById((uint)exam.Appointment);
+
+            ViewBag.SelectedProfileId = appointment.Profile;
+            ViewBag.SelectedDoctorId = appointment.Doctor;
 
             if (exam.Diagnostic != "" && exam.Diagnostic != null)
             {
